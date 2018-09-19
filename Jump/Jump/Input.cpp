@@ -14,7 +14,7 @@ void InputInitialize(int key[]) {
 }
 
 double idir;
-void InputUpdata(XINPUT_STATE input, int Key[]) {
+void InputUpdata(XINPUT_STATE input, int key[]) {
 
 	if (GetJoypadXInputState(DX_INPUT_PAD1, &input) == 0) {
 		if (input.Buttons[12]) A++; else A = 0;
@@ -70,7 +70,7 @@ void InputUpdata(XINPUT_STATE input, int Key[]) {
 
 }
 
-void InputUpdata(int Key[]) {
+void InputUpdata(int key[]) {
 
 		 if (CheckHitKey(KEY_INPUT_RIGHT) && CheckHitKey(KEY_INPUT_RSHIFT)) THUMB_X = 55; 
 	else if (CheckHitKey(KEY_INPUT_RIGHT)) THUMB_X = 100;
@@ -89,7 +89,7 @@ void InputUpdata(int Key[]) {
 	
 }
 
-void PrintInput(int Key[]) {
+void PrintInput(int key[]) {
 
 	DrawFormatString(0, 0, RED, "A:%d", A);
 	DrawFormatString(0, 40, RED, "B:%d", B);
@@ -101,15 +101,15 @@ void PrintInput(int Key[]) {
 	DrawFormatString(0, 280, RED, "L_TRIG:%d", L_TRIG);
 	DrawFormatString(0, 320, RED, "RATIO_X:%d", THUMB_X);
 	DrawFormatString(0, 360, RED, "RATIO_Y:%d", THUMB_Y);
-	DrawFormatString(0, 400, RED, "1:%d", Key[10]);
-	DrawFormatString(0, 440, RED, "2:%d", Key[11]);
-	DrawFormatString(0, 480, RED, "3:%d", Key[12]);
-	DrawFormatString(0, 520, RED, "4:%d", Key[13]);
-	DrawFormatString(0, 560, RED, "5:%d", Key[14]);
-	DrawFormatString(0, 600, RED, "6:%d", Key[15]);
-	DrawFormatString(0, 640, RED, "7:%d", Key[16]);
-	DrawFormatString(0, 680, RED, "8:%d", Key[17]);
-	DrawFormatString(0, 720, RED, "9:%d", Key[18]);
-	DrawFormatString(0, 760, RED, "10:%d", Key[19]);
+	DrawFormatString(0, 400, RED, "1:%d", key[10]);
+	DrawFormatString(0, 440, RED, "2:%d", key[11]);
+	DrawFormatString(0, 480, RED, "3:%d", key[12]);
+	DrawFormatString(0, 520, RED, "4:%d", key[13]);
+	DrawFormatString(0, 560, RED, "5:%d", key[14]);
+	DrawFormatString(0, 600, RED, "6:%d", key[15]);
+	DrawFormatString(0, 640, RED, "7:%d", key[16]);
+	DrawFormatString(0, 680, RED, "8:%d", key[17]);
+	DrawFormatString(0, 720, RED, "9:%d", key[18]);
+	DrawFormatString(0, 760, RED, "10:%d", key[19]);
 
 }

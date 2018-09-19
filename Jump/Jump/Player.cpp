@@ -9,11 +9,11 @@ int PWalk3;
 int PWalk4;
 int PWalk5;
 
-int PRun1;
-int PRun2;
-int PRun3;
-int PRun4;
-int PRun5;
+int PDash1;
+int PDash2;
+int PDash3;
+int PDash4;
+int PDash5;
 
 int PWalkW1;
 int PWalkW2;
@@ -55,49 +55,46 @@ int PGet;
 
 void Player::Initialize() {
 
-	PWalk1 = LoadGraph("images/Player/walk/Resize/1.png");
+	/*PWalk1 = LoadGraph("images/Player/walk/Resize/1.png");
 	PWalk2 = LoadGraph("images/Player/walk/Resize/2.png");
 	PWalk3 = LoadGraph("images/Player/walk/Resize/3.png");
 	PWalk4 = LoadGraph("images/Player/walk/Resize/4.png");
-	PWalk5 = LoadGraph("images/Player/walk/Resize/5.png");
+	PWalk5 = LoadGraph("images/Player/walk/Resize/5.png");*/
 
-	PRun1 = LoadGraph("images/Player/run/Resize/1.png");
-	PRun2 = LoadGraph("images/Player/run/Resize/2.png");
-	PRun3 = LoadGraph("images/Player/run/Resize/3.png");
-	PRun4 = LoadGraph("images/Player/run/Resize/4.png");
-	PRun5 = LoadGraph("images/Player/run/Resize/5.png");
+	PDash1 = LoadGraph("images/player/dash/1.png");
+	PDash2 = LoadGraph("images/player/dash/2.png");
+	PDash3 = LoadGraph("images/player/dash/3.png");
+	PDash4 = LoadGraph("images/player/dash/4.png");
+	PDash5 = LoadGraph("images/player/dash/5.png");
 
-	PWalkW1 = LoadGraph("images/Player/walksword/Resize/1.png");
-	PWalkW2 = LoadGraph("images/Player/walksword/Resize/2.png");
-	PWalkW3 = LoadGraph("images/Player/walksword/Resize/3.png");
-	PWalkW4 = LoadGraph("images/Player/walksword/Resize/4.png");
-	PWalkW5 = LoadGraph("images/Player/walksword/Resize/5.png");
+	/*PWalkW1 = LoadGraph("images/Player/walksword/1.png");
+	PWalkW2 = LoadGraph("images/Player/walksword/2.png");
+	PWalkW3 = LoadGraph("images/Player/walksword/3.png");
+	PWalkW4 = LoadGraph("images/Player/walksword/4.png");
+	PWalkW5 = LoadGraph("images/Player/walksword/5.png");*/
 
-	PRunW1 = LoadGraph("images/Player/runsword/Resize/1.png");
-	PRunW2 = LoadGraph("images/Player/runsword/Resize/2.png");
-	PRunW3 = LoadGraph("images/Player/runsword/Resize/3.png");
-	PRunW4 = LoadGraph("images/Player/runsword/Resize/4.png");
-	PRunW5 = LoadGraph("images/Player/runsword/Resize/5.png");
+	/*PRunW1 = LoadGraph("images/Player/runsword/1.png");
+	PRunW2 = LoadGraph("images/Player/runsword/2.png");
+	PRunW3 = LoadGraph("images/Player/runsword/3.png");
+	PRunW4 = LoadGraph("images/Player/runsword/4.png");
+	PRunW5 = LoadGraph("images/Player/runsword/5.png");*/
 
-	PJump1 = LoadGraph("images/Player/Jump/Resize/1.png");
-	PJump2 = LoadGraph("images/Player/Jump/Resize/2.png");
-	PJump3 = LoadGraph("images/Player/Jump/Resize/3.png");
-	PJump4 = LoadGraph("images/Player/Jump/Resize/4.png");
+	PJump1 = LoadGraph("images/player/Jump/1.png");
+	PJump2 = LoadGraph("images/player/Jump/2.png");
+	PJump3 = LoadGraph("images/player/Jump/3.png");
+	PJump4 = LoadGraph("images/player/Jump/4.png");
 
-	PAttacks1 = LoadGraph("images/Player/Attack_s/Resize/1.png");
-	PAttacks2 = LoadGraph("images/Player/Attack_s/Resize/2.png");
-	PAttacks3 = LoadGraph("images/Player/Attack_s/Resize/3.png");
+	PAttacks1 = LoadGraph("images/player/Attacks/1.png");
+	PAttacks2 = LoadGraph("images/player/Attacks/2.png");
+	PAttacks3 = LoadGraph("images/player/Attacks/3.png");
 
-	PAttackw1 = LoadGraph("images/Player/Attack_w/Resize/1.png");
-	PAttackw2 = LoadGraph("images/Player/Attack_w/Resize/2.png");
-	PAttackw3 = LoadGraph("images/Player/Attack_w/Resize/3.png");
+	PAttackw1 = LoadGraph("images/player/Attackw/1.png");
+	PAttackw2 = LoadGraph("images/player/Attackw/2.png");
+	PAttackw3 = LoadGraph("images/player/Attackw/3.png");
 
-	PAttackl1 = LoadGraph("images/Player/attack_l/Resize/1.png");
-	PAttackl2 = LoadGraph("images/Player/attack_l/Resize/2.png");
-	PAttackl3 = LoadGraph("images/Player/attack_l/Resize/3.png");
-
-	FlyingSword = LoadGraph("images/Player/attack_l/Resize/sword.png");
-	StuckingSword = LoadGraph("images/Player/attack_l/Resize/sworddrop.png");;
+	/*PAttackl1 = LoadGraph("images/Player/attack_l/1.png");
+	PAttackl2 = LoadGraph("images/Player/attack_l/2.png");
+	PAttackl3 = LoadGraph("images/Player/attack_l/3.png");*/
 
 	Attack_s = LoadSoundMem("music/knife2.wav");
 	Attack_l = LoadSoundMem("music/knife.wav");
@@ -244,54 +241,28 @@ void Player::UpdataDash(int count) {
 	int num = 8;	//àÍé¸ÇÃâÊëúêî
 	if (WeaponFlag == 0) {
 		if (count % sum <= sum / num * 1) {
-			Image = PRun1;
+			Image = PDash1;
 		}
 		else if (count % sum <= sum / num * 2) {
-			Image = PRun2;
+			Image = PDash2;
 		}
 		else if (count % sum <= sum / num * 3) {
-			Image = PRun3;
+			Image = PDash3;
 		}
 		else if (count % sum <= sum / num * 4) {
-			Image = PRun4;
+			Image = PDash4;
 		}
 		else if (count % sum <= sum / num * 5) {
-			Image = PRun5;
+			Image = PDash5;
 		}
 		else if (count % sum <= sum / num * 6) {
-			Image = PRun4;
+			Image = PDash4;
 		}
 		else if (count % sum <= sum / num * 7) {
-			Image = PRun3;
+			Image = PDash3;
 		}
 		else if (count % sum <= sum / num * 8) {
-			Image = PRun2;
-		}
-	}
-	else {
-		if (count % sum <= sum / num * 1) {
-			Image = PRunW1;
-		}
-		else if (count % sum <= sum / num * 2) {
-			Image = PRunW2;
-		}
-		else if (count % sum <= sum / num * 3) {
-			Image = PRunW3;
-		}
-		else if (count % sum <= sum / num * 4) {
-			Image = PRunW4;
-		}
-		else if (count % sum <= sum / num * 5) {
-			Image = PRunW5;
-		}
-		else if (count % sum <= sum / num * 6) {
-			Image = PRunW4;
-		}
-		else if (count % sum <= sum / num * 7) {
-			Image = PRunW3;
-		}
-		else if (count % sum <= sum / num * 8) {
-			Image = PRunW2;
+			Image = PDash2;
 		}
 	}
 }
@@ -391,7 +362,7 @@ void Player::UpdataAttack_w(int count) {
 	}
 	else if (count < 7) {//15ÇÕã≠Ç∑Ç¨
 		attack = 10;
-		attackArea.Set(LU, RD);
+		//attackArea.Set(LU, RD);
 	}
 	else if (count < 17) {
 		attack = 0;
@@ -440,7 +411,7 @@ void Player::UpdataAttack_s(int count) {
 	}
 	else if (count < 20) {//çUåÇ
 		attack = 40;
-		attackArea.Set(LU, RD);
+		//attackArea.Set(LU, RD);
 	}
 	else if (count < 40) {//ó]âC
 		attack = 0;
@@ -489,7 +460,7 @@ void Player::UpdataAttack_l(int count) {
 	}
 	else if (count < 40) {//çUåÇ
 		attack = 60;
-		attackArea.Set(LU, RD);
+		//attackArea.Set(LU, RD);
 		//weapon.Set((LU.Get_x() + RD.Get_x()) / 2, (LU.Get_y() + RD.Get_y()) / 2);
 		WeaponFlag = 0;
 		dirKeeper = isRightFlag;
@@ -521,7 +492,7 @@ void Player::UpdataAttack_l(int count) {
 }
 Square Splayer;
 Square Sweapon;
-void Player::Updata(int count,int Key[]) {
+void Player::Updata(int count,int key[]) {
 	int flag = 4;//ãÛíÜêßå‰ópÉtÉâÉO
 	//if (WeaponFlag == 0 && attack == 0) {
 	//	weapon.Set(weapon.Get_x() - GROUND_SPEED, weapon.Get_y());

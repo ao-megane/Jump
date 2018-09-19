@@ -1,6 +1,6 @@
 #include"DxLib.h"
 #include"Input.h"
-//#include"Player.h"
+#include"Player.h"
 //#include"EnemyMng.h"
 #include"Value.h"
 #include"Chore.h"
@@ -9,7 +9,7 @@
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 
-	SetGraphMode(2160, 1440, 32);
+	SetGraphMode(DISP_WIDTH, DISP_HEIGHT, 32);
 
 	{
 		SetWindowSizeChangeEnableFlag(TRUE);
@@ -22,16 +22,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	XINPUT_STATE input;
-	int Key[20] = { 0 };
+	int key[20] = { 0 };
 
 	int flag = 0;
 	int selectFlag = 0;	//0:play,1:manual,2:credit
 	int count = 0;
 	int keepCount = 0;
-	//Player player;
+	Player player;
 	
-	InputInitialize(Key);
-	//player.Initialize();
+	InputInitialize(key);
+	player.Initialize();
 	//KeyInitialize();
 	SetRand();
 	
@@ -50,17 +50,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	while (!ScreenFlip() && !ProcessMessage() && !ClearDrawScreen()) {
 
 		GetJoypadXInputState(DX_INPUT_PAD1, &input);
-		InputUpdata(input, Key);
+		InputUpdata(input, key);
 
 		switch (flag) {
 		case 0://OP
 			DrawOP(count);
+			//DrawFormatString(0, 0, WHITE, "opening");
 			//DrawData();
 			
 			if (THUMB_Y >= 80) down++; else down = 0;
 			if (THUMB_Y <= -80) up++; else up = 0;
 
-			if (Y > 0) DrawFormatString(0, 0, BLACK, "ClearRate:%f,Winner:%d,Loser:%d", (double)Winner / (double)(Winner + Loser), Winner, Loser);
+			//if (Y > 0) DrawFormatString(0, 0, BLACK, "ClearRate:%f,Winner:%d,Loser:%d", (double)Winner / (double)(Winner + Loser), Winner, Loser);
 
 			if (down == 1) {
 				PlayMove();
@@ -92,6 +93,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			break;
 		case 1://Loading
+			DrawFormatString(0, 0, WHITE, "loading");
 			//yesBGM();
 			//yesESounds();
 			//yesPSounds();
@@ -104,9 +106,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			flag = 8;
 			break;
 		case 2://playing
-
+			DrawFormatString(0, 0, WHITE, "playing");
+			player.Updata(count,key);
+			player.Draw();
 			break;
 		case 3://gameover
+			DrawFormatString(0, 0, WHITE, "gameover");
 			DrawGameOverBord(count - keepCount);
 			if (count - keepCount > 180) {
 				flag = 0;
@@ -114,6 +119,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			break;
 		case 4://gameclear
+			DrawFormatString(0, 0, WHITE, "gameclear");
 			DrawClearBord(count - keepCount);
 			if (count - keepCount > 180) {
 				flag = 0;
@@ -121,6 +127,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			break;
 		case 5://マニュアル
+			DrawFormatString(0, 0, WHITE, "manual1");
 			if (B == 1)
 				PlayChoice();
 			if (DrawManual(B)) {
@@ -129,6 +136,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			break;
 		case 6://クレジット
+			DrawFormatString(0, 0, WHITE, "credit");
 			DrawCredit();
 			if (B == 1) {
 				PlayChoice();
@@ -136,6 +144,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			break;
 		case 7://ポーズ
+			DrawFormatString(0, 0, WHITE, "pause");
 			DrawPause();
 			//player.UIDraw(count);
 			count--;
@@ -146,6 +155,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			break;
 		case 8://ゲーム開始前のマニュアル
+			DrawFormatString(0, 0, WHITE, "manual2");
 			if (B == 1)
 				PlayChoice();
 			if (DrawManual(B)) {
@@ -162,8 +172,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		count++;
 		if (CheckHitKey(KEY_INPUT_DELETE)) break;
 
-		//PrintInput(Key);
-		//FpsTimeFanction();
+		//PrintInput(key);
+		FpsTimeFanction();
 		ScreenFlip();
 	}
 

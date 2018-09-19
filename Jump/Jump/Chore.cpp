@@ -86,15 +86,15 @@ int SystemInitialize() {
 	normalBGM = LoadSoundMem("sounds/system/normal.wav");
 
 	if (AddFontResourceEx("font/Charlemagne.ttf", FR_PRIVATE, NULL) == 0) {
-		printfDx("AddFontResourceExé∏îs\n");
+		//printfDx("AddFontResourceExé∏îs\n");
 	}
 	lemagne = CreateFontToHandle("Charlemagne", 60, -1, DX_FONTTYPE_ANTIALIASING_8X8);
 	if (lemagne == -1) {
-		printfDx("CreateFontToHandleé∏îs\n");
+		//printfDx("CreateFontToHandleé∏îs\n");
 	}
 	slemagne = CreateFontToHandle("Charlemagne", 40, -1, DX_FONTTYPE_ANTIALIASING_8X8);
 	if (lemagne == -1) {
-		printfDx("CreateFontToHandleé∏îs\n");
+		//printfDx("CreateFontToHandleé∏îs\n");
 	}
 	Keeper = 0;
 	flag = 0;
@@ -179,16 +179,16 @@ int DrawTitleSentence(int flag) {
 	switch (flag)
 	{
 	case 0://play
-		//DrawFormatString(0, 30, RED, "Å®PLAY!!");
-		DrawFormatStringToHandle(1575, 900, BLACK, lemagne, "PLAY");
+		DrawFormatString(0, 30, RED, "Å®PLAY!!");
+		//DrawFormatStringToHandle(1575, 900, BLACK, lemagne, "PLAY");
 		break;
 	case 1://manual
-		//DrawFormatString(0, 30, RED, "Å®MANUAL!!");
-		DrawFormatStringToHandle(1500, 900, BLACK, lemagne, "MANUAL");
+		DrawFormatString(0, 30, RED, "Å®MANUAL!!");
+		//DrawFormatStringToHandle(1500, 900, BLACK, lemagne, "MANUAL");
 		break;
 	case 2://credit
-		//DrawFormatString(0, 30, RED, "Å®CREDIT!!");
-		DrawFormatStringToHandle(1530, 900, BLACK, lemagne, "CREDIT");
+		DrawFormatString(0, 30, RED, "Å®CREDIT!!");
+		//DrawFormatStringToHandle(1530, 900, BLACK, lemagne, "CREDIT");
 		break;
 	default:
 		break;
@@ -248,26 +248,26 @@ int DrawManual(int b) {
 	switch (manFlag)
 	{
 	case 0:
-		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Manual[0], true);
-		//DrawFormatString(0, 0, RED, "MANUAL");
+		//DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Manual[0], true);
+		DrawFormatString(20, 20, RED, "MANUAL");
 		break;
 	case 1:
-		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Manual[1], true);
-		//DrawFormatString(0, 0, RED, "2");
+		//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Manual[1], true);
+		DrawFormatString(20, 20, RED, "3");
 		break;
 	case 2:
-		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor1Image, true);
-		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor1WallsImage, true);
-		DrawFormatStringToHandle(52, 52, BLACK, lemagne, "floor1");
-		DrawFormatStringToHandle(50, 50, ORANGE, lemagne, "floor1");
-		//DrawFormatString(0, 0, RED, "2");
+		DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor1Image, true);
+		DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor1WallsImage, true);
+		//DrawFormatStringToHandle(52, 52, BLACK, lemagne, "floor1");
+		//DrawFormatStringToHandle(50, 50, ORANGE, lemagne, "floor1");
+		DrawFormatString(20, 20, RED, "2");
 		break;
 	case 3:
-		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor2Image, true);
-		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor2WallsImage, true);
-		DrawFormatStringToHandle(52, 52, BLACK, lemagne, "floor2");
-		DrawFormatStringToHandle(50, 50, ORANGE, lemagne, "floor2");
-		//DrawFormatString(0, 0, RED, "2");
+		DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor2Image, true);
+		DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor2WallsImage, true);
+		//DrawFormatStringToHandle(52, 52, BLACK, lemagne, "floor2");
+		//DrawFormatStringToHandle(50, 50, ORANGE, lemagne, "floor2");
+		DrawFormatString(20, 20, RED, "1");
 		break;
 	}
 
