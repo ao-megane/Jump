@@ -104,6 +104,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			flag = 8;
 			break;
 		case 2://playing
+
 			break;
 		case 3://gameover
 			DrawGameOverBord(count - keepCount);
