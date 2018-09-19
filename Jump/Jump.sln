@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2042
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Jump", "Jump\Jump.vcxproj", "{45751188-99AD-4EFB-9D47-895C36935305}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{45751188-99AD-4EFB-9D47-895C36935305}.Debug|x64.ActiveCfg = Debug|x64
+		{45751188-99AD-4EFB-9D47-895C36935305}.Debug|x64.Build.0 = Debug|x64
+		{45751188-99AD-4EFB-9D47-895C36935305}.Debug|x86.ActiveCfg = Debug|Win32
+		{45751188-99AD-4EFB-9D47-895C36935305}.Debug|x86.Build.0 = Debug|Win32
+		{45751188-99AD-4EFB-9D47-895C36935305}.Release|x64.ActiveCfg = Release|x64
+		{45751188-99AD-4EFB-9D47-895C36935305}.Release|x64.Build.0 = Release|x64
+		{45751188-99AD-4EFB-9D47-895C36935305}.Release|x86.ActiveCfg = Release|Win32
+		{45751188-99AD-4EFB-9D47-895C36935305}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7EB3702A-CB72-4A73-8BC6-9B78607FD2FA}
+	EndGlobalSection
+EndGlobal
