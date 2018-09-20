@@ -12,10 +12,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetGraphMode(DISP_WIDTH, DISP_HEIGHT, 32);
 
 	{
-		SetWindowSizeChangeEnableFlag(TRUE);
+		/*SetWindowSizeChangeEnableFlag(TRUE);
 		SetWindowSizeExtendRate(0.6);
 		ChangeWindowMode(TRUE);
-		SetBackgroundColor(0, 0, 0);
+		SetBackgroundColor(0, 0, 0);*/
 	}
 
 	DxLib_Init();
@@ -32,7 +32,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	
 	InputInitialize(key);
 	player.Initialize();
-	//KeyInitialize();
 	SetRand();
 	
 	//EnemyMngInitialize();
@@ -92,8 +91,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				}
 			}
 			break;
-		case 1://Loading
-			DrawFormatString(0, 0, WHITE, "loading");
+		case 1://ステージ選択画面
+			DrawFormatString(0, 0, WHITE, "selecting");
 			//yesBGM();
 			//yesESounds();
 			//yesPSounds();
@@ -103,14 +102,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			//player.Set();
 			//SetKeyPosi();
 			//EnemyMngSet();
-			flag = 8;
+			flag = 2;
 			break;
-		case 2://playing
+		case 2://loading
+			DrawFormatString(0, 0, WHITE, "loading");
+			flag = 3;
+			break;
+		case 3://playing
 			DrawFormatString(0, 0, WHITE, "playing");
 			player.Updata(count,key);
 			player.Draw();
 			break;
-		case 3://gameover
+		case 4://gameover
 			DrawFormatString(0, 0, WHITE, "gameover");
 			DrawGameOverBord(count - keepCount);
 			if (count - keepCount > 180) {
@@ -118,7 +121,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				PlayTitleBGM();
 			}
 			break;
-		case 4://gameclear
+		case 5://gameclear
 			DrawFormatString(0, 0, WHITE, "gameclear");
 			DrawClearBord(count - keepCount);
 			if (count - keepCount > 180) {
@@ -126,7 +129,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				PlayTitleBGM();
 			}
 			break;
-		case 5://マニュアル
+		case 6://マニュアル
 			DrawFormatString(0, 0, WHITE, "manual1");
 			if (B == 1)
 				PlayChoice();
@@ -135,7 +138,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				count = 0;
 			}
 			break;
-		case 6://クレジット
+		case 7://クレジット
 			DrawFormatString(0, 0, WHITE, "credit");
 			DrawCredit();
 			if (B == 1) {
@@ -143,7 +146,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				flag = 0;
 			}
 			break;
-		case 7://ポーズ
+		case 8://ポーズ
 			DrawFormatString(0, 0, WHITE, "pause");
 			DrawPause();
 			//player.UIDraw(count);
@@ -154,16 +157,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				PlayTitleBGM();
 			}
 			break;
-		case 8://ゲーム開始前のマニュアル
-			DrawFormatString(0, 0, WHITE, "manual2");
-			if (B == 1)
-				PlayChoice();
-			if (DrawManual(B)) {
-				flag = 2;
-				count = 0;
-				PlaynormalBGM();
-			}
-			break;
+		//case 9://ゲーム開始前のマニュアル
+		//	DrawFormatString(0, 0, WHITE, "manual2");
+		//	if (B == 1)
+		//		PlayChoice();
+		//	if (DrawManual(B)) {
+		//		flag = 2;
+		//		count = 0;
+		//		PlaynormalBGM();
+		//	}
+		//	break;
 
 		default:
 			break;

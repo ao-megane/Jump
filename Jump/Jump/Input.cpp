@@ -44,21 +44,21 @@ void InputUpdata(XINPUT_STATE input, int key[]) {
 
 	//-----------------------------------------------------------------
 	else {
-		if (CheckHitKey(KEY_INPUT_RIGHT) && CheckHitKey(KEY_INPUT_RSHIFT)) THUMB_X = 55;
-		else if (CheckHitKey(KEY_INPUT_RIGHT)) THUMB_X = 100;
-		else if (CheckHitKey(KEY_INPUT_LEFT) && CheckHitKey(KEY_INPUT_RSHIFT)) THUMB_X = -55;
-		else if (CheckHitKey(KEY_INPUT_LEFT)) THUMB_X = -100;
+		if (CheckHitKey(KEY_INPUT_D) && CheckHitKey(KEY_INPUT_LSHIFT)) THUMB_X = 55;
+		else if (CheckHitKey(KEY_INPUT_D)) THUMB_X = 100;
+		else if (CheckHitKey(KEY_INPUT_A) && CheckHitKey(KEY_INPUT_LSHIFT)) THUMB_X = -55;
+		else if (CheckHitKey(KEY_INPUT_A)) THUMB_X = -100;
 		else THUMB_X = 0;
-		if (CheckHitKey(KEY_INPUT_UP) && CheckHitKey(KEY_INPUT_RSHIFT)) THUMB_Y = -55;
-		else if (CheckHitKey(KEY_INPUT_UP)) THUMB_Y = -100;
-		else if (CheckHitKey(KEY_INPUT_DOWN) && CheckHitKey(KEY_INPUT_RSHIFT)) THUMB_Y = 55;
-		else if (CheckHitKey(KEY_INPUT_DOWN)) THUMB_Y = 100;
+		if (CheckHitKey(KEY_INPUT_W) && CheckHitKey(KEY_INPUT_LSHIFT)) THUMB_Y = -55;
+		else if (CheckHitKey(KEY_INPUT_W)) THUMB_Y = -100;
+		else if (CheckHitKey(KEY_INPUT_S) && CheckHitKey(KEY_INPUT_LSHIFT)) THUMB_Y = 55;
+		else if (CheckHitKey(KEY_INPUT_S)) THUMB_Y = 100;
 		else THUMB_Y = 0;
-		if (CheckHitKey(KEY_INPUT_D)) B++; else B = 0;
-		if (CheckHitKey(KEY_INPUT_S)) A++; else A = 0;
-		if (CheckHitKey(KEY_INPUT_W)) Y++; else Y = 0;
-		if (CheckHitKey(KEY_INPUT_A)) X++; else X = 0;
-		if (CheckHitKey(KEY_INPUT_LSHIFT)) LEFT++; else LEFT = 0;
+		if (CheckHitKey(KEY_INPUT_RIGHT)) B++; else B = 0;
+		if (CheckHitKey(KEY_INPUT_DOWN)) A++; else A = 0;
+		if (CheckHitKey(KEY_INPUT_UP)) Y++; else Y = 0;
+		if (CheckHitKey(KEY_INPUT_LEFT)) X++; else X = 0;
+		//if (CheckHitKey(KEY_INPUT_LSHIFT)) LEFT++; else LEFT = 0;
 
 		if (CheckHitKey(KEY_INPUT_P)) PAUSE++; else PAUSE = 0;
 

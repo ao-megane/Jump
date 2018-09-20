@@ -32,16 +32,27 @@ const int ThumbTrig = 16383; //thumbの無視する範囲 ～32767
 const int DISP_WIDTH = 1920;	//画面の大きさ(HD)
 const int DISP_HEIGHT = 1080;
 
-const double P_RATIO = 0.1;
-const double P_WEEK_HEIGHT = 1200 * P_RATIO;	//
-const double P_WEEK_WIDTH = 800 * P_RATIO;	//
-const double P_DRAW_HEIGHT = 2480 * P_RATIO;
-const double P_DRAW_WIDTH = 2480 * P_RATIO;
+const int GROUND_HEIGHT = DISP_HEIGHT - 50;
+
+const int GRAVITY = 30;
+
+/*-----------------------------*/
+const double P_RATIO = 1.0;
+//const double P_WEEK_HEIGHT = 1200 * P_RATIO;
+//const double P_WEEK_WIDTH = 800 * P_RATIO;
+//const double P_DRAW_HEIGHT = 2480 * P_RATIO;
+//const double P_DRAW_WIDTH = 2480 * P_RATIO;
+const double P_DRAW_HEIGHT = 400.0 * P_RATIO;
+const double P_DRAW_WIDTH = 400.0 * P_RATIO;
+const double P_HEIGHT = 64.0;
+const double P_WIDTH = 64.0;
 //const int P_REBORN_X = 145;
 //const int P_REBORN_Y = 1450;
 const double P_SPEED = 30;
 const int P_DASH_CLOCK = 40;//P_CLOCK/2 フレームに一回足音
 
+const double P_JUMP_NUM = 30.0*3.0;//ジャンプの総フレーム
+const double P_JUMP_HEIGHT = 64.0*3.0;//ジャンプの高さ
 
 /*------システム--------*/
 const int COUNT = 30*60*6;//30*60*3//3m
