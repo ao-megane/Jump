@@ -110,7 +110,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			break;
 		case 3://playing
 			DrawFormatString(0, 0, WHITE, "playing");
-			player.Updata(count,key);
+			player.Update(count,key);
 			player.Draw();
 			break;
 		case 4://gameover

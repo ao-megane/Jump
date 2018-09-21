@@ -1,6 +1,7 @@
 #ifndef OBJH
 #define OBJH
 #include<math.h>
+#include"Value.h"
 
 class intDot {//int型の点
 public:/*
@@ -36,6 +37,7 @@ public:/*
 	double Set(double x, double y);			//左上、右下
 	double Getx();
 	double Gety();
+	int Move(double x, double y);
 
 	void operator = (Dot d) {		//Dotの代入
 		x = d.Getx();
@@ -104,24 +106,26 @@ private:
 	Dot center;
 };
 
-class Square{//doubleDot2つ＋方向 中心は左の真ん中
+class Square{//doubleDot2つ
 public:
-	int Set(Dot a, Dot b, double c);
 	int Set(Dot a, Dot b);
-	int Set(Dot a, int w, int h, double dir);
-	int Set(int a, int b, int c, int d, double thita);
-	int Getup();
-	int Getleft();
-	bool isHitCenter(double p_radius,double e_radius);
+	int Set(Dot a, double w, double h);
+	int Set(double a, double b, double c, double d);
+	int Move(double x, double y);
+	//int Getup();
+	//int Getleft();
+	//bool isHitCenter(double p_radius,double e_radius);
 	Dot GetLU();
 	Dot GetRD();
-	int Draw(int colorHandle,double circleradius);
+	bool GetisExist();
+	int Delete();
+	//int Draw(int colorHandle,double circleradius);
+	int testDraw(int colorHandle);
 	void operator - (Dot a) {		//Squareのdot平行移動
 		Set(LU - a, RD - a);
 	};
-	void operator - (int a) {		//Squareのx平行移動
-		LU.Setx(LU.Getx() - a);
-		RD.Setx(RD.Getx() - a);
+	void operator + (Dot a) {
+		Set(LU + a, RD + a);
 	};
 	bool operator & (Square a) {	//あたり判定演算子　true で重なってる
 	//if (a[2]<b[0] || a[0]>b[2] || a[1] > b[3] || a[3] < b[1]) return 当たってない
@@ -131,14 +135,24 @@ public:
 		else
 			return true;
 	};
-	bool operator & (Circle a) ;
 
 private:
 	Dot LU;
 	Dot RD;
-	double dir;	//0~2PI
+	bool isExist;
 };
 
+class SquareMng
+{
+public:
+	int Initialize();
+	int Born(Dot a, Dot b);
+	int Move(double x, double y);
+	int testDraw(int colorHandle);
+	int Delete();
+private:
+	Square square[SQU_NUM];
+};
 
 
 #endif // !OBJH

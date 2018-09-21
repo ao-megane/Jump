@@ -36,6 +36,8 @@ const int GROUND_HEIGHT = DISP_HEIGHT - 50;
 
 const int GRAVITY = 30;
 
+const int SQU_NUM = 10;
+
 /*-----------------------------*/
 const double P_RATIO = 1.0;
 //const double P_WEEK_HEIGHT = 1200 * P_RATIO;
