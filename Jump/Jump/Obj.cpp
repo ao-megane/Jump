@@ -328,12 +328,18 @@ int SquareMng::Initialize() {
 	}
 	return 0;
 }
-int SquareMng::Born(Dot a,Dot b) {
-	for (int i = 0; i < SQU_NUM; i++) {
-		if (!square[i].GetisExist()) {//‘¶Ý‚µ‚È‚¯‚ê‚Î
-			square[i].Set(a, b);
-			break;
-		}
+//int SquareMng::Born(Dot a,Dot b) {
+//	for (int i = 0; i < SQU_NUM; i++) {
+//		if (!square[i].GetisExist()) {//‘¶Ý‚µ‚È‚¯‚ê‚Î
+//			square[i].Set(a, b);
+//			break;
+//		}
+//	}
+//	return 0;
+//}
+int SquareMng::Born(double a[], int num) {//num‚ÍSQU_NUM‚æ‚è¬‚³‚¢‚±‚Æ,num‚ÍŽlŠp‚Ì”
+	for (int i = 0; i < num; i++) {
+		square[i].Set(a[4 * i], a[4 * i + 1], a[4 * i + 2], a[4 * i + 3]);
 	}
 	return 0;
 }

@@ -1,7 +1,6 @@
 #ifndef VALUE_H
 #define VALUE_H
 #include"dxlib.h"
-//#include"Color.h"
 
 #define PI 3.1415926535
 
@@ -58,5 +57,12 @@ const double P_JUMP_HEIGHT = 64.0*3.0;//ジャンプの高さ
 
 /*------システム--------*/
 const int COUNT = 30*60*6;//30*60*3//3m
+const int STAGE_NUM = 10;
+
+/*------stage1(チュートリアル1)-----*/
+const int STAGE1_NUM = 1;
+static double STAGE1[STAGE1_NUM * 4] = {
+	0, GROUND_HEIGHT, DISP_WIDTH, DISP_HEIGHT
+};
 
 #endif // !VALUE_H

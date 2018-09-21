@@ -146,7 +146,8 @@ class SquareMng
 {
 public:
 	int Initialize();
-	int Born(Dot a, Dot b);
+	//int Born(Dot a, Dot b);
+	int Born(double a[], int num);
 	int Move(double x, double y);
 	int testDraw(int colorHandle);
 	int Delete();

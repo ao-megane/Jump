@@ -1,6 +1,7 @@
 #include"DxLib.h"
 #include"Input.h"
 #include"Player.h"
+#include"Stages.h"
 //#include"EnemyMng.h"
 #include"Value.h"
 #include"Chore.h"
@@ -10,40 +11,39 @@
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 
 	SetGraphMode(DISP_WIDTH, DISP_HEIGHT, 32);
-
 	{
-		/*SetWindowSizeChangeEnableFlag(TRUE);
-		SetWindowSizeExtendRate(0.6);
+		SetWindowSizeChangeEnableFlag(TRUE);
+		SetWindowSizeExtendRate(0.8);
 		ChangeWindowMode(TRUE);
-		SetBackgroundColor(0, 0, 0);*/
+		SetBackgroundColor(0, 0, 0);
 	}
-
 	DxLib_Init();
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	XINPUT_STATE input;
 	int key[20] = { 0 };
-
 	int flag = 0;
 	int selectFlag = 0;	//0:play,1:manual,2:credit
+	int stageFlag = 0;	//stage選択フラグ
 	int count = 0;
 	int keepCount = 0;
 	Player player;
 	
 	InputInitialize(key);
 	player.Initialize();
+	StagesInitialize();
+	SystemInitialize();
 	SetRand();
 	
 	//EnemyMngInitialize();
-	SystemInitialize();
 	//ColorMngInitialize();
 	//InputFile("kanuma2017.txt");
 
 	PlayTitleBGM();
 
 	flag = 0;
-	int Winner = 0;
-	int Loser = 0;
+	int Winner[STAGE_NUM] = { 0 };
+	int Loser[STAGE_NUM] = { 0 };
 	int down = 0;
 	int up = 0;
 	while (!ScreenFlip() && !ProcessMessage() && !ClearDrawScreen()) {
@@ -51,15 +51,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		GetJoypadXInputState(DX_INPUT_PAD1, &input);
 		InputUpdata(input, key);
 
+		if (THUMB_Y >= 80) down++; else down = 0;
+		if (THUMB_Y <= -80) up++; else up = 0;
+
 		switch (flag) {
 		case 0://OP
 			DrawOP(count);
-			//DrawFormatString(0, 0, WHITE, "opening");
-			//DrawData();
-			
-			if (THUMB_Y >= 80) down++; else down = 0;
-			if (THUMB_Y <= -80) up++; else up = 0;
-
+			//if (Y > 0) DrawData();
 			//if (Y > 0) DrawFormatString(0, 0, BLACK, "ClearRate:%f,Winner:%d,Loser:%d", (double)Winner / (double)(Winner + Loser), Winner, Loser);
 
 			if (down == 1) {
@@ -93,24 +91,35 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			break;
 		case 1://ステージ選択画面
 			DrawFormatString(0, 0, WHITE, "selecting");
-			//yesBGM();
-			//yesESounds();
-			//yesPSounds();
-			//yesKeySounds();
-			count = 0;
-			keepCount = 0;
-			//player.Set();
-			//SetKeyPosi();
-			//EnemyMngSet();
-			flag = 2;
+			DrawFormatString(0, 40, WHITE, "STAGE%d",stageFlag);
+			if (down == 1) {
+				PlayMove();
+				if (stageFlag == 2) stageFlag = 0;
+				else stageFlag++;
+			}
+			if (up == 1) {
+				PlayMove();
+				if (stageFlag == 0) stageFlag = 2;
+				else stageFlag--;
+			}
+			if (B == 1) {
+				flag = 2;
+			}
 			break;
 		case 2://loading
 			DrawFormatString(0, 0, WHITE, "loading");
+			count = 0;
+			StageLoad(stageFlag);
+			//player.Set();
+			//SetKeyPosi();
+			//EnemyMngSet();
 			flag = 3;
 			break;
 		case 3://playing
 			DrawFormatString(0, 0, WHITE, "playing");
 			player.Update(count,key);
+			StageUpdata(stageFlag,count,0);
+			DrawStage(stageFlag);
 			player.Draw();
 			break;
 		case 4://gameover
