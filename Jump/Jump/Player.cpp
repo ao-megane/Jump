@@ -64,7 +64,7 @@ int Player::Initialize() {
 	image = PStand1;
 	acceptFlag = 1;
 	isRightFlag = 1;
-	isAir = false;
+	//isAir = false;
 	stateFlag = 0;
 	bodyClock = 0;
 	return 0;
@@ -93,7 +93,9 @@ Dot Player::GetCenter() {
 	return center;
 }
 
-int Player::Set(Dot a) {
+
+
+int Player::Set(int stageflag) {
 	//if(levelFlag = 1)
 	//center.Set(100, GROUND_HEIGHT - P_HEIGHT / 2);
 	//weakArea.Set(center, P_W_WIDTH, P_W_HEIGHT);
@@ -102,8 +104,9 @@ int Player::Set(Dot a) {
 	acceptFlag = 1;
 	bodyClock = 0;
 	isRightFlag = 1;
-	center = a;
 	SetStand(0);
+	center.Set(P_START_POINT[2 * stageflag], P_START_POINT[2 * stageflag + 1]);
+
 	return 0;
 }
 
@@ -111,6 +114,8 @@ int Player::SetStand(int count) {
 	bodyClock = count;
 	stateFlag = 0;
 	acceptFlag = 1;
+	acceleration.Set(0, 0);
+	velocity.Set(0, 0);
 	image = PStand1;
 	return 0;
 }
@@ -128,10 +133,6 @@ int Player::SetDash(int count) {
 	return 0;
 }
 int Player::UpdateDash(int count) {
-	if (isRightFlag)
-		center.Move(P_SPEED, 0);
-	else
-		center.Move(-P_SPEED, 0);
 
 	int sum = 19;	//一周のフレーム数
 	int num = 8;	//一周の画像数
@@ -166,13 +167,14 @@ int Player::SetJump(int count) {
 	stateFlag = 4;
 	image = PStand1;
 	bodyClock = count;
-	isAir = true;
+	acceleration.Set(0, -P_JUMP_POWER);
+	//isAir = true;
 	PlayJump();
 	return 0;
 }
 int Player::UpdateJump(int count) {
 	//printfDx("JUMPING");
-	center.Sety(-sin((count / P_JUMP_NUM)*PI) * P_JUMP_HEIGHT + GROUND_HEIGHT);
+	//center.Sety(-sin((count / P_JUMP_NUM)*PI) * P_JUMP_HEIGHT + GROUND_HEIGHT);
 
 	//switch (flag)
 	//{
@@ -209,10 +211,9 @@ int Player::UpdateJump(int count) {
 	}*/
 	
 	if (count >= P_JUMP_NUM) {
-		stateFlag = 0;
+		//stateFlag = 0;
 		acceptFlag = true;
 		bodyClock = count;
-		isAir = false;
 	}
 	return 0;
 }
@@ -247,14 +248,14 @@ int Player::UpdateAttack_w(int count) {
 	}
 	else if (count >= 17) {//モーション終わり
 		acceptFlag = 1;
-		if (isAir != 0) {
-			isAir = 0;
-			stateFlag = 4;//戻す
-		}
-		else {
-			SetStand(count);
-			//printfDx("SETSTAND!\n");
-		}
+		//if (isAir != 0) {
+		//	isAir = 0;
+		//	stateFlag = 4;//戻す
+		//}
+		//else {
+		//	SetStand(count);
+		//	//printfDx("SETSTAND!\n");
+		//}
 	}
 
 	if (count == 0) image = PAttackw1;
@@ -296,14 +297,14 @@ int Player::UpdateAttack_s(int count) {
 	}
 	else if (count >= 40) {//モーション終わり
 		acceptFlag = 1;
-		if (isAir != 0) {
-			isAir = 0;
-			stateFlag = 4;//戻す
-		}
-		else {
-			SetStand(count);
-			//printfDx("SETSTAND!\n");
-		}
+		//if (isAir != 0) {
+		//	isAir = 0;
+		//	stateFlag = 4;//戻す
+		//}
+		//else {
+		//	SetStand(count);
+		//	//printfDx("SETSTAND!\n");
+		//}
 	}
 	if (count == 0) image = PAttacks1;
 	if (count == 17) image = PAttacks2;
@@ -314,27 +315,22 @@ int Player::UpdateAttack_s(int count) {
 }
 
 int dirKeeper;
-int Player::Update(int count,int key[]) {
-	//int flag = 4;//空中制御用フラグ
-	//if (WeaponFlag == 0 && attack == 0) {
-	//	weapon.Set(weapon.Get_x() - GROUND_SPEED, weapon.Get_y());
-	//	Splayer.Set(center, P_WIDTH, P_HEIGHT);
-	//	Sweapon.Set(weapon, STUKSWORD_WIDTH, STUKSWORD_HEIGHT);
-	//	if (Splayer & Sweapon) {
-	//		//printfDx("PICK!");
-	//		PlayGet();
-	//		WeaponFlag = 1;
-	//	}
-	//}
-
-	//if (center.Gety() >= GROUND_HEIGHT) {//床
-	//	isAir = false;
-	//}
-	//else {//空中
-	//	isAir = true;
-	//}
+int Player::Update1(int count,int key[]) {
+	weakAreaMng.Delete();
 
 	if (acceptFlag) {//入力受付時
+		if (THUMB_X > 0) {
+			velocity.Setx(P_SPEED);
+			isRightFlag = true;
+		}
+		else if (THUMB_X < 0) {
+			velocity.Setx(-P_SPEED);
+			isRightFlag = false;
+		}
+		else {
+			velocity.Setx(0);
+		}
+
 		if (isAir) {//空中なら
 			//if (B == 1) SetAirAttack();
 		}
@@ -345,8 +341,7 @@ int Player::Update(int count,int key[]) {
 			}
 		}
 	}
-	
-	//printfDx("INN!!!!!");
+
 	switch (stateFlag)
 	{
 	case 0:
@@ -374,25 +369,60 @@ int Player::Update(int count,int key[]) {
 		break;
 	}
 
-	//if (center.Gety() >= DISP_HEIGHT - 50) {//床
-	//	if (acceleration.Gety() > 0) acceleration.Sety(0);
-	//	if (velocity.Gety() > 0) velocity.Sety(0);
-	//	isAir = false;
-	//}
-	//else {//空中
-	//	isAir = true;
-	//	acceleration.Sety(acceleration.Gety() + GRAVITY);
-	//}
-	//velocity.Set(velocity.Getx() + acceleration.Getx(), velocity.Gety() + acceleration.Gety());
-	//if (center.Gety() + velocity.Gety() >= DISP_HEIGHT - 50) {//着地
-	//	center.Set(center.Getx() + velocity.Getx(), DISP_HEIGHT - 50);
-	//}
-	//else {
-	//	center.Set(center.Getx() + velocity.Getx(), center.Gety() + velocity.Gety());
-	//}
-	
+	weakAreaMng.Born(center.Getx() - P_WEAK_LU_X, center.Gety() - P_WEAK_LU_Y, center.Getx() + P_WEAK_RD_X, center.Gety() + P_WEAK_RD_Y);
 
-	//weakArea.Set(center, P_W_WIDTH, P_W_HEIGHT);
+	return 0;
+}
+int Player::Update2(SquareMng a) {//壁まわりの処理
+	DrawFormatString(40, 80, RED, "%d,UP = %f", weakAreaMng.isHitSquareMng(a),a.GetUP());
+
+	isAir = true;//足に何かが触れなければ空中にいる
+	switch (weakAreaMng.isHitSquareMng(a))
+	{
+	case 0://ぶつかってない
+		break;
+	case 1://LU
+		acceleration.Sety(GRAVITY);
+		//velocity.Sety(0);
+		break;
+	case 2://U
+		acceleration.Sety(GRAVITY);
+		//velocity.Sety(0);
+		break;
+	case 3://RU
+		acceleration.Sety(GRAVITY);
+		//velocity.Sety(0);
+		break;
+	case 4://R
+		break;
+	case 5://RD
+		acceleration.Sety(0);
+		velocity.Sety(0);
+		isAir = false;
+		break;
+	case 6://D
+		if(acceleration.Gety() > 0)
+			acceleration.Sety(0);
+		if(velocity.Gety() > 0)
+			velocity.Sety(0);
+		//center.Sety(a.GetUP() - ( - P_WEAK_LU_Y + P_WEAK_RD_Y) / 2.0);
+		isAir = false;
+		break;
+	case 7://LD
+		acceleration.Sety(0);
+		velocity.Sety(0);
+		isAir = false;
+		break;
+	case 8://L
+		break;
+	default:
+		break;
+	}
+	if (isAir)
+		acceleration.Move(0, GRAVITY);
+
+	velocity.Move(acceleration.Getx(), acceleration.Gety());
+	center.Move(velocity.Getx(), velocity.Gety());
 	return 0;
 }
 
@@ -426,18 +456,18 @@ int Player::Draw() {
 	//		image, true);
 
 	//if(isRightFlag)
-	DrawModiGraph(
+	/*DrawModiGraph(
 		center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() - P_DRAW_HEIGHT / 2.0,
 		center.Getx() + P_DRAW_WIDTH / 2.0, center.Gety() - P_DRAW_HEIGHT / 2.0,
 		center.Getx() + P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0,
 		center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0,
 		image, true
-	);
+	);*/
 
 	if (attack > 0)
 		attackAreaMng.testDraw(RED);
 
-	//DrawFormatString(0, 0, RED, "P_state : %2d ,accept : %2d,bodyClock : %5d,center.y : %5d",stateFlag,acceptFlag,bodyClock,center.Get_y());
+	DrawFormatString(0, 120, RED, "P_state:%d ,a:%f",stateFlag,acceleration.Gety());
 	//DrawFormatString(0, 0, RED, "P_state:%d,weaponFlag:%d,accept:%d", stateFlag, WeaponFlag,acceptFlag);
 	
 

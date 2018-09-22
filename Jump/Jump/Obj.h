@@ -112,6 +112,7 @@ public:
 	int Set(Dot a, double w, double h);
 	int Set(double a, double b, double c, double d);
 	int Move(double x, double y);
+	int isHitSquare(Square a);//1:LU 2:U 3:RU 4:R 5:RD 6:D 7:LD 8:L 0:“–‚½‚Á‚Ä‚È‚¢ 
 	//int Getup();
 	//int Getleft();
 	//bool isHitCenter(double p_radius,double e_radius);
@@ -148,7 +149,11 @@ public:
 	int Initialize();
 	//int Born(Dot a, Dot b);
 	int Born(double a[], int num);
+	int Born(double a, double b, double c, double d);
 	int Move(double x, double y);
+	Square GetSquare(int num);
+	int isHitSquareMng(SquareMng a);//1:LU 2:U 3:RU 4:R 5:RD 6:D 7:LD 8:L 0:“–‚½‚Á‚Ä‚È‚¢
+	double GetUP();
 	int testDraw(int colorHandle);
 	int Delete();
 private:

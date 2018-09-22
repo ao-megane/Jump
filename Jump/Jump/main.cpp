@@ -110,15 +110,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			DrawFormatString(0, 0, WHITE, "loading");
 			count = 0;
 			StageLoad(stageFlag);
-			//player.Set();
+			player.Set(stageFlag);
 			//SetKeyPosi();
 			//EnemyMngSet();
 			flag = 3;
 			break;
 		case 3://playing
 			DrawFormatString(0, 0, WHITE, "playing");
-			player.Update(count,key);
+			player.Update1(count,key);
 			StageUpdata(stageFlag,count,0);
+			player.Update2(GetStageStaticSquareMng());
 			DrawStage(stageFlag);
 			player.Draw();
 			break;

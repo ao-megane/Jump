@@ -50,6 +50,10 @@ int StageUpdata(int stagenum, int count, int flag) {//大体のステージでいらないか
 	return 0;
 }
 
+SquareMng GetStageStaticSquareMng() {
+	return staticWall;
+}
+
 int DrawStage(int count) {//count渡す必要ないかも
 	staticWall.testDraw(GREEN);
 	dynamicWall.testDraw(ORANGE);

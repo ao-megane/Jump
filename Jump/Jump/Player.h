@@ -10,7 +10,7 @@ public:/*
 	~Player();*/
 	int Initialize();	//ゲーム開始時（画像ハンドル周辺）
 
-	int Set(Dot a);			//プレイ開始時（座標周辺）
+	int Set(int stageflag);			//プレイ開始時（座標周辺）
 
 	int SetStand(int count);		//stand状態に入る関数
 	int SetDash(int count);
@@ -20,7 +20,8 @@ public:/*
 	//int SetAttack_air(int count);
 	//int SetKunai(int count);
 
-	int Update(int count, int key[]);	//入力周辺の処理
+	int Update1(int count, int key[]);	//入力周辺の処理
+	int Update2(SquareMng a);	//壁周辺の処理
 
 	int UpdateStand(int count);		//stand状態中の処理,アニメーションや攻撃力の設定
 	int UpdateDash(int count);

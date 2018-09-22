@@ -33,14 +33,16 @@ const int DISP_HEIGHT = 1080;
 
 const int GROUND_HEIGHT = DISP_HEIGHT - 50;
 
-const int GRAVITY = 30;
+const double GRAVITY = 9.8*0.1;
 
 const int SQU_NUM = 10;
 
 /*-----------------------------*/
 const double P_RATIO = 1.0;
-//const double P_WEEK_HEIGHT = 1200 * P_RATIO;
-//const double P_WEEK_WIDTH = 800 * P_RATIO;
+const double P_WEAK_LU_X = 100;
+const double P_WEAK_LU_Y = 100;
+const double P_WEAK_RD_X = 100;
+const double P_WEAK_RD_Y = 100;
 //const double P_DRAW_HEIGHT = 2480 * P_RATIO;
 //const double P_DRAW_WIDTH = 2480 * P_RATIO;
 const double P_DRAW_HEIGHT = 400.0 * P_RATIO;
@@ -53,11 +55,23 @@ const double P_SPEED = 30;
 const int P_DASH_CLOCK = 40;//P_CLOCK/2 フレームに一回足音
 
 const double P_JUMP_NUM = 30.0*3.0;//ジャンプの総フレーム
-const double P_JUMP_HEIGHT = 64.0*3.0;//ジャンプの高さ
+const double P_JUMP_POWER = GRAVITY * 10.0;//ジャンプの高さ
 
 /*------システム--------*/
 const int COUNT = 30*60*6;//30*60*3//3m
 const int STAGE_NUM = 10;
+const double P_START_POINT[STAGE_NUM * 2] = {
+	100,GROUND_HEIGHT - 100,
+	0,0,
+	0,0,
+	0,0,
+	0,0,
+	0,0,
+	0,0,
+	0,0,
+	0,0,
+	0,0
+};
 
 /*------stage1(チュートリアル1)-----*/
 const int STAGE1_NUM = 1;

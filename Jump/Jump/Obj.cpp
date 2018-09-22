@@ -79,6 +79,21 @@ int Square::Move(double x, double y) {
 	RD.Set(RD.Getx() + x, RD.Gety() + y);
 	return 0;
 }
+int Square::isHitSquare(Square a) {//二辺接地が未実装
+	if (LU.Getx() < a.GetRD().Getx() && a.GetRD().Getx() < RD.Getx()) {//左でぶつかってる
+		return 8;
+	}
+	if (LU.Gety() < a.GetRD().Gety() && a.GetRD().Gety() < RD.Gety()) {//上でぶつかってる
+		return 2;
+	}
+	if (LU.Getx() < a.GetLU().Getx() && a.GetLU().Getx() < RD.Getx()) {//右でぶつかってる
+		return 4;
+	}
+	if (LU.Gety() < a.GetLU().Gety() && a.GetLU().Gety() < RD.Gety()) {//下でぶつかってる
+		return 6;
+	}
+	return 0;
+}
 int Square::testDraw(int handle) {
 	DrawBox(LU.Getx(), LU.Gety(), RD.Getx(), RD.Gety(), handle, false);
 	return 0;
@@ -343,6 +358,15 @@ int SquareMng::Born(double a[], int num) {//numはSQU_NUMより小さいこと,numは四角
 	}
 	return 0;
 }
+int SquareMng::Born(double a,double b,double c,double d) {//numはSQU_NUMより小さいこと,numは四角の数
+	for (int i = 0; i < SQU_NUM; i++) {
+		if (!square[i].GetisExist()) {
+			square[i].Set(a,b,c,d);
+			break;
+		}
+	}
+	return 0;
+}
 int SquareMng::Move(double x, double y) {
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {//存在すれば
@@ -350,6 +374,29 @@ int SquareMng::Move(double x, double y) {
 		}
 	}
 	return 0;
+}
+Square SquareMng::GetSquare(int num) {
+	return square[num];
+}
+int SquareMng::isHitSquareMng(SquareMng a) {//二辺接地が未実装
+	for (int i = 0; i < SQU_NUM; i++) {
+		if (square[i].GetisExist()) {
+			for (int j = 0; j < SQU_NUM; j++) {
+				if (square[i].isHitSquare(a.GetSquare(j)))
+					return square[i].isHitSquare(a.GetSquare(j));
+			}
+		}
+	}
+}
+double SquareMng::GetUP() {
+	double a=0;
+	for (int i = 0; i < SQU_NUM; i++) {
+		if (square[i].GetisExist()) {
+			if (square[i].GetLU().Gety() > a)
+				a = square[i].GetLU().Gety();
+		}
+	}
+	return a;
 }
 int SquareMng::testDraw(int handle) {
 	for (int i = 0; i < SQU_NUM; i++) {
