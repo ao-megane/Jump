@@ -80,17 +80,20 @@ int Square::Move(double x, double y) {
 	return 0;
 }
 int Square::isHitSquare(Square a) {//“ñ•ÓÚ’n‚ª–¢À‘•
-	if (LU.Getx() < a.GetRD().Getx() && a.GetRD().Getx() < RD.Getx()) {//¶‚Å‚Ô‚Â‚©‚Á‚Ä‚é
-		return 8;
-	}
-	if (LU.Gety() < a.GetRD().Gety() && a.GetRD().Gety() < RD.Gety()) {//ã‚Å‚Ô‚Â‚©‚Á‚Ä‚é
-		return 2;
-	}
-	if (LU.Getx() < a.GetLU().Getx() && a.GetLU().Getx() < RD.Getx()) {//‰E‚Å‚Ô‚Â‚©‚Á‚Ä‚é
-		return 4;
-	}
-	if (LU.Gety() < a.GetLU().Gety() && a.GetLU().Gety() < RD.Gety()) {//‰º‚Å‚Ô‚Â‚©‚Á‚Ä‚é
-		return 6;
+	if (*this & a) {
+		if (LU.Gety() <= a.GetLU().Gety() && a.GetLU().Gety() <= RD.Gety()) {//‰º‚Å‚Ô‚Â‚©‚Á‚Ä‚é(G‚ê‚Ä‚¢‚é)
+			return 6;
+		}
+		if (LU.Getx() <= a.GetRD().Getx() && a.GetRD().Getx() <= RD.Getx()) {//¶‚Å‚Ô‚Â‚©‚Á‚Ä‚é(G‚ê‚Ä‚¢‚é)
+			return 8;
+		}
+		if (LU.Gety() <= a.GetRD().Gety() && a.GetRD().Gety() <= RD.Gety()) {//ã‚Å‚Ô‚Â‚©‚Á‚Ä‚é(G‚ê‚Ä‚¢‚é)
+			return 2;
+		}
+		if (LU.Getx() <= a.GetLU().Getx() && a.GetLU().Getx() <= RD.Getx()) {//‰E‚Å‚Ô‚Â‚©‚Á‚Ä‚é(G‚ê‚Ä‚¢‚é)
+			return 4;
+		}
+		return 6;	//“à•ï‚³‚ê‚½‚ç‰º‚É‚Ô‚Â‚©‚Á‚½‚±‚Æ‚É‚·‚é(°”²‚¯–h~)
 	}
 	return 0;
 }
@@ -362,6 +365,7 @@ int SquareMng::Born(double a,double b,double c,double d) {//num‚ÍSQU_NUM‚æ‚è¬‚³
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (!square[i].GetisExist()) {
 			square[i].Set(a,b,c,d);
+			//printfDx("%d", i);
 			break;
 		}
 	}
@@ -376,17 +380,62 @@ int SquareMng::Move(double x, double y) {
 	return 0;
 }
 Square SquareMng::GetSquare(int num) {
+	if (square[num].GetisExist()) {
+	}
+	else {
+		//printfDx("GETSQUAREERROR!!\n");
+	}
 	return square[num];
 }
-int SquareMng::isHitSquareMng(SquareMng a) {//“ñ•ÓÚ’n‚ª–¢À‘•
+int SquareMng::isHitSquareMng(SquareMng a) {//
+	bool L = false, R = false, U = false, D = false;
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {
 			for (int j = 0; j < SQU_NUM; j++) {
-				if (square[i].isHitSquare(a.GetSquare(j)))
-					return square[i].isHitSquare(a.GetSquare(j));
+				switch(square[i].isHitSquare(a.GetSquare(j))) {
+				case 0:
+					break;
+				case 1:
+					L = true;
+					U = true;
+					break;
+				case 2:
+					U = true;
+					break;
+				case 3:
+					R = true;
+					U = true;
+					break;
+				case 4:
+					R = true;
+					break;
+				case 5:
+					R = true;
+					D = true;
+					break;
+				case 6:
+					D = true;
+					break;
+				case 7:
+					L = true;
+					D = true;
+					break;
+				case 8:
+					L = true;
+					break;
+				}
 			}
 		}
 	}
+	if (D && L) return 7;
+	if (D && R) return 5;
+	if (D) return 6;
+	if (U && L) return 1;
+	if (U && R) return 3;
+	if (U) return 2;
+	if (R) return 4;
+	if (L) return 8;
+	return 0;
 }
 double SquareMng::GetUP() {
 	double a=0;
@@ -397,6 +446,27 @@ double SquareMng::GetUP() {
 		}
 	}
 	return a;
+}
+double SquareMng::GetLanding(Square area) {//area‚ÍSquareMng‚Ì‚Ç‚±‚É’…’n‚·‚é‚©
+	double a = DISP_HEIGHT;
+	int b = 0;
+	for (int i = 0; i < SQU_NUM; i++) {
+		if (square[i].GetisExist()) {	//lŠp‚ª‘¶İ‚µ‚Ä
+			//printfDx("%d",i);
+			if (!(square[i].GetLU().Getx() >= area.GetRD().Getx()) && !(area.GetLU().Getx() >= square[i].GetRD().Getx())) {	//‰¡•ûŒü”»’è
+				//printfDx("2");
+				if (square[i].GetLU().Gety() >= area.GetLU().Gety()) {	//c•ûŒü”»’è,LU‚Í‚ß‚è‚±‚İ‘ÎôC‚¤‚Ü‚­‚¢‚©‚È‚¯‚ê‚ÎÄl(RD‚©‚çmargin‚Å‚â‚é‚©)
+					//printfDx("3");
+					if (square[i].GetLU().Gety() - area.GetRD().Gety() < a) {//‹ß‚¢‚â‚Â
+						//square[i].testDraw(RED);
+						a = square[i].GetLU().Gety() - area.GetRD().Gety();
+						b = i;
+					}
+				}
+			}
+		}
+	}
+	return square[b].GetLU().Gety();
 }
 int SquareMng::testDraw(int handle) {
 	for (int i = 0; i < SQU_NUM; i++) {

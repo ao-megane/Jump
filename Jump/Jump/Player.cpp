@@ -106,7 +106,7 @@ int Player::Set(int stageflag) {
 	isRightFlag = 1;
 	SetStand(0);
 	center.Set(P_START_POINT[2 * stageflag], P_START_POINT[2 * stageflag + 1]);
-
+	telepo_back.Set(0, 0);
 	return 0;
 }
 
@@ -115,7 +115,7 @@ int Player::SetStand(int count) {
 	stateFlag = 0;
 	acceptFlag = 1;
 	acceleration.Set(0, 0);
-	velocity.Set(0, 0);
+	//velocity.Set(0, 0);	//0,0ÇæÇ©ÇÁstandÇ…ì¸Ç¡ÇΩ
 	image = PStand1;
 	return 0;
 }
@@ -164,10 +164,10 @@ int Player::UpdateDash(int count) {
 }
 
 int Player::SetJump(int count) {
-	stateFlag = 4;
+	stateFlag = 2;
 	image = PStand1;
 	bodyClock = count;
-	acceleration.Set(0, -P_JUMP_POWER);
+	acceleration.Sety(-P_JUMP_POWER);
 	//isAir = true;
 	PlayJump();
 	return 0;
@@ -220,7 +220,7 @@ int Player::UpdateJump(int count) {
 
 int Player::SetAttack_w(int count) {
 	bodyClock = count;
-	stateFlag = 6;
+	stateFlag = 4;
 	image = PStand1;
 	acceptFlag = 0;
 	attack = 0;
@@ -269,7 +269,7 @@ int Player::UpdateAttack_w(int count) {
 
 int Player::SetAttack_s(int count) {
 	bodyClock = count;
-	stateFlag = 5;
+	stateFlag = 3;
 	image = PStand1;
 	acceptFlag = 0;
 	attack = 0;
@@ -318,6 +318,16 @@ int dirKeeper;
 int Player::Update1(int count,int key[]) {
 	weakAreaMng.Delete();
 
+	if (LEFT == 1) {
+		if (telepo_back.Getx() == 0 && telepo_back.Gety() == 0) {
+			telepo_back = center;
+		}
+		else {
+			center = telepo_back;
+			telepo_back.Set(0, 0);
+		}
+	}
+
 	if (acceptFlag) {//ì¸óÕéÛïtéû
 		if (THUMB_X > 0) {
 			velocity.Setx(P_SPEED);
@@ -333,11 +343,12 @@ int Player::Update1(int count,int key[]) {
 
 		if (isAir) {//ãÛíÜÇ»ÇÁ
 			//if (B == 1) SetAirAttack();
+			//printfDx("isAir\n");
 		}
 		else {//ínè„Ç»ÇÁ
 			if (Y == 1) {
 				SetJump(count);
-				printfDx("JUMP!");
+				//printfDx("JUMP!");
 			}
 		}
 	}
@@ -383,37 +394,63 @@ int Player::Update2(SquareMng a) {//ï«Ç‹ÇÌÇËÇÃèàóù
 		break;
 	case 1://LU
 		acceleration.Sety(GRAVITY);
-		//velocity.Sety(0);
+		if (velocity.Getx() < 0) velocity.Setx(0);
 		break;
 	case 2://U
-		acceleration.Sety(GRAVITY);
-		//velocity.Sety(0);
+		if (acceleration.Gety() < 0) {
+			acceleration.Sety(0);
+		}
+		if (velocity.Gety() < 0) {
+			velocity.Sety(0);
+		}
 		break;
 	case 3://RU
 		acceleration.Sety(GRAVITY);
-		//velocity.Sety(0);
+		if (velocity.Getx() > 0) velocity.Setx(0);
 		break;
 	case 4://R
+		if (velocity.Getx() > 0) velocity.Setx(0);
 		break;
 	case 5://RD
-		acceleration.Sety(0);
-		velocity.Sety(0);
+		if (acceleration.Gety() > 0) {
+			acceleration.Sety(0);
+		}
+		if (velocity.Gety() > 0) {
+			velocity.Sety(0);
+		}
+		center.Sety(a.GetLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_Y);
+		if (velocity.Getx() > 0) velocity.Setx(0);
 		isAir = false;
+		printfDx("RD!\n");
 		break;
 	case 6://D
-		if(acceleration.Gety() > 0)
+		if (acceleration.Gety() > 0) {
 			acceleration.Sety(0);
-		if(velocity.Gety() > 0)
+		}
+		if (velocity.Gety() > 0) {
 			velocity.Sety(0);
-		//center.Sety(a.GetUP() - ( - P_WEAK_LU_Y + P_WEAK_RD_Y) / 2.0);
+		}
+		center.Sety(a.GetLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_Y);
+		//a.testDraw(GREEN);
+		//printfDx("%f\n", a.GetSquare(0).GetLU().Gety());
+		if (stateFlag == 2) {//
+			//SetStand(0);
+		}
 		isAir = false;
 		break;
 	case 7://LD
-		acceleration.Sety(0);
-		velocity.Sety(0);
+		if (acceleration.Gety() > 0) {
+			acceleration.Sety(0);
+		}
+		if (velocity.Gety() > 0) {
+			velocity.Sety(0);
+		}
+		center.Sety(a.GetLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_Y);
+		if (velocity.Getx() < 0) velocity.Setx(0);
 		isAir = false;
 		break;
 	case 8://L
+		if (velocity.Getx() < 0) velocity.Setx(0);
 		break;
 	default:
 		break;
@@ -466,6 +503,11 @@ int Player::Draw() {
 
 	if (attack > 0)
 		attackAreaMng.testDraw(RED);
+
+	DrawBox(telepo_back.Getx() - 30, telepo_back.Gety() - 30, telepo_back.Getx() + 30, telepo_back.Gety() + 30, WHITE, false);
+
+	DrawBox(center.Getx() - 96, center.Gety() - 96, center.Getx() + 96, center.Gety() + 96, BLUE, false);
+	DrawBox(center.Getx() - 96*2, center.Gety() - 96 * 2, center.Getx() + 96 * 2, center.Gety() + 96 * 2, BLUE, false);
 
 	DrawFormatString(0, 120, RED, "P_state:%d ,a:%f",stateFlag,acceleration.Gety());
 	//DrawFormatString(0, 0, RED, "P_state:%d,weaponFlag:%d,accept:%d", stateFlag, WeaponFlag,acceptFlag);

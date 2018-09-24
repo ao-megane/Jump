@@ -152,6 +152,7 @@ public:
 	int Born(double a, double b, double c, double d);
 	int Move(double x, double y);
 	Square GetSquare(int num);
+	double GetLanding(Square area);//プレイヤーが乗ってそうな四角のLU.Gety()を返す
 	int isHitSquareMng(SquareMng a);//1:LU 2:U 3:RU 4:R 5:RD 6:D 7:LD 8:L 0:当たってない
 	double GetUP();
 	int testDraw(int colorHandle);

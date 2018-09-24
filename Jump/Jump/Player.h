@@ -49,6 +49,7 @@ private:
 	Dot center;			//中心座標
 	Dot acceleration;	//加速度
 	Dot velocity;		//速度
+	Dot telepo_back;	//0,0以外ならテレポ先
 
 	SquareMng weakAreaMng;	//被ダメ範囲
 	SquareMng attackAreaMng;	//与ダメ範囲
@@ -59,6 +60,7 @@ private:
 	bool isRightFlag;	//向いてる方向フラグ（0で左 1で右）
 	bool acceptFlag;	//入力受付フラグ（1で受付）
 	bool isAir;			//空中か否かのフラグ
+	//bool onSquare;		//四角の上にいるか否かのフラグ
 	
 	int stateFlag;		//現状態フラグ
 	/*
