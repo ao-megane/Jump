@@ -80,21 +80,29 @@ int Square::Move(double x, double y) {
 	return 0;
 }
 int Square::isHitSquare(Square a) {//“ñ•ÓÚ’n‚ª–¢À‘•
+	bool L = false, R = false, U = false, D = false;
 	if (*this & a) {
 		if (LU.Gety() <= a.GetLU().Gety() && a.GetLU().Gety() <= RD.Gety()) {//‰º‚Å‚Ô‚Â‚©‚Á‚Ä‚é(G‚ê‚Ä‚¢‚é)
-			return 6;
+			D = true;
 		}
 		if (LU.Getx() <= a.GetRD().Getx() && a.GetRD().Getx() <= RD.Getx()) {//¶‚Å‚Ô‚Â‚©‚Á‚Ä‚é(G‚ê‚Ä‚¢‚é)
-			return 8;
+			L = true;
 		}
 		if (LU.Gety() <= a.GetRD().Gety() && a.GetRD().Gety() <= RD.Gety()) {//ã‚Å‚Ô‚Â‚©‚Á‚Ä‚é(G‚ê‚Ä‚¢‚é)
-			return 2;
+			U = true;
 		}
 		if (LU.Getx() <= a.GetLU().Getx() && a.GetLU().Getx() <= RD.Getx()) {//‰E‚Å‚Ô‚Â‚©‚Á‚Ä‚é(G‚ê‚Ä‚¢‚é)
-			return 4;
+			R = true;
 		}
-		return 6;	//“à•ï‚³‚ê‚½‚ç‰º‚É‚Ô‚Â‚©‚Á‚½‚±‚Æ‚É‚·‚é(°”²‚¯–h~)
 	}
+	if (D && L) return 7;
+	if (D && R) return 5;
+	if (D) return 6;
+	if (U && L) return 1;
+	if (U && R) return 3;
+	if (U) return 2;
+	if (R) return 4;
+	if (L) return 8;
 	return 0;
 }
 int Square::testDraw(int handle) {

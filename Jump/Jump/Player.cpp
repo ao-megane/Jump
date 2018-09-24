@@ -410,6 +410,7 @@ int Player::Update2(SquareMng a) {//•Ç‚Ü‚í‚è‚Ìˆ—
 		break;
 	case 4://R
 		if (velocity.Getx() > 0) velocity.Setx(0);
+		printfDx("R!\n");
 		break;
 	case 5://RD
 		if (acceleration.Gety() > 0) {
