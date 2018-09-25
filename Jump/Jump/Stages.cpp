@@ -3,7 +3,7 @@
 #include"Obj.h"
 
 int BackGround;
-int Wall;
+int Limit;
 SquareMng staticWall;
 SquareMng dynamicWall;
 
@@ -27,11 +27,33 @@ int StageLoad(int stagenum) {
 	{
 	case 0:	//stage1
 		BackGround = Tutorial_back;
-		Wall = Tutorial_wall;
 		staticWall.Born(STAGE1,STAGE1_NUM);
 		//dynamicWall.Born();
+		Limit = STAGE1_COUNT;
 		break;
 	case 1:
+		BackGround = Tutorial_back;
+		staticWall.Born(STAGE2, STAGE2_NUM);
+		//dynamicWall.Born();
+		Limit = STAGE2_COUNT;
+		break;
+	case 2:
+		BackGround = Tutorial_back;
+		staticWall.Born(STAGE3, STAGE3_NUM);
+		//dynamicWall.Born();
+		Limit = STAGE3_COUNT;
+		break;
+	case 3:
+		BackGround = Tutorial_back;
+		staticWall.Born(STAGE4, STAGE4_NUM);
+		//dynamicWall.Born();
+		Limit = STAGE4_COUNT;
+		break;
+	case 4:
+		BackGround = Tutorial_back;
+		staticWall.Born(STAGE5, STAGE5_NUM);
+		//dynamicWall.Born();
+		Limit = STAGE5_COUNT;
 		break;
 	default:
 		break;
@@ -52,6 +74,9 @@ int StageUpdata(int stagenum, int count, int flag) {//大体のステージでいらないか
 
 SquareMng GetStageStaticSquareMng() {
 	return staticWall;
+}
+int GetStageLimit() {
+	return Limit;
 }
 
 int DrawStage(int count) {//count渡す必要ないかも

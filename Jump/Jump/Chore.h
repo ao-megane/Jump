@@ -16,17 +16,6 @@
 
 int SystemInitialize();
 
-int GetFloor1SoftHandle();
-
-int GetStepSoftHandle();
-
-int GetFloor2SoftHandle();
-
-int GetmaskRight();
-int GetmaskLeft();
-int GetmaskRightSoft();
-int GetmaskLeftSoft();
-
 int PlayMove();
 
 int PlayChoice();
@@ -37,7 +26,6 @@ int DrawOP(int count);
 
 int DrawTitleSentence(int flag);
 
-int DrawTime(int count);
 
 int PlayTitleBGM();
 
@@ -49,21 +37,16 @@ int StopChaseBGM();
 
 int PlaybeLooked();
 
+int DrawUI(int count);
+
 int DrawPrologue(int b);
-
 int DrawManual(int b);
-
 int DrawCredit();
-
 int DrawPause();
 
 //void DrawChore();
 
 //int SetBack();
-
-int DrawBack(int floor,Dot player);
-
-int DrawWalls(int floor,Dot player);
 
 int EndBack();
 

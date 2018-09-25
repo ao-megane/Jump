@@ -1,19 +1,5 @@
 #include"Chore.h"
 
-int Floor1Image;
-int Floor1WallsImage;
-int StepImage;
-int Floor2Image;
-int Floor2WallsImage;
-int Floor1data;
-int Stepdata;
-int Floor2data;
-
-int maskRight;
-int maskLeft;
-int maskRightSoft;
-int maskLeftSoft;
-
 int Clear;
 int GameOver;
 int Loading;
@@ -56,20 +42,6 @@ int SystemInitialize() {
 	White = LoadGraph("images/system/white.png");
 	Manual[0] = LoadGraph("images/system/manual1.png");
 	Manual[1] = LoadGraph("images/system/manual2.png");
-
-	Floor1Image = LoadGraph("images/maps/floor1-floor.png");
-	Floor1WallsImage = LoadGraph("images/maps/floor1-wall-2.png");
-	Floor1data = LoadSoftImage("images/maps/floor1-data.png");
-	StepImage = LoadGraph("images/maps/step.png");
-	Stepdata = LoadSoftImage("images/maps/step-data.png");
-	Floor2Image = LoadGraph("images/maps/floor2-floor.png");
-	Floor2WallsImage = LoadGraph("images/maps/floor2-wall.png");
-	Floor2data = LoadSoftImage("images/maps/floor2-data.png");
-
-	maskRight = LoadGraph("images/player/masks/right.png");
-	maskLeft = LoadGraph("images/player/masks/left.png");
-	maskRightSoft = LoadSoftImage("images/player/masks/right.png");
-	maskLeftSoft = LoadSoftImage("images/player/masks/left.png");
 
 	Prologue[0] = LoadGraph("images/system/prologue/1.png");
 	Prologue[1] = LoadGraph("images/system/prologue/2.png");
@@ -238,12 +210,7 @@ int DrawPause() {
 	//DrawFormatString(0, 0, RED, "PAUSE");
 	return 0;
 }
-int DrawTime(int count) {
-	DrawFormatStringToHandle(1800, 185, WHITE, lemagne, "%d", (COUNT - count) / 30);
-	return 0;
-}
 
-//int manFlag;
 int DrawManual(int b) {
 	switch (manFlag)
 	{
@@ -256,15 +223,15 @@ int DrawManual(int b) {
 		DrawFormatString(20, 20, RED, "3");
 		break;
 	case 2:
-		DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor1Image, true);
-		DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor1WallsImage, true);
+		//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor1Image, true);
+		//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor1WallsImage, true);
 		//DrawFormatStringToHandle(52, 52, BLACK, lemagne, "floor1");
 		//DrawFormatStringToHandle(50, 50, ORANGE, lemagne, "floor1");
 		DrawFormatString(20, 20, RED, "2");
 		break;
 	case 3:
-		DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor2Image, true);
-		DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor2WallsImage, true);
+		//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor2Image, true);
+		//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor2WallsImage, true);
 		//DrawFormatStringToHandle(52, 52, BLACK, lemagne, "floor2");
 		//DrawFormatStringToHandle(50, 50, ORANGE, lemagne, "floor2");
 		DrawFormatString(20, 20, RED, "1");
@@ -287,6 +254,11 @@ int DrawCredit() {
 	return 0;
 }
 
+int DrawUI(int count) {
+	DrawFormatString(DISP_WIDTH - 50, 50, WHITE, "%d", count / 30);
+	return 0;
+}
+
 void DrawChore() {
 	//DrawFormatString(0, 0, RED, "UI?");
 	//if (count < NORMAL_COUNT) {
@@ -297,28 +269,6 @@ void DrawChore() {
 	//		UI_MARGIN_WIDTH, UI_HEIGHT + UI_MARGIN_HEIGHT, UIBack, true);
 
 	//DrawFormatStringFToHandle(DISP_WIDTH - 500, 10, BROWN, nishiki, "SCORE : %5d", Score);
-}
-
-int GetFloor1SoftHandle() {
-	return Floor1data;
-}
-int GetStepSoftHandle() {
-	return Stepdata;
-}
-int GetFloor2SoftHandle() {
-	return Floor2data;
-}
-int GetmaskRight() {
-	return maskRight;
-}
-int GetmaskLeft() {
-	return maskLeft;
-}
-int GetmaskRightSoft() {
-	return maskRightSoft;
-}
-int GetmaskLeftSoft() {
-	return maskLeftSoft;
 }
 
 int UpdataBack(int count) {//countŽg‚í‚È‚­‚Ä‚à‚Å‚«‚é(?)

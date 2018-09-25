@@ -46,6 +46,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	int Loser[STAGE_NUM] = { 0 };
 	int down = 0;
 	int up = 0;
+	int right = 0;
+	int left = 0;
+
 	while (!ScreenFlip() && !ProcessMessage() && !ClearDrawScreen()) {
 
 		GetJoypadXInputState(DX_INPUT_PAD1, &input);
@@ -53,6 +56,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		if (THUMB_Y >= 80) down++; else down = 0;
 		if (THUMB_Y <= -80) up++; else up = 0;
+		if (THUMB_X >= 80) right++; else right = 0;
+		if (THUMB_X <= -80) left++; else left = 0;
 
 		switch (flag) {
 		case 0://OP
@@ -91,15 +96,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			break;
 		case 1://ステージ選択画面
 			DrawFormatString(0, 0, WHITE, "selecting");
-			DrawFormatString(0, 40, WHITE, "STAGE%d",stageFlag);
-			if (down == 1) {
+			DrawFormatString(0, 40, WHITE, "STAGE%d",stageFlag+1);
+			if (right == 1) {
 				PlayMove();
-				if (stageFlag == 2) stageFlag = 0;
+				if (stageFlag == 4) stageFlag = 0;
 				else stageFlag++;
 			}
-			if (up == 1) {
+			if (left == 1) {
 				PlayMove();
-				if (stageFlag == 0) stageFlag = 2;
+				if (stageFlag == 0) stageFlag = 4;
 				else stageFlag--;
 			}
 			if (B == 1) {
@@ -120,8 +125,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			player.Update1(count,key);
 			StageUpdata(stageFlag,count,0);
 			player.Update2(GetStageStaticSquareMng());
+
+
+			if (count > GetStageLimit()) {
+				flag = 4;
+				keepCount = count;
+			}
+
 			DrawStage(stageFlag);
 			player.Draw();
+			DrawUI(count);
 			break;
 		case 4://gameover
 			DrawFormatString(0, 0, WHITE, "gameover");
