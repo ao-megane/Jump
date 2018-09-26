@@ -410,7 +410,7 @@ int Player::Update2(SquareMng a) {//•Ç‚Ü‚í‚è‚Ìˆ—
 		break;
 	case 4://R
 		if (velocity.Getx() > 0) velocity.Setx(0);
-		printfDx("R!\n");
+		//printfDx("R!\n");
 		break;
 	case 5://RD
 		if (acceleration.Gety() > 0) {
@@ -422,7 +422,7 @@ int Player::Update2(SquareMng a) {//•Ç‚Ü‚í‚è‚Ìˆ—
 		center.Sety(a.GetLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_Y);
 		if (velocity.Getx() > 0) velocity.Setx(0);
 		isAir = false;
-		printfDx("RD!\n");
+		//printfDx("RD!\n");
 		break;
 	case 6://D
 		if (acceleration.Gety() > 0) {

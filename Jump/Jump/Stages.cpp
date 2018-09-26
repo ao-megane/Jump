@@ -1,5 +1,6 @@
 #include"Stages.h"
 #include"DxLib.h"
+#include"Value.h"
 #include"Obj.h"
 
 int BackGround;
@@ -17,7 +18,7 @@ int Tutorial_wall;
 int StagesInitialize() {
 	staticWall.Initialize();
 	dynamicWall.Initialize();
-	Tutorial_back = LoadGraph("images/maps/.png");
+	Tutorial_back = LoadGraph("images/maps/base/background.png");
 
 	return 0;
 }
@@ -61,6 +62,33 @@ int StageLoad(int stagenum) {
 	return 0;
 }
 
+bool StageBeforeDescription(int stage, int key[]) {
+	switch (stage)
+	{
+	case 0:
+		DrawFormatString(300, 300, RED, "STAGE1_BEFORE_DESCRIPTION!");
+		break;
+	case 1:
+		DrawFormatString(300, 300, RED, "STAGE2_BEFORE_DESCRIPTION!");
+		break;
+	case 2:
+		DrawFormatString(300, 300, RED, "STAGE3_BEFORE_DESCRIPTION!");
+		break;
+	case 3:
+		DrawFormatString(300, 300, RED, "STAGE4_BEFORE_DESCRIPTION!");
+		break;
+	case 4:
+		DrawFormatString(300, 300, RED, "STAGE5_BEFORE_DESCRIPTION!");
+		break;
+	default:
+		break;
+	}
+	if (B == 1)
+		return true;
+	else
+		return false;
+}
+
 int StageUpdata(int stagenum, int count, int flag) {//大体のステージでいらないかも
 	switch (stagenum)
 	{
@@ -80,6 +108,7 @@ int GetStageLimit() {
 }
 
 int DrawStage(int count) {//count渡す必要ないかも
+	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, BackGround, true);
 	staticWall.testDraw(GREEN);
 	dynamicWall.testDraw(ORANGE);
 	return 0;

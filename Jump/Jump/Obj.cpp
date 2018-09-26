@@ -68,6 +68,12 @@ int Square::Set(Dot a, double w, double h) {
 	isExist = true;
 	return 0;
 }
+int Square::SetLength(double x,double y, double w, double h) {
+	LU.Set(x, y);
+	RD.Set(x + w, y + h);
+	isExist = true;
+	return 0;
+}
 int Square::Set(double a, double b, double c, double d) {
 	LU.Set(a, b);
 	RD.Set(c, d);
@@ -365,7 +371,8 @@ int SquareMng::Initialize() {
 //}
 int SquareMng::Born(double a[], int num) {//num‚ÍSQU_NUM‚æ‚è¬‚³‚¢‚±‚Æ,num‚ÍlŠp‚Ì”
 	for (int i = 0; i < num; i++) {
-		square[i].Set(a[4 * i], a[4 * i + 1], a[4 * i + 2], a[4 * i + 3]);
+		//square[i].Set(a[4 * i], a[4 * i + 1], a[4 * i + 2], a[4 * i + 3]);
+		square[i].SetLength(a[4 * i], a[4 * i + 1], a[4 * i + 2], a[4 * i + 3]);
 	}
 	return 0;
 }

@@ -84,10 +84,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					flag = 1;
 					break;
 				case 1://manual
-					flag = 5;
+					flag = 7;
 					break;
 				case 2://credit
-					flag = 6;
+					flag = 8;
 					break;
 				default:
 					break;
@@ -120,7 +120,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			//EnemyMngSet();
 			flag = 3;
 			break;
-		case 3://playing
+		case 3://beforeDescription
+			if (StageBeforeDescription(stageFlag, key)) {
+				flag = 4;
+				count = 0;
+			}
+			break;
+		case 4://playing
 			DrawFormatString(0, 0, WHITE, "playing");
 			player.Update1(count,key);
 			StageUpdata(stageFlag,count,0);
@@ -128,7 +134,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 
 			if (count > GetStageLimit()) {
-				flag = 4;
+				flag = 5;
 				keepCount = count;
 			}
 
@@ -136,7 +142,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			player.Draw();
 			DrawUI(count);
 			break;
-		case 4://gameover
+		case 5://gameover
 			DrawFormatString(0, 0, WHITE, "gameover");
 			DrawGameOverBord(count - keepCount);
 			if (count - keepCount > 180) {
@@ -144,15 +150,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				PlayTitleBGM();
 			}
 			break;
-		case 5://gameclear
+		case 6://result
 			DrawFormatString(0, 0, WHITE, "gameclear");
 			DrawClearBord(count - keepCount);
 			if (count - keepCount > 180) {
-				flag = 0;
+				flag = 1;
 				PlayTitleBGM();
 			}
 			break;
-		case 6://マニュアル
+		case 7://マニュアル
 			DrawFormatString(0, 0, WHITE, "manual1");
 			if (B == 1)
 				PlayChoice();
@@ -161,7 +167,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				count = 0;
 			}
 			break;
-		case 7://クレジット
+		case 8://クレジット
 			DrawFormatString(0, 0, WHITE, "credit");
 			DrawCredit();
 			if (B == 1) {
@@ -169,14 +175,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				flag = 0;
 			}
 			break;
-		case 8://ポーズ
+		case 9://ポーズ
 			DrawFormatString(0, 0, WHITE, "pause");
 			DrawPause();
 			//player.UIDraw(count);
 			count--;
-			if (B == 1) flag = 2;
+			if (B == 1) flag = 4;
 			if (A == 1) {
-				flag = 0;
+				flag = 1;
 				PlayTitleBGM();
 			}
 			break;
