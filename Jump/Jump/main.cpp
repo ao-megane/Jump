@@ -132,6 +132,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			StageUpdata(stageFlag,count,0);
 			player.Update2(GetStageStaticSquareMng());
 
+			if (player.GetStateFlag() != 7) {//”íƒ_ƒ’†‚Å‚È‚¯‚ê‚Î
+				//player.GetWeakAreaMng().isDamageSquareMng(GetEnemyMngAttackArea)
+			}
 
 			if (count > GetStageLimit()) {
 				flag = 5;
@@ -140,7 +143,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 			DrawStage(stageFlag);
 			player.Draw();
-			DrawUI(count);
+			DrawUI(GetStageLimit() - count);
 			break;
 		case 5://gameover
 			DrawFormatString(0, 0, WHITE, "gameover");

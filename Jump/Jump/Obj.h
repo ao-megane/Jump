@@ -138,14 +138,30 @@ public:
 			return true;
 	};
 
-private:
+protected:
 	Dot LU;
 	Dot RD;
 	bool isExist;
+};
+
+class imageSquare : public Square
+{
+public:
+
+private:
 	int image;
 };
 
-class SquareMng
+class attackSquare : public Square
+{
+public:
+
+private:
+	int attack;
+};
+
+
+class imageSquareMng	//壁，画像の設定をしないことでweakAreaにも
 {
 public:
 	int Initialize();
@@ -155,13 +171,15 @@ public:
 	int Move(double x, double y);
 	Square GetSquare(int num);
 	double GetLanding(Square area);//プレイヤーが乗ってそうな四角のLU.Gety()を返す
-	int isHitSquareMng(SquareMng a);//1:LU 2:U 3:RU 4:R 5:RD 6:D 7:LD 8:L 0:当たってない
+	int isHitSquareMng(imageSquareMng a);//1:LU 2:U 3:RU 4:R 5:RD 6:D 7:LD 8:L 0:当たってない
 	double GetUP();
 	int testDraw(int colorHandle);
 	int Delete();
 private:
-	Square square[SQU_NUM];
+	imageSquare square[SQU_NUM];
 };
+
+
 
 
 #endif // !OBJH

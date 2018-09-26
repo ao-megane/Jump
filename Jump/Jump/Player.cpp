@@ -470,6 +470,9 @@ int Player::GetStateFlag() {
 SquareMng Player::GetAttackAreaMng() {
 	return attackAreaMng;
 }
+SquareMng Player::GetWeakAreaMng() {
+	return weakAreaMng;
+}
 int Player::GetAttack() {
 	return attack;
 }

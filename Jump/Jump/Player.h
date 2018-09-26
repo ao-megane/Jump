@@ -40,6 +40,7 @@ public:/*
 	int GetIsRightFlag();
 	Dot GetCenter();
 	SquareMng GetAttackAreaMng();
+	SquareMng GetWeakAreaMng();
 	Dot weapon;
 	int GetAttack();
 	int Draw();
@@ -70,7 +71,8 @@ private:
 	3 attack_strong
 	4 attack_weak
 	5 attack_air
-	6 kunai
+	6 telepo
+	7 damage
 	*/
 	
 };

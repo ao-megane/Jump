@@ -353,14 +353,14 @@ double Circle::GetRadius() {
 	return radius;
 }
 
-int SquareMng::Initialize() {
+int imageSquareMng::Initialize() {
 	for (int i = 0; i < SQU_NUM; i++) {
 		square[i].Set(0, 0, 0, 0);
 		square[i].Delete();
 	}
 	return 0;
 }
-//int SquareMng::Born(Dot a,Dot b) {
+//int imageSquareMng::Born(Dot a,Dot b) {
 //	for (int i = 0; i < SQU_NUM; i++) {
 //		if (!square[i].GetisExist()) {//‘¶Ý‚µ‚È‚¯‚ê‚Î
 //			square[i].Set(a, b);
@@ -369,14 +369,14 @@ int SquareMng::Initialize() {
 //	}
 //	return 0;
 //}
-int SquareMng::Born(double a[], int num) {//num‚ÍSQU_NUM‚æ‚è¬‚³‚¢‚±‚Æ,num‚ÍŽlŠp‚Ì”
+int imageSquareMng::Born(double a[], int num) {//num‚ÍSQU_NUM‚æ‚è¬‚³‚¢‚±‚Æ,num‚ÍŽlŠp‚Ì”
 	for (int i = 0; i < num; i++) {
 		//square[i].Set(a[4 * i], a[4 * i + 1], a[4 * i + 2], a[4 * i + 3]);
 		square[i].SetLength(a[4 * i], a[4 * i + 1], a[4 * i + 2], a[4 * i + 3]);
 	}
 	return 0;
 }
-int SquareMng::Born(double a,double b,double c,double d) {//num‚ÍSQU_NUM‚æ‚è¬‚³‚¢‚±‚Æ,num‚ÍŽlŠp‚Ì”
+int imageSquareMng::Born(double a,double b,double c,double d) {//num‚ÍSQU_NUM‚æ‚è¬‚³‚¢‚±‚Æ,num‚ÍŽlŠp‚Ì”
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (!square[i].GetisExist()) {
 			square[i].Set(a,b,c,d);
@@ -386,7 +386,7 @@ int SquareMng::Born(double a,double b,double c,double d) {//num‚ÍSQU_NUM‚æ‚è¬‚³
 	}
 	return 0;
 }
-int SquareMng::Move(double x, double y) {
+int imageSquareMng::Move(double x, double y) {
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {//‘¶Ý‚·‚ê‚Î
 			square[i].Move(x, y);
@@ -394,7 +394,7 @@ int SquareMng::Move(double x, double y) {
 	}
 	return 0;
 }
-Square SquareMng::GetSquare(int num) {
+Square imageSquareMng::GetSquare(int num) {
 	if (square[num].GetisExist()) {
 	}
 	else {
@@ -402,7 +402,7 @@ Square SquareMng::GetSquare(int num) {
 	}
 	return square[num];
 }
-int SquareMng::isHitSquareMng(SquareMng a) {//
+int imageSquareMng::isHitSquareMng(imageSquareMng a) {//
 	bool L = false, R = false, U = false, D = false;
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {
@@ -452,7 +452,7 @@ int SquareMng::isHitSquareMng(SquareMng a) {//
 	if (L) return 8;
 	return 0;
 }
-double SquareMng::GetUP() {
+double imageSquareMng::GetUP() {
 	double a=0;
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {
@@ -462,7 +462,7 @@ double SquareMng::GetUP() {
 	}
 	return a;
 }
-double SquareMng::GetLanding(Square area) {//area‚ÍSquareMng‚Ì‚Ç‚±‚É’…’n‚·‚é‚©
+double imageSquareMng::GetLanding(Square area) {//area‚ÍSquareMng‚Ì‚Ç‚±‚É’…’n‚·‚é‚©
 	double a = DISP_HEIGHT;
 	int b = 0;
 	for (int i = 0; i < SQU_NUM; i++) {
@@ -483,7 +483,7 @@ double SquareMng::GetLanding(Square area) {//area‚ÍSquareMng‚Ì‚Ç‚±‚É’…’n‚·‚é‚©
 	}
 	return square[b].GetLU().Gety();
 }
-int SquareMng::testDraw(int handle) {
+int imageSquareMng::testDraw(int handle) {
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {//‘¶Ý‚·‚ê‚Î
 			square[i].testDraw(handle);
@@ -491,7 +491,7 @@ int SquareMng::testDraw(int handle) {
 	}
 	return 0;
 }
-int SquareMng::Delete() {
+int imageSquareMng::Delete() {
 	for (int i = 0; i < SQU_NUM; i++) {
 		square[i].Delete();
 	}
