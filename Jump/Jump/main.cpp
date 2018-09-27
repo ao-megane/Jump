@@ -130,7 +130,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			DrawFormatString(0, 0, WHITE, "playing");
 			player.Update1(count,key);
 			StageUpdata(stageFlag,count,0);
-			player.Update2(GetStageStaticSquareMng());
+			player.Update2(GetStageStaticWalls() + GetStageWalls());
 
 			if (player.GetStateFlag() != 7) {//îÌÉ_ÉÅíÜÇ≈Ç»ÇØÇÍÇŒ
 				//player.GetWeakAreaMng().isDamageSquareMng(GetEnemyMngAttackArea)

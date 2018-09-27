@@ -5,21 +5,30 @@
 
 int BackGround;
 int Limit;
-SquareMng staticWall;
-SquareMng dynamicWall;
+
+SquareMng staticWalls;
+imageSquareMng Walls;
 
 int Tutorial_back;
-int Tutorial_wall;
+int Tutorial_wall_1;
+int Tutorial_wall_2;
+//int Tutorial_wall_1;
+int Factory_back;
+int Factory_wall_1;
+int Factory_wall_2;
 
 //int _back;
 //int _wall;
 
 
 int StagesInitialize() {
-	staticWall.Initialize();
-	dynamicWall.Initialize();
+	Walls.Initialize();
 	Tutorial_back = LoadGraph("images/maps/base/background.png");
-
+	Tutorial_wall_1 = LoadGraph("images/maps/base/wall/120_60.png");
+	Tutorial_wall_2 = LoadGraph("images/maps/base/wall/600_60.png");
+	Factory_back = LoadGraph("images/maps/factory/background.png");
+	Factory_wall_1 = LoadGraph("images/maps/factory/wall/120_60.png");
+	Factory_wall_2 = LoadGraph("images/maps/factory/wall/600_60.png");
 	return 0;
 }
 
@@ -28,31 +37,36 @@ int StageLoad(int stagenum) {
 	{
 	case 0:	//stage1
 		BackGround = Tutorial_back;
-		staticWall.Born(STAGE1,STAGE1_NUM);
+		staticWalls.Add(STATICWALLS, STATICWALLS_NUM);
+		Walls.SetWalls(STAGE1,STAGE1_NUM,stagenum,Tutorial_wall_1,Tutorial_wall_2,0);
 		//dynamicWall.Born();
 		Limit = STAGE1_COUNT;
 		break;
 	case 1:
 		BackGround = Tutorial_back;
-		staticWall.Born(STAGE2, STAGE2_NUM);
+		staticWalls.Add(STATICWALLS, STATICWALLS_NUM);
+		Walls.SetWalls(STAGE2, STAGE2_NUM, stagenum, Tutorial_wall_1, Tutorial_wall_2, 0);
 		//dynamicWall.Born();
 		Limit = STAGE2_COUNT;
 		break;
 	case 2:
 		BackGround = Tutorial_back;
-		staticWall.Born(STAGE3, STAGE3_NUM);
+		staticWalls.Add(STATICWALLS, STATICWALLS_NUM);
+		Walls.SetWalls(STAGE3, STAGE3_NUM, stagenum, Tutorial_wall_1, Tutorial_wall_2, 0);
 		//dynamicWall.Born();
 		Limit = STAGE3_COUNT;
 		break;
 	case 3:
-		BackGround = Tutorial_back;
-		staticWall.Born(STAGE4, STAGE4_NUM);
+		BackGround = Factory_back;
+		staticWalls.Add(STATICWALLS, STATICWALLS_NUM);
+		Walls.SetWalls(STAGE4, STAGE4_NUM, stagenum, Factory_wall_1, Factory_wall_2, 0);
 		//dynamicWall.Born();
 		Limit = STAGE4_COUNT;
 		break;
 	case 4:
-		BackGround = Tutorial_back;
-		staticWall.Born(STAGE5, STAGE5_NUM);
+		BackGround = Factory_back;
+		staticWalls.Add(STATICWALLS, STATICWALLS_NUM);
+		Walls.SetWalls(STAGE5, STAGE5_NUM, stagenum, Factory_wall_1, Factory_wall_2, 0);
 		//dynamicWall.Born();
 		Limit = STAGE5_COUNT;
 		break;
@@ -100,8 +114,11 @@ int StageUpdata(int stagenum, int count, int flag) {//大体のステージでいらないか
 	return 0;
 }
 
-SquareMng GetStageStaticSquareMng() {
-	return staticWall;
+SquareMng GetStageStaticWalls() {
+	return staticWalls;
+}
+SquareMng GetStageWalls() {
+	return Walls.GetSquareMng();
 }
 int GetStageLimit() {
 	return Limit;
@@ -109,7 +126,10 @@ int GetStageLimit() {
 
 int DrawStage(int count) {//count渡す必要ないかも
 	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, BackGround, true);
-	staticWall.testDraw(GREEN);
-	dynamicWall.testDraw(ORANGE);
+	staticWalls.testDraw(GREEN);
+	Walls.Draw();
+	Walls.testDraw(GREEN);
+
+	//DrawGraph(0, 0, Tutorial_wall_1, true);
 	return 0;
 }

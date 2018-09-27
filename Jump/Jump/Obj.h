@@ -147,7 +147,8 @@ protected:
 class imageSquare : public Square
 {
 public:
-
+	int Setimage(int image);
+	int Draw();
 private:
 	int image;
 };
@@ -161,25 +162,51 @@ private:
 };
 
 
-class imageSquareMng	//壁，画像の設定をしないことでweakAreaにも
+class SquareMng	
 {
 public:
 	int Initialize();
 	//int Born(Dot a, Dot b);
-	int Born(double a[], int num);
-	int Born(double a, double b, double c, double d);
+	int Add(double a[], int num);
+	int Add(double a, double b, double c, double d);
+	int Add(Square a);
+	int Add(Dot a, Dot b);
 	int Move(double x, double y);
 	Square GetSquare(int num);
 	double GetLanding(Square area);//プレイヤーが乗ってそうな四角のLU.Gety()を返す
-	int isHitSquareMng(imageSquareMng a);//1:LU 2:U 3:RU 4:R 5:RD 6:D 7:LD 8:L 0:当たってない
+	int isHitSquareMng(SquareMng a);//1:LU 2:U 3:RU 4:R 5:RD 6:D 7:LD 8:L 0:当たってない
+	//int isHitSquareMng(SquareMng a,imageSquareMng b);//1:LU 2:U 3:RU 4:R 5:RD 6:D 7:LD 8:L 0:当たってない
 	double GetUP();
 	int testDraw(int colorHandle);
 	int Delete();
+	SquareMng operator + (SquareMng b) {
+		SquareMng a;
+		a.Initialize();
+		for (int i = 0; i < SQU_NUM; i++) {
+			if (square[i].GetisExist()) {
+				a.Add(square[i]);
+			}
+		}
+		for (int i = 0; i < SQU_NUM; i++) {
+			if (b.GetSquare(i).GetisExist()) {
+				a.Add(b.GetSquare(i));
+			}
+		}
+		return a;
+	}
+	
+private:
+	Square square[SQU_NUM];
+};
+
+class imageSquareMng : public SquareMng {
+public:
+	int SetWalls(int a[], int num, int stageflag, int square1_image, int square2_image, int square3_image);
+	SquareMng GetSquareMng();
+	int Draw();
 private:
 	imageSquare square[SQU_NUM];
 };
-
-
 
 
 #endif // !OBJH
