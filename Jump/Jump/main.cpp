@@ -2,9 +2,10 @@
 #include"Input.h"
 #include"Player.h"
 #include"Stages.h"
-//#include"EnemyMng.h"
+#include"EnemyMng.h"
 #include"Value.h"
 #include"Chore.h"
+#include"fps.h"
 //#include"Key.h"
 //#include"Color.h"
 
@@ -21,6 +22,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	XINPUT_STATE input;
+	Fps fps;
 	int key[20] = { 0 };
 	int flag = 0;
 	int selectFlag = 0;	//0:play,1:manual,2:credit
@@ -53,6 +55,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		GetJoypadXInputState(DX_INPUT_PAD1, &input);
 		InputUpdata(input, key);
+		fps.Update();
 
 		if (THUMB_Y >= 80) down++; else down = 0;
 		if (THUMB_Y <= -80) up++; else up = 0;
@@ -116,6 +119,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			count = 0;
 			StageLoad(stageFlag);
 			player.Set(stageFlag);
+			EnemyMngSet(stageFlag);
 			//SetKeyPosi();
 			//EnemyMngSet();
 			flag = 3;
@@ -208,8 +212,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		if (CheckHitKey(KEY_INPUT_DELETE)) break;
 
 		//PrintInput(key);
-		FpsTimeFanction();
+		//fps.Draw();
 		ScreenFlip();
+		fps.Wait();
 	}
 
 	//UpdataFile("kanuma2017.txt", 0, 0);

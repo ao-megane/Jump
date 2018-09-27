@@ -84,6 +84,8 @@ const int SQUARE1_WIDTH = 120;
 const int SQUARE1_HEIGHT = 60;
 const int SQUARE2_WIDTH = 60;
 const int SQUARE2_HEIGHT = 600;
+const int SQUARE3_WIDTH = 900;
+const int SQUARE3_HEIGHT = 60;
 /*------stage1(チュートリアル1)-----*/
 const int STAGE1_NUM = 12;
 //static double STAGE1[STAGE1_NUM * 4] = {//左上,W,H
@@ -120,7 +122,7 @@ static int STAGE1[STAGE1_NUM * 3] = {//左上,四角の種類
 const int STAGE1_COUNT = 30 * 60;//30fps
 
 /*------stage2(チュートリアル1)-----*/
-const int STAGE2_NUM = 15;
+const int STAGE2_NUM = 5;
 //static double STAGE2[STAGE2_NUM * 4] = {
 //	0, GROUND_HEIGHT, DISP_WIDTH, DISP_HEIGHT * 2,
 //	DISP_WIDTH / 2.0, GROUND_HEIGHT - 100, DISP_WIDTH, GROUND_HEIGHT - 10,
@@ -130,18 +132,11 @@ const int STAGE2_NUM = 15;
 //	0,GROUND_HEIGHT - 600,DISP_WIDTH / 2.0,GROUND_HEIGHT - 510
 //};
 static int STAGE2[STAGE2_NUM * 3] = {//左上,四角の種類
-	300,600,1,
-	420,420,1,
-	480,720,1,
-	600,300,1,
-	720,600,1,
-	780,180,1,
-	900,720,1,
-	960,60,1,
-	1080,840,1,
-	1560,420,1,
-	1740,720,1,
-	1500,420,2
+	540,840,1,
+	720,660,1,
+	900,540,1,
+	1080,420,1,
+	60,420,3
 };
 const int STAGE2_COUNT = 30 * 60;//30fps
 
@@ -222,5 +217,8 @@ static int STAGE5[STAGE5_NUM * 3] = {//左上,四角の種類
 	1500,420,2
 };
 const int STAGE5_COUNT = 30 * 60;//30fps
+
+
+const int DRAWN_NUM = 10;
 
 #endif // !VALUE_H

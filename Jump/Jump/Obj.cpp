@@ -637,6 +637,15 @@ int imageSquare::Draw() {
 	return 0;
 }
 
+int intSquare::Setvalue(int a) {
+	value = a;
+	return 0;
+}
+int intSquare::GetValue() {
+	return value;
+}
+
+/*---------------------------------------------------*/
 int imageSquareMng::SetWalls(int a[], int num, int stageflag,int square1_image,int square2_image,int square3_image) {//壁をセットするためだけの関数，Jumpでしか使えないかも
 	switch (stageflag+1)
 	{
@@ -655,6 +664,10 @@ int imageSquareMng::SetWalls(int a[], int num, int stageflag,int square1_image,i
 			case 2:
 				square[i].SetLength(a[i * 3 + 0], a[i * 3 + 1], SQUARE2_WIDTH, SQUARE2_HEIGHT);
 				square[i].Setimage(square2_image);
+				break;
+			case 3:
+				square[i].SetLength(a[i * 3 + 0], a[i * 3 + 1], SQUARE3_WIDTH, SQUARE3_HEIGHT);
+				square[i].Setimage(square3_image);
 				break;
 			default:
 				break;
@@ -677,6 +690,45 @@ int imageSquareMng::Draw() {
 		if (square[i].GetisExist()) {//存在すれば
 			square[i].Draw();
 			square[i].Square::testDraw(GREEN);
+		}
+	}
+	return 0;
+}
+
+SquareMng intSquareMng::GetSquareMng() {
+	SquareMng a;
+	a.Initialize();
+	for (int i = 0; i < SQU_NUM; i++) {
+		if (square[i].Square::GetisExist()) {
+			a.Add(square[i].Square::GetLU(), square[i].Square::GetRD());
+		}
+	}
+	return a;
+}
+intSquare intSquareMng::GetSquare(int num) {
+	//if (square[num].Square::GetisExist())
+		return square[num];
+	//return;
+}
+
+int intSquareMng::Add(intSquare a) {
+	for (int i = 0; i < SQU_NUM; i++) {
+		if (!square[i].Square::GetisExist()) {
+			square[i].Square::Set(a.Square::GetLU(), a.Square::GetRD());
+			square[i].Setvalue(a.GetValue());
+		}
+	}
+	return 0;
+}
+
+int intSquareMng::Add(intSquareMng a) {
+	int j = 0;
+	for (int i = 0; i < SQU_NUM; i++) {
+		if (!square[i].Square::GetisExist()) {
+			for (; j < SQU_NUM; j++) {
+				if(a.GetSquare(j).Square::GetisExist())
+					square[i] = a.GetSquare(j);
+			}
 		}
 	}
 	return 0;

@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Chore.cpp" />
+    <ClCompile Include="EnemyMng.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Obj.cpp" />
@@ -132,6 +133,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chore.h" />
+    <ClInclude Include="EnemyMng.h" />
+    <ClInclude Include="fps.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Obj.h" />
     <ClInclude Include="Player.h" />

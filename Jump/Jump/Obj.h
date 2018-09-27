@@ -153,6 +153,21 @@ private:
 	int image;
 };
 
+class intSquare : public Square
+{
+public:
+	int Setvalue(int value);
+	int GetValue();
+	int operator = (intSquare a) {
+		LU = a.Square::GetLU();
+		RD = a.Square::GetRD();
+		value = a.GetValue();
+		return 0;
+	};
+private:
+	int value;
+};
+
 class attackSquare : public Square
 {
 public:
@@ -206,6 +221,18 @@ public:
 	int Draw();
 private:
 	imageSquare square[SQU_NUM];
+};
+
+class intSquareMng : public SquareMng {
+public:
+	//int SetWalls(int a[], int num, int stageflag, int square1_image, int square2_image, int square3_image);
+	SquareMng GetSquareMng();
+	int Add(intSquare a);
+	int Add(intSquareMng a);
+	intSquare GetSquare(int num);
+	//int Draw();
+private:
+	intSquare square[SQU_NUM];
 };
 
 
