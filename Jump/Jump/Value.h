@@ -57,6 +57,12 @@ const int P_DASH_CLOCK = 40;//P_CLOCK/2 フレームに一回足音
 const double P_JUMP_NUM = 30.0*3.0;//ジャンプの総フレーム
 const double P_JUMP_POWER = GRAVITY * 15.0;//ジャンプの高さ
 
+/*-----------------------*/
+const int DRAWN_W_WIDTH = 180;
+const int DRAWN_W_HEIGHT = 180;
+const int DRAWN_A_WIDTH = 120;
+const int DRAWN_A_HEIGHT = 120;
+
 /*------システム--------*/
 const int STAGE_NUM = 10;
 const double P_START_POINT[STAGE_NUM * 2] = {

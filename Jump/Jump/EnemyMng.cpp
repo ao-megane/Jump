@@ -1,4 +1,5 @@
 #include"EnemyMng.h"
+#include"Value.h"
 
 intSquareMng AttackArea;
 
@@ -15,8 +16,11 @@ int Enemy::Initialize() {
 bool Enemy::GetisExist() {
 	return isExist;
 }
-intSquareMng Enemy::GetAttackMng() {
-	return attackMng;
+intSquareMng* Enemy::GetAttackMngAd() {
+	return &attackMng;
+}
+Dot* Enemy::GetcenterAd() {
+	return &center;
 }
 
 int Drawn::Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy) {
@@ -26,14 +30,24 @@ int Drawn::Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serch
 }
 int Drawn::Updata(int count, Dot Pcener) {
 	//center“®‚¢‚½‚è‚·‚é
+	attackMng.SquareMng::Delete();
+	weakMng.Delete();
+	imageMng.SquareMng::Delete();
+	
+	//center.Move();
 
-
+	attackMng.Add(center.Getx() - DRAWN_A_WIDTH / 2.0, center.Gety() - DRAWN_A_HEIGHT / 2.0, center.Getx() + DRAWN_A_WIDTH / 2.0, center.Gety() + DRAWN_A_HEIGHT / 2.0, 10);
+	weakMng.Add(center.Getx() - DRAWN_W_WIDTH / 2.0, center.Gety() - DRAWN_W_HEIGHT / 2.0, center.Getx() + DRAWN_W_WIDTH / 2.0, center.Gety() + DRAWN_W_HEIGHT / 2.0);
+	imageMng.SquareMng::Add(center.Getx() - DRAWN_W_WIDTH / 2.0-10, center.Gety() - DRAWN_W_HEIGHT / 2.0 - 10, center.Getx() + DRAWN_W_WIDTH / 2.0 - 10, center.Gety() + DRAWN_W_HEIGHT / 2.0 - 10);
+	
 	return 0;
 }
-
-
-
-
+int Drawn::Draw() {
+	imageMng.Draw();
+	attackMng.SquareMng::testDraw(RED);
+	weakMng.testDraw(BLUE);
+	return 0;
+}
 
 Drawn drawn[DRAWN_NUM];
 int EnemyMngInitialize() {
@@ -72,6 +86,15 @@ int EnemyMngUpdata(int count, Dot Pcenter) {
 			AttackArea.Add(drawn[i].GetAttackMng());
 		}
 	}
+	return 0;
+}
 
+int EnemyMngDraw() {
+	for (int i = 0; i < DRAWN_NUM; i++) {
+		if (drawn[i].Enemy::GetisExist()) {
+			drawn[i].Draw();
+			//printfDx("DRAW!!\n");
+		}
+	}
 	return 0;
 }

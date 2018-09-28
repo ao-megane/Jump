@@ -7,9 +7,14 @@ class Enemy
 public:
 	int Initialize();
 	bool GetisExist();
-	intSquareMng GetAttackMng();
+	intSquareMng* GetAttackMngAd();
+	Dot* GetcenterAd();
+	imageSquareMng* GetimageMngAd();
+	intSquareMng* GetattackMngAd();
+	SquareMng* GetweakMngAd();
+	SquareMng* GetsearchAreaAd();
 	int End();
-protected:
+private:
 	bool isExist;
 	bool isRight;
 	int bodyClock;
@@ -26,6 +31,7 @@ public:
 	int Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy);
 
 	int Updata(int count,Dot Pcenter);
+	int Draw();
 private:
 
 };

@@ -229,6 +229,7 @@ public:
 	SquareMng GetSquareMng();
 	int Add(intSquare a);
 	int Add(intSquareMng a);
+	int Add(double lux, double luy, double rdx, double rdy, int value);
 	intSquare GetSquare(int num);
 	//int Draw();
 private:

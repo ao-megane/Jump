@@ -720,6 +720,16 @@ int intSquareMng::Add(intSquare a) {
 	}
 	return 0;
 }
+int intSquareMng::Add(double lux, double luy, double rdx, double rdy, int value) {
+	for (int i = 0; i < SQU_NUM; i++) {
+		if (!square[i].Square::GetisExist()) {
+			square[i].Square::Set(lux, luy, rdx, rdy);
+			square[i].Setvalue(value);
+			break;
+		}
+	}
+	return 0;
+}
 
 int intSquareMng::Add(intSquareMng a) {
 	int j = 0;

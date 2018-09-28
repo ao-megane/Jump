@@ -32,6 +32,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Player player;
 	
 	InputInitialize(key);
+	EnemyMngInitialize();
 	player.Initialize();
 	StagesInitialize();
 	SystemInitialize();
@@ -135,6 +136,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			player.Update1(count,key);
 			StageUpdata(stageFlag,count,0);
 			player.Update2(GetStageStaticWalls() + GetStageWalls());
+			EnemyMngUpdata(count, player.GetCenter());
 
 			if (player.GetStateFlag() != 7) {//îÌÉ_ÉÅíÜÇ≈Ç»ÇØÇÍÇŒ
 				//player.GetWeakAreaMng().isDamageSquareMng(GetEnemyMngAttackArea)
@@ -144,8 +146,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				flag = 5;
 				keepCount = count;
 			}
+			if (PAUSE == 1) {
+				flag = 9;
+			}
 
 			DrawStage(stageFlag);
+			EnemyMngDraw();
 			player.Draw();
 			DrawUI(GetStageLimit() - count);
 			break;
