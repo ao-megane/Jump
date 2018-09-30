@@ -365,7 +365,7 @@ int Player::UpdateDamage(int count) {
 }
 
 int dirKeeper;
-int Player::Update1(int count,int key[]) {
+int Player::Update1(int count,int key[]) {//ó‘Ô‰ñ‚è
 	weakAreaMng.Delete();
 
 	if (LEFT == 1) {
@@ -438,7 +438,7 @@ int Player::Update1(int count,int key[]) {
 	return 0;
 }
 int Player::Update2(SquareMng a) {//•Ç‚Ü‚í‚è‚Ìˆ—
-	DrawFormatString(40, 80, RED, "%d,UP = %f", weakAreaMng.isHitSquareMng(a),a.GetUP());
+	DrawFormatString(40, 80, RED, "%d", weakAreaMng.isHitSquareMng(a));
 
 	isAir = true;//‘«‚É‰½‚©‚ªG‚ê‚È‚¯‚ê‚Î‹ó’†‚É‚¢‚é
 	switch (weakAreaMng.isHitSquareMng(a))
@@ -447,6 +447,7 @@ int Player::Update2(SquareMng a) {//•Ç‚Ü‚í‚è‚Ìˆ—
 		break;
 	case 1://LU
 		acceleration.Sety(GRAVITY);
+		center.Sety(a.GetUpLanding(weakAreaMng.GetSquare(0)) + P_WEAK_LU_Y);
 		if (velocity.Getx() < 0) velocity.Setx(0);
 		break;
 	case 2://U
@@ -456,13 +457,18 @@ int Player::Update2(SquareMng a) {//•Ç‚Ü‚í‚è‚Ìˆ—
 		if (velocity.Gety() < 0) {
 			velocity.Sety(0);
 		}
+		center.Sety(a.GetUpLanding(weakAreaMng.GetSquare(0)) + P_WEAK_LU_Y);
+		acceleration.Sety(GRAVITY);
 		break;
 	case 3://RU
 		acceleration.Sety(GRAVITY);
+		center.Sety(a.GetUpLanding(weakAreaMng.GetSquare(0)) + P_WEAK_LU_Y);
+		center.Setx(a.GetRightLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_X);
 		if (velocity.Getx() > 0) velocity.Setx(0);
 		break;
 	case 4://R
 		if (velocity.Getx() > 0) velocity.Setx(0);
+		center.Setx(a.GetRightLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_X);
 		//printfDx("R!\n");
 		break;
 	case 5://RD
@@ -473,6 +479,7 @@ int Player::Update2(SquareMng a) {//•Ç‚Ü‚í‚è‚Ìˆ—
 			velocity.Sety(0);
 		}
 		center.Sety(a.GetLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_Y);
+		center.Setx(a.GetRightLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_X);
 		if (velocity.Getx() > 0) velocity.Setx(0);
 		isAir = false;
 		//printfDx("RD!\n");
@@ -485,8 +492,6 @@ int Player::Update2(SquareMng a) {//•Ç‚Ü‚í‚è‚Ìˆ—
 			velocity.Sety(0);
 		}
 		center.Sety(a.GetLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_Y);
-		//a.testDraw(GREEN);
-		//printfDx("%f\n", a.GetSquare(0).GetLU().Gety());
 		if (stateFlag == 2) {//
 			//SetStand(0);
 		}
@@ -505,6 +510,7 @@ int Player::Update2(SquareMng a) {//•Ç‚Ü‚í‚è‚Ìˆ—
 		break;
 	case 8://L
 		if (velocity.Getx() < 0) velocity.Setx(0);
+		center.Setx(a.GetLeftLanding(weakAreaMng.GetSquare(0)) + P_WEAK_LU_X);
 		break;
 	default:
 		break;

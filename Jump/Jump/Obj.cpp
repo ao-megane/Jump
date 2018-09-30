@@ -51,9 +51,6 @@ double Dot::Gety() {
 	return y;
 }
 
-
-
-
 /***************************************************************/
 
 int Square::Set(Dot a,Dot b) {
@@ -514,6 +511,60 @@ double SquareMng::GetLanding(Square area) {//areaはSquareMngのどこに着地するか
 	}
 	return square[b].GetLU().Gety();
 }
+double SquareMng::GetUpLanding(Square area) {
+	double a = DISP_HEIGHT;
+	int b = 0;
+	for (int i = 0; i < SQU_NUM; i++) {
+		if (square[i].GetisExist()) {	//四角が存在して
+			if (!(square[i].GetLU().Getx() > area.GetRD().Getx()) && !(area.GetLU().Getx() > square[i].GetRD().Getx())) {	//横方向判定
+				if (square[i].GetLU().Gety() <= area.GetLU().Gety()) {	//縦方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
+					if (area.GetLU().Gety() - square[i].GetRD().Gety() < a) {//近いやつ
+						a = area.GetLU().Gety() - square[i].GetRD().Gety();
+						b = i;
+					}
+				}
+			}
+		}
+	}
+	return square[b].GetRD().Gety();
+}
+double SquareMng::GetLeftLanding(Square area) {
+	double a = DISP_WIDTH;
+	int b = 0;
+	for (int i = 0; i < SQU_NUM; i++) {
+		if (square[i].GetisExist()) {	//四角が存在して
+			if (!(square[i].GetLU().Gety() > area.GetRD().Gety()) && !(area.GetLU().Gety() > square[i].GetRD().Gety())) {	//縦方向判定
+				if (square[i].GetLU().Getx() <= area.GetLU().Getx()) {	//横方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
+					if (area.GetLU().Getx() - square[i].GetLU().Getx() < a) {//近いやつ
+						a = square[i].GetLU().Getx() - area.GetLU().Getx();
+						//square[i].testDraw(RED);
+						b = i;
+					}
+				}
+			}
+		}
+	}
+	return square[b].GetRD().Getx();
+}
+double SquareMng::GetRightLanding(Square area) {
+	double a = DISP_WIDTH;
+	int b = 0;
+	for (int i = 0; i < SQU_NUM; i++) {
+		if (square[i].GetisExist()) {	//四角が存在して
+			if (!(square[i].GetLU().Gety() > area.GetRD().Gety()) && !(area.GetLU().Gety() > square[i].GetRD().Gety())) {	//縦方向判定
+				if (square[i].GetRD().Getx() >= area.GetRD().Getx()) {	//横方向判定,RDはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
+					if (area.GetRD().Getx() - square[i].GetRD().Getx() < a) {//近いやつ
+						a = square[i].GetRD().Getx() - area.GetRD().Getx();
+						//square[i].testDraw(RED);
+						b = i;
+					}
+				}
+			}
+		}
+	}
+	return square[b].GetLU().Getx();
+}
+
 int SquareMng::testDraw(int handle) {
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {//存在すれば
