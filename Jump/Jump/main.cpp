@@ -45,6 +45,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	PlayTitleBGM();
 
 	flag = 0;
+	int damage = 0;
+	int sumdamage = 0;
 	int Winner[STAGE_NUM] = { 0 };
 	int Loser[STAGE_NUM] = { 0 };
 	int down = 0;
@@ -136,7 +138,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			player.Update1(count,key);
 			StageUpdata(stageFlag,count,0);
 			player.Update2(GetStageStaticWalls() + GetStageWalls());
-			EnemyMngUpdata(count, player.GetCenter());
+			damage = EnemyMngUpdata(count, player.GetCenter());
+			if (player.GetStateFlag() != 7 && damage) {//ダメージが返ってくる
+				//count += damage * 30.0;
+				sumdamage += damage;
+				player.SetDamage(count);
+				toUIDamage(damage*30.0, count);
+			}
 
 			if (player.GetStateFlag() != 7) {//被ダメ中でなければ
 				//player.GetWeakAreaMng().isDamageSquareMng(GetEnemyMngAttackArea)
@@ -153,7 +161,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			DrawStage(stageFlag);
 			EnemyMngDraw();
 			player.Draw();
-			DrawUI(GetStageLimit() - count);
+			DrawUI(GetStageLimit() - sumdamage*30 - count);
+			DrawFormatString(DISP_WIDTH - 100, 100, RED, "%d", sumdamage * 30);
 			break;
 		case 5://gameover
 			DrawFormatString(0, 0, WHITE, "gameover");
@@ -218,7 +227,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		if (CheckHitKey(KEY_INPUT_DELETE)) break;
 
 		//PrintInput(key);
-		//fps.Draw();
+		fps.Draw();
 		ScreenFlip();
 		fps.Wait();
 	}

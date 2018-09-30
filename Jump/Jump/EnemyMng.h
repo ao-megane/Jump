@@ -7,12 +7,13 @@ class Enemy
 public:
 	int Initialize();
 	bool GetisExist();
-	intSquareMng* GetAttackMngAd();
+	int Set(int x, int y);
+	int Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy);
+	intSquareMng* GetattackMngAd();
 	Dot* GetcenterAd();
 	imageSquareMng* GetimageMngAd();
-	intSquareMng* GetattackMngAd();
 	SquareMng* GetweakMngAd();
-	SquareMng* GetsearchAreaAd();
+	//SquareMng* GetsearchAreaAd();
 	int End();
 private:
 	bool isExist;
@@ -22,13 +23,12 @@ private:
 	imageSquareMng imageMng;
 	intSquareMng attackMng;
 	SquareMng weakMng;
-	SquareMng searchArea;
+	//SquareMng searchArea;
 };
 
 class Drawn : public Enemy
 {
 public:
-	int Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy);
 
 	int Updata(int count,Dot Pcenter);
 	int Draw();

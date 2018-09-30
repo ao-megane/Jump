@@ -313,6 +313,56 @@ int Player::UpdateAttack_s(int count) {
 		PlayAttack_s();
 	return 0;
 }
+int Player::SetDamage(int count) {
+	bodyClock = count;
+	stateFlag = 7;
+	image = PStand1;
+	acceptFlag = 0;
+	attack = 0;
+	return 0;
+}
+int Player::UpdateDamage(int count) {
+	/*if (isRightFlag) {
+	LU.Set(center.Get_x() - P_WIDTH / 2, center.Get_y() - P_HEIGHT / 4);
+	RD.Set(center.Get_x() + P_WIDTH *3/2, center.Get_y() + P_HEIGHT / 4);
+	}
+	else {
+	LU.Set(center.Get_x() - P_WIDTH * 3 / 2, center.Get_y() - P_HEIGHT/4);
+	RD.Set(center.Get_x() + P_WIDTH / 2, center.Get_y() + P_HEIGHT / 4);
+	}*/
+
+	if (count < 17) {//待機
+		acceptFlag = 0;
+	}
+	else if (count < 20) {//攻撃
+		attack = 40;
+		//attackArea.Set(LU, RD);
+	}
+	else if (count < 40) {//余韻
+		attack = 0;
+	}
+	else if (count >= 40) {//モーション終わり
+		acceptFlag = 1;
+		//if (isAir != 0) {
+		//	isAir = 0;
+		//	stateFlag = 4;//戻す
+		//}
+		//else {
+		//	SetStand(count);
+		//	//printfDx("SETSTAND!\n");
+		//}
+	}
+	if (count == 0) image = PAttacks1;
+	if (count == 17) image = PAttacks2;
+	if (count == 19) image = PAttacks3;
+	if (count == 17)
+		PlayAttack_s();
+	if (count == 10) {
+		acceptFlag = true;
+		stateFlag = 0;
+	}
+	return 0;
+}
 
 int dirKeeper;
 int Player::Update1(int count,int key[]) {
@@ -375,6 +425,9 @@ int Player::Update1(int count,int key[]) {
 		break;
 	case 6:
 		//UpdateAttack_air(count - bodyClock);
+		break;
+	case 7:
+		UpdateDamage(count - bodyClock);
 		break;
 	default:
 		break;

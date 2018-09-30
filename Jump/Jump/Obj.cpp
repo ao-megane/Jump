@@ -152,8 +152,18 @@ Dot Square::GetLU() {
 Dot Square::GetRD() {
 	return RD;
 }
+Dot* Square::GetLUAd() {
+	return &LU;
+}
+Dot* Square::GetRDAd() {
+	return &RD;
+}
+
 bool Square::GetisExist() {
 	return isExist;
+}
+bool* Square::GetisExistAd() {
+	return &isExist;
 }
 //double decoidist_obj;
 //bool Square::operator & (Circle a) {
@@ -472,94 +482,7 @@ int SquareMng::isHitSquareMng(SquareMng a) {//
 	if (L) return 8;
 	return 0;
 }
-//int SquareMng::isHitSquareMng(SquareMng a,imageSquareMng b) {//
-//	bool L = false, R = false, U = false, D = false;
-//	for (int i = 0; i < SQU_NUM; i++) {
-//		if (square[i].GetisExist()) {
-//			for (int j = 0; j < SQU_NUM; j++) {
-//				switch (square[i].isHitSquare(a.GetSquare(j))) {
-//				case 0:
-//					break;
-//				case 1:
-//					L = true;
-//					U = true;
-//					break;
-//				case 2:
-//					U = true;
-//					break;
-//				case 3:
-//					R = true;
-//					U = true;
-//					break;
-//				case 4:
-//					R = true;
-//					break;
-//				case 5:
-//					R = true;
-//					D = true;
-//					break;
-//				case 6:
-//					D = true;
-//					break;
-//				case 7:
-//					L = true;
-//					D = true;
-//					break;
-//				case 8:
-//					L = true;
-//					break;
-//				}
-//			}
-//		}
-//	}
-//	for (int i = 0; i < SQU_NUM; i++) {
-//		if (square[i].GetisExist()) {
-//			for (int j = 0; j < SQU_NUM; j++) {
-//				switch (square[i].isHitSquare(b.SquareMng::GetSquare(j))) {
-//				case 0:
-//					break;
-//				case 1:
-//					L = true;
-//					U = true;
-//					break;
-//				case 2:
-//					U = true;
-//					break;
-//				case 3:
-//					R = true;
-//					U = true;
-//					break;
-//				case 4:
-//					R = true;
-//					break;
-//				case 5:
-//					R = true;
-//					D = true;
-//					break;
-//				case 6:
-//					D = true;
-//					break;
-//				case 7:
-//					L = true;
-//					D = true;
-//					break;
-//				case 8:
-//					L = true;
-//					break;
-//				}
-//			}
-//		}
-//	}
-//	if (D && L) return 7;
-//	if (D && R) return 5;
-//	if (D) return 6;
-//	if (U && L) return 1;
-//	if (U && R) return 3;
-//	if (U) return 2;
-//	if (R) return 4;
-//	if (L) return 8;
-//	return 0;
-//}
+
 double SquareMng::GetUP() {
 	double a=0;
 	for (int i = 0; i < SQU_NUM; i++) {
@@ -621,8 +544,9 @@ SquareMng imageSquareMng::GetSquareMng() {
 	}
 	return a;
 }
+
 int imageSquare::Draw() {
-	if (isExist) {
+	if (*Square::GetisExistAd()) {
 		DrawModiGraph(
 			Square::GetLU().Getx(), Square::GetLU().Gety(),
 			Square::GetRD().Getx(), Square::GetLU().Gety(),
@@ -684,12 +608,23 @@ int imageSquareMng::SetWalls(int a[], int num, int stageflag,int square1_image,i
 	}
 	return 0;
 }
-
+int imageSquareMng::Add(double a, double b, double c, double d, int handle) {
+	for (int i = 0; i < SQU_NUM; i++) {
+		if (!square[i].GetisExist()) {
+			square[i].Set(a, b, c, d);
+			square[i].Setimage(handle);
+			//printfDx("%d", i);
+			break;
+		}
+	}
+	return 0;
+}
 int imageSquareMng::Draw() {
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {//‘¶Ý‚·‚ê‚Î
-			square[i].Draw();
+			DrawLine(square[i].GetLU().Getx(), square[i].GetLU().Gety(), square[i].GetRD().Getx(), square[i].GetRD().Gety(), RED);
 			square[i].Square::testDraw(GREEN);
+			square[i].Draw();
 		}
 	}
 	return 0;
@@ -730,15 +665,24 @@ int intSquareMng::Add(double lux, double luy, double rdx, double rdy, int value)
 	}
 	return 0;
 }
-
-int intSquareMng::Add(intSquareMng a) {
+int intSquareMng::Add(intSquareMng* a) {
 	int j = 0;
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (!square[i].Square::GetisExist()) {
 			for (; j < SQU_NUM; j++) {
-				if(a.GetSquare(j).Square::GetisExist())
-					square[i] = a.GetSquare(j);
+				if(a->GetSquare(j).Square::GetisExist())
+					square[i] = a->GetSquare(j);
 			}
+		}
+	}
+	return 0;
+}
+int intSquareMng::testDraw(int colorhandle) {
+	for (int i = 0; i < SQU_NUM; i++) {
+		if (square[i].GetisExist()) {//‘¶Ý‚·‚ê‚Î
+			//DrawLine(square[i].GetLU().Getx(), square[i].GetLU().Gety(), square[i].GetRD().Getx(), square[i].GetRD().Gety(), RED);
+			square[i].Square::testDraw(colorhandle);
+			//square[i].Draw();
 		}
 	}
 	return 0;

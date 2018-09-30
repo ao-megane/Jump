@@ -30,7 +30,7 @@ public:/*
 	int UpdateJump(int count);
 	int UpdateAttack_s(int count);
 	int UpdateAttack_w(int count);
-	int UpdataDamge(int count);
+	int UpdateDamage(int count);
 	//int UpdateAttack_air(int count);
 	//int UpdateKunai(int count);
 

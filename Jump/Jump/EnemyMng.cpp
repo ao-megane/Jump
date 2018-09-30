@@ -1,7 +1,9 @@
 #include"EnemyMng.h"
 #include"Value.h"
 
-intSquareMng AttackArea;
+//intSquareMng AttackArea;
+
+int DrawnStand1;
 
 int Enemy::Initialize() {
 	isExist = false;
@@ -9,48 +11,68 @@ int Enemy::Initialize() {
 	imageMng.SquareMng::Initialize();
 	attackMng.SquareMng::Initialize();
 	weakMng.Initialize();
-	searchArea.Initialize();
+	//searchArea.Initialize();
 	return 0;
 }
-
 bool Enemy::GetisExist() {
 	return isExist;
 }
-intSquareMng* Enemy::GetAttackMngAd() {
+intSquareMng* Enemy::GetattackMngAd() {
 	return &attackMng;
 }
 Dot* Enemy::GetcenterAd() {
 	return &center;
 }
+imageSquareMng* Enemy::GetimageMngAd() {
+	return &imageMng;
+}
+SquareMng* Enemy::GetweakMngAd() {
+	return &weakMng;
+}
 
-int Drawn::Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy) {
+int Enemy::Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy) {
 	isExist = true;
 	center.Set(x, y);
 	return 0;
 }
+int Enemy::Set(int x, int y) {
+	isExist = true;
+	center.Set(x, y);
+	return 0;
+}
+
 int Drawn::Updata(int count, Dot Pcener) {
 	//center“®‚¢‚½‚è‚·‚é
-	attackMng.SquareMng::Delete();
-	weakMng.Delete();
-	imageMng.SquareMng::Delete();
+	Enemy::GetattackMngAd()->SquareMng::Delete();
+	Enemy::GetweakMngAd()->SquareMng::Delete();
+	Enemy::GetimageMngAd()->SquareMng::Delete();
 	
 	//center.Move();
 
-	attackMng.Add(center.Getx() - DRAWN_A_WIDTH / 2.0, center.Gety() - DRAWN_A_HEIGHT / 2.0, center.Getx() + DRAWN_A_WIDTH / 2.0, center.Gety() + DRAWN_A_HEIGHT / 2.0, 10);
-	weakMng.Add(center.Getx() - DRAWN_W_WIDTH / 2.0, center.Gety() - DRAWN_W_HEIGHT / 2.0, center.Getx() + DRAWN_W_WIDTH / 2.0, center.Gety() + DRAWN_W_HEIGHT / 2.0);
-	imageMng.SquareMng::Add(center.Getx() - DRAWN_W_WIDTH / 2.0-10, center.Gety() - DRAWN_W_HEIGHT / 2.0 - 10, center.Getx() + DRAWN_W_WIDTH / 2.0 - 10, center.Gety() + DRAWN_W_HEIGHT / 2.0 - 10);
+	Enemy::GetattackMngAd()->Add(Enemy::GetcenterAd()->Getx() - DRAWN_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DRAWN_A_HEIGHT / 2.0,
+		Enemy::GetcenterAd()->Getx() + DRAWN_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_A_HEIGHT / 2.0, 10);
+
+	Enemy::GetweakMngAd()->Add(Enemy::GetcenterAd()->Getx() - DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DRAWN_W_HEIGHT / 2.0,
+		Enemy::GetcenterAd()->Getx() + DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_W_HEIGHT / 2.0);
+
+	Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DRAWN_W_HEIGHT / 2.0,
+		Enemy::GetcenterAd()->Getx() + DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_W_HEIGHT / 2.0,DrawnStand1);
 	
-	return 0;
+	
+	return *Enemy::GetattackMngAd() & Pcener;
 }
+
 int Drawn::Draw() {
-	imageMng.Draw();
-	attackMng.SquareMng::testDraw(RED);
-	weakMng.testDraw(BLUE);
+	Enemy::GetimageMngAd()->Draw();
+	Enemy::GetweakMngAd()->testDraw(BLUE);
+	Enemy::GetattackMngAd()->testDraw(RED);
+
 	return 0;
 }
 
 Drawn drawn[DRAWN_NUM];
 int EnemyMngInitialize() {
+	DrawnStand1 = LoadGraph("images/enemies/drawn/stand/1.png");
 	for (int i = 0; i < DRAWN_NUM; i++) {
 		drawn[i].Enemy::Initialize();
 	}
@@ -79,14 +101,14 @@ int EnemyMngSet(int stageFlag) {
 }
 
 int EnemyMngUpdata(int count, Dot Pcenter) {
-	AttackArea.SquareMng::Delete();
+	int damage = 0;
 	for (int i = 0; i < DRAWN_NUM; i++) {
 		if (drawn[i].Enemy::GetisExist()) {
-			drawn[i].Updata(count, Pcenter);
-			AttackArea.Add(drawn[i].GetAttackMng());
+			damage += drawn[i].Updata(count, Pcenter);
 		}
 	}
-	return 0;
+
+	return damage;
 }
 
 int EnemyMngDraw() {

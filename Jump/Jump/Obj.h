@@ -119,7 +119,10 @@ public:
 	//bool isHitCenter(double p_radius,double e_radius);
 	Dot GetLU();
 	Dot GetRD();
+	Dot* GetLUAd();
+	Dot* GetRDAd();
 	bool GetisExist();
+	bool* GetisExistAd();
 	int Delete();
 	//int Draw(int colorHandle,double circleradius);
 	int testDraw(int colorHandle);
@@ -137,8 +140,16 @@ public:
 		else
 			return true;
 	};
+	bool operator & (Dot a) {	//‚ ‚½‚è”»’è‰‰Zq@true ‚Åd‚È‚Á‚Ä‚é
+		//if (a[2]<b[0] || a[0]>b[2] || a[1] > b[3] || a[3] < b[1]) return “–‚½‚Á‚Ä‚È‚¢
+		if (RD.Getx() < a.Getx() || LU.Getx() > a.Getx() ||
+			LU.Gety() > a.Gety() || RD.Gety() < a.Gety())
+			return false;
+		else
+			return true;
+	};
 
-protected:
+private:
 	Dot LU;
 	Dot RD;
 	bool isExist;
@@ -159,23 +170,14 @@ public:
 	int Setvalue(int value);
 	int GetValue();
 	int operator = (intSquare a) {
-		LU = a.Square::GetLU();
-		RD = a.Square::GetRD();
+		*Square::GetLUAd() = a.Square::GetLU();
+		*Square::GetRDAd() = a.Square::GetRD();
 		value = a.GetValue();
 		return 0;
 	};
 private:
 	int value;
 };
-
-class attackSquare : public Square
-{
-public:
-
-private:
-	int attack;
-};
-
 
 class SquareMng	
 {
@@ -209,7 +211,15 @@ public:
 		}
 		return a;
 	}
-	
+	bool operator & (Dot a) {
+		for (int i = 0; i < SQU_NUM; i++) {
+			if (square[i].GetisExist()) {
+				if (square[i] & a)
+					return true;
+			}
+		}
+		return false;
+	};
 private:
 	Square square[SQU_NUM];
 };
@@ -218,6 +228,7 @@ class imageSquareMng : public SquareMng {
 public:
 	int SetWalls(int a[], int num, int stageflag, int square1_image, int square2_image, int square3_image);
 	SquareMng GetSquareMng();
+	int Add(double a,double b,double c,double d,int handle);
 	int Draw();
 private:
 	imageSquare square[SQU_NUM];
@@ -228,10 +239,19 @@ public:
 	//int SetWalls(int a[], int num, int stageflag, int square1_image, int square2_image, int square3_image);
 	SquareMng GetSquareMng();
 	int Add(intSquare a);
-	int Add(intSquareMng a);
+	int Add(intSquareMng* a);
 	int Add(double lux, double luy, double rdx, double rdy, int value);
 	intSquare GetSquare(int num);
-	//int Draw();
+	int testDraw(int colorhandle);
+	bool operator & (Dot a) {
+		for (int i = 0; i < SQU_NUM; i++) {
+			if (square[i].GetisExist()) {
+				if (square[i] & a)
+					return square[i].GetValue();
+			}
+		}
+		return false;
+	};
 private:
 	intSquare square[SQU_NUM];
 };

@@ -26,7 +26,6 @@ int DrawOP(int count);
 
 int DrawTitleSentence(int flag);
 
-
 int PlayTitleBGM();
 
 int PlaynormalBGM();
@@ -38,6 +37,7 @@ int StopChaseBGM();
 int PlaybeLooked();
 
 int DrawUI(int count);
+int toUIDamage(int damage, int count);
 
 int DrawPrologue(int b);
 int DrawManual(int b);

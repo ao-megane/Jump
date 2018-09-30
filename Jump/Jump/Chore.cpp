@@ -258,6 +258,10 @@ int DrawUI(int count) {
 	DrawFormatString(DISP_WIDTH - 50, 50, WHITE, "%d", count / 30);
 	return 0;
 }
+int toUIDamage(int damage,int count) {
+	return 0;
+}
+
 
 void DrawChore() {
 	//DrawFormatString(0, 0, RED, "UI?");
