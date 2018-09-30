@@ -136,21 +136,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		case 4://playing
 			DrawFormatString(0, 0, WHITE, "playing");
 			player.Update1(count,key);
-			StageUpdata(stageFlag,count,0);
+			if (StageUpdata(stageFlag, count, 0,player.GetCenter())) {
+				keepCount = count;
+				flag = 6;
+			}
 			player.Update2(GetStageStaticWalls() + GetStageWalls());
 			damage = EnemyMngUpdata(count, player.GetCenter());
 			if (player.GetStateFlag() != 7 && damage) {//ダメージが返ってくる
 				//count += damage * 30.0;
 				sumdamage += damage;
 				player.SetDamage(count);
-				toUIDamage(damage*30.0, count);
+				toUIDamage(damage, count);
 			}
 
 			if (player.GetStateFlag() != 7) {//被ダメ中でなければ
 				//player.GetWeakAreaMng().isDamageSquareMng(GetEnemyMngAttackArea)
 			}
 
-			if (count > GetStageLimit()) {
+			if (count + sumdamage*30 > GetStageLimit()) {
 				flag = 5;
 				keepCount = count;
 			}
@@ -162,10 +165,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			EnemyMngDraw();
 			player.Draw();
 			DrawUI(GetStageLimit() - sumdamage*30 - count);
-			DrawFormatString(DISP_WIDTH - 100, 100, RED, "%d", sumdamage * 30);
+			DrawFormatString(DISP_WIDTH - 100, 100, RED, "%2d", sumdamage);
 			break;
 		case 5://gameover
-			DrawFormatString(0, 0, WHITE, "gameover");
+			DrawFormatString(100, 100, WHITE, "gameover");
 			DrawGameOverBord(count - keepCount);
 			if (count - keepCount > 180) {
 				flag = 0;
@@ -173,9 +176,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			break;
 		case 6://result
-			DrawFormatString(0, 0, WHITE, "gameclear");
+			DrawFormatString(100, 100, WHITE, "gameclear");
 			DrawClearBord(count - keepCount);
-			if (count - keepCount > 180) {
+			if (B == 1) {
 				flag = 1;
 				PlayTitleBGM();
 			}
@@ -227,7 +230,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		if (CheckHitKey(KEY_INPUT_DELETE)) break;
 
 		//PrintInput(key);
-		fps.Draw();
+		//fps.Draw();
 		ScreenFlip();
 		fps.Wait();
 	}

@@ -243,7 +243,7 @@ public:
 	int Add(double lux, double luy, double rdx, double rdy, int value);
 	intSquare GetSquare(int num);
 	int testDraw(int colorhandle);
-	bool operator & (Dot a) {
+	int operator & (Dot a) {
 		for (int i = 0; i < SQU_NUM; i++) {
 			if (square[i].GetisExist()) {
 				if (square[i] & a)

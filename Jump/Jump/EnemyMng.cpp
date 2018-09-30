@@ -58,7 +58,6 @@ int Drawn::Updata(int count, Dot Pcener) {
 	Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DRAWN_W_HEIGHT / 2.0,
 		Enemy::GetcenterAd()->Getx() + DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_W_HEIGHT / 2.0,DrawnStand1);
 	
-	
 	return *Enemy::GetattackMngAd() & Pcener;
 }
 
@@ -73,13 +72,14 @@ int Drawn::Draw() {
 Drawn drawn[DRAWN_NUM];
 int EnemyMngInitialize() {
 	DrawnStand1 = LoadGraph("images/enemies/drawn/stand/1.png");
-	for (int i = 0; i < DRAWN_NUM; i++) {
-		drawn[i].Enemy::Initialize();
-	}
+	
 	return 0;
 }
 
 int EnemyMngSet(int stageFlag) {
+	for (int i = 0; i < DRAWN_NUM; i++) {
+		drawn[i].Enemy::Initialize();
+	}
 	switch (stageFlag)
 	{
 	case 0://“G‚È‚µ

@@ -8,6 +8,7 @@ int Limit;
 
 SquareMng staticWalls;
 imageSquareMng Walls;
+imageSquare Door;
 
 int Tutorial_back;
 int Tutorial_wall_1;
@@ -16,6 +17,8 @@ int Tutorial_wall_2;
 int Factory_back;
 int Factory_wall_1;
 int Factory_wall_2;
+
+int Doorimage;
 
 //int _back;
 //int _wall;
@@ -29,10 +32,12 @@ int StagesInitialize() {
 	Factory_back = LoadGraph("images/maps/factory/background.png");
 	Factory_wall_1 = LoadGraph("images/maps/factory/wall/120_60.png");
 	Factory_wall_2 = LoadGraph("images/maps/factory/wall/600_60.png");
+	Doorimage = LoadGraph("images/maps/base/door.png");
 	return 0;
 }
 
 int StageLoad(int stagenum) {
+	Door.Delete();
 	switch (stagenum)
 	{
 	case 0:	//stage1
@@ -41,6 +46,8 @@ int StageLoad(int stagenum) {
 		Walls.SetWalls(STAGE1,STAGE1_NUM,stagenum,Tutorial_wall_1,Tutorial_wall_2,0);
 		//dynamicWall.Born();
 		Limit = STAGE1_COUNT;
+		Door.Set(DISP_WIDTH - 120, DISP_HEIGHT - 180, DISP_WIDTH - 60, DISP_HEIGHT - 60);
+		Door.Setimage(Doorimage);
 		break;
 	case 1:
 		BackGround = Tutorial_back;
@@ -48,6 +55,8 @@ int StageLoad(int stagenum) {
 		Walls.SetWalls(STAGE2, STAGE2_NUM, stagenum, Tutorial_wall_1, Tutorial_wall_2, 0);
 		//dynamicWall.Born();
 		Limit = STAGE2_COUNT;
+		Door.Set(DISP_WIDTH - 120, DISP_HEIGHT - 180, DISP_WIDTH - 60, DISP_HEIGHT - 60);
+		Door.Setimage(Doorimage);
 		break;
 	case 2:
 		BackGround = Tutorial_back;
@@ -55,6 +64,8 @@ int StageLoad(int stagenum) {
 		Walls.SetWalls(STAGE3, STAGE3_NUM, stagenum, Tutorial_wall_1, Tutorial_wall_2, 0);
 		//dynamicWall.Born();
 		Limit = STAGE3_COUNT;
+		Door.Set(DISP_WIDTH - 120, DISP_HEIGHT - 180, DISP_WIDTH - 60, DISP_HEIGHT - 60);
+		Door.Setimage(Doorimage);
 		break;
 	case 3:
 		BackGround = Factory_back;
@@ -103,13 +114,16 @@ bool StageBeforeDescription(int stage, int key[]) {
 		return false;
 }
 
-int StageUpdata(int stagenum, int count, int flag) {//大体のステージでいらないかも
+int StageUpdata(int stagenum, int count, int flag,Dot pcenter) {//大体のステージでいらないかも
 	switch (stagenum)
 	{
 	case 0:
 		break;
 	default:
 		break;
+	}
+	if (Door & pcenter) {
+		return 1;
 	}
 	return 0;
 }
@@ -129,7 +143,7 @@ int DrawStage(int count) {//count渡す必要ないかも
 	staticWalls.testDraw(GREEN);
 	Walls.Draw();
 	Walls.testDraw(GREEN);
-
+	Door.Draw();
 	//DrawGraph(0, 0, Tutorial_wall_1, true);
 	return 0;
 }
