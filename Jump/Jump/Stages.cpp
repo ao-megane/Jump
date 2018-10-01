@@ -38,6 +38,8 @@ int StagesInitialize() {
 
 int StageLoad(int stagenum) {
 	Door.Delete();
+	Walls.Delete();
+	staticWalls.Delete();
 	switch (stagenum)
 	{
 	case 0:	//stage1

@@ -516,13 +516,13 @@ double SquareMng::GetLanding(Square area) {//areaはSquareMngのどこに着地するか
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {	//四角が存在して
 			//printfDx("%d",i);
-			if (!(square[i].GetLU().Getx() >= area.GetRD().Getx()) && !(area.GetLU().Getx() >= square[i].GetRD().Getx())) {	//横方向判定
+			if (!(square[i].GetLU().Getx() > area.GetRD().Getx()) && !(area.GetLU().Getx() > square[i].GetRD().Getx())) {	//横方向判定
 				//printfDx("2");
 				if (square[i].GetLU().Gety() + 60 >= area.GetRD().Gety()) {	//縦方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
 					//printfDx("3");
 					if (square[i].GetLU().Gety() + 60 - area.GetRD().Gety() < a) {//近いやつ
 						//square[i].testDraw(RED);
-						a = square[i].GetRD().Gety() - area.GetRD().Gety();
+						a = square[i].GetLU().Gety() + 60 - area.GetRD().Gety();
 						b = i;
 					}
 				}
