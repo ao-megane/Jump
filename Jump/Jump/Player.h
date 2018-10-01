@@ -57,9 +57,9 @@ private:
 
 	SquareMng weakAreaMng;	//被ダメ範囲
 	SquareMng attackAreaMng;	//与ダメ範囲
+	imageSquareMng image;
 
 	int attack;			//現在の攻撃力
-	int image;			//現在の画像
 	int bodyClock;		//アニメーション用体内時計
 	bool isRightFlag;	//向いてる方向フラグ（0で左 1で右）
 	bool acceptFlag;	//入力受付フラグ（1で受付）

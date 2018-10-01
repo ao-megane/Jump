@@ -61,7 +61,7 @@ int Player::Initialize() {
 	acceleration.Set(0, 0);
 	velocity.Set(0, 0);
 	attack = 0;
-	image = PStand1;
+	//image = PStand1;
 	acceptFlag = 1;
 	isRightFlag = 1;
 	//isAir = false;
@@ -100,12 +100,14 @@ int Player::Set(int stageflag) {
 	//center.Set(100, GROUND_HEIGHT - P_HEIGHT / 2);
 	//weakArea.Set(center, P_W_WIDTH, P_W_HEIGHT);
 	attack = 0;
-	image = PStand1;
+	//image = PStand1;
 	acceptFlag = 1;
 	bodyClock = 0;
 	isRightFlag = 1;
 	SetStand(0);
 	center.Set(P_START_POINT[2 * stageflag], P_START_POINT[2 * stageflag + 1]);
+	velocity.Set(0, 0);
+	acceleration.Set(0, 0);
 	telepo_back.Set(0, 0);
 	return 0;
 }
@@ -116,7 +118,7 @@ int Player::SetStand(int count) {
 	acceptFlag = 1;
 	acceleration.Set(0, 0);
 	//velocity.Set(0, 0);	//0,0‚¾‚©‚çstand‚É“ü‚Á‚½
-	image = PStand1;
+	//image = PStand1;
 	return 0;
 }
 
@@ -128,7 +130,7 @@ int Player::UpdateStand(int count) {
 int Player::SetDash(int count) {
 	bodyClock = count;
 	stateFlag = 1;
-	image = PStand1;
+	//image = PStand1;
 	acceptFlag = 1;
 	return 0;
 }
@@ -137,35 +139,35 @@ int Player::UpdateDash(int count) {
 	int sum = 19;	//ˆêü‚ÌƒtƒŒ[ƒ€”
 	int num = 8;	//ˆêü‚Ì‰æ‘œ”
 	if (count % sum <= sum / num * 1) {
-		image = PDash1;
+		//image = PDash1;
 	}
 	else if (count % sum <= sum / num * 2) {
-		image = PDash2;
+		//image = PDash2;
 	}
 	else if (count % sum <= sum / num * 3) {
-		image = PDash3;
+		//image = PDash3;
 	}
 	else if (count % sum <= sum / num * 4) {
-		image = PDash4;
+		//image = PDash4;
 	}
 	else if (count % sum <= sum / num * 5) {
-		image = PDash5;
+		//image = PDash5;
 	}
 	else if (count % sum <= sum / num * 6) {
-		image = PDash4;
+		//image = PDash4;
 	}
 	else if (count % sum <= sum / num * 7) {
-		image = PDash3;
+		//image = PDash3;
 	}
 	else if (count % sum <= sum / num * 8) {
-		image = PDash2;
+		//image = PDash2;
 	}
 	return 0;
 }
 
 int Player::SetJump(int count) {
 	stateFlag = 2;
-	image = PStand1;
+	//image = PStand1;
 	bodyClock = count;
 	acceleration.Sety(-P_JUMP_POWER);
 	//isAir = true;
@@ -221,7 +223,7 @@ int Player::UpdateJump(int count) {
 int Player::SetAttack_w(int count) {
 	bodyClock = count;
 	stateFlag = 4;
-	image = PStand1;
+	//image = PStand1;
 	acceptFlag = 0;
 	attack = 0;
 	return 0;
@@ -258,19 +260,19 @@ int Player::UpdateAttack_w(int count) {
 		//}
 	}
 
-	if (count == 0) image = PAttackw1;
+	/*if (count == 0) image = PAttackw1;
 	if (count == 2) {
 		image = PAttackw2;
 		PlayAttack_w();
 	}
-	if (count == 5) image = PAttackw3;
+	if (count == 5) image = PAttackw3;*/
 	return 0;
 }
 
 int Player::SetAttack_s(int count) {
 	bodyClock = count;
 	stateFlag = 3;
-	image = PStand1;
+	//image = PStand1;
 	acceptFlag = 0;
 	attack = 0;
 	return 0;
@@ -306,9 +308,9 @@ int Player::UpdateAttack_s(int count) {
 		//	//printfDx("SETSTAND!\n");
 		//}
 	}
-	if (count == 0) image = PAttacks1;
+	/*if (count == 0) image = PAttacks1;
 	if (count == 17) image = PAttacks2;
-	if (count == 19) image = PAttacks3;
+	if (count == 19) image = PAttacks3;*/
 	if (count == 17)
 		PlayAttack_s();
 	return 0;
@@ -316,7 +318,7 @@ int Player::UpdateAttack_s(int count) {
 int Player::SetDamage(int count) {
 	bodyClock = count;
 	stateFlag = 7;
-	image = PStand1;
+	//image = PStand1;
 	acceptFlag = 0;
 	attack = 0;
 	return 0;
@@ -352,9 +354,9 @@ int Player::UpdateDamage(int count) {
 		//	//printfDx("SETSTAND!\n");
 		//}
 	}
-	if (count == 0) image = PAttacks1;
+	/*if (count == 0) image = PAttacks1;
 	if (count == 17) image = PAttacks2;
-	if (count == 19) image = PAttacks3;
+	if (count == 19) image = PAttacks3;*/
 	if (count == 17)
 		PlayAttack_s();
 	if (count == 10) {
@@ -433,93 +435,70 @@ int Player::Update1(int count,int key[]) {//ó‘Ô‰ñ‚è
 		break;
 	}
 
-	weakAreaMng.Add(center.Getx() - P_WEAK_LU_X, center.Gety() - P_WEAK_LU_Y, center.Getx() + P_WEAK_RD_X, center.Gety() + P_WEAK_RD_Y);
+	velocity.Move(acceleration.Getx(), acceleration.Gety());
+	center.Move(velocity.Getx(), velocity.Gety());
+	weakAreaMng.Add(center.Getx() - P_WEAK_LU_X, center.Gety() - P_WEAK_LU_Y, center.Getx() + P_WEAK_RD_X, center.Gety() + P_WEAK_RD_Y);	
 
 	return 0;
 }
+
 int Player::Update2(SquareMng a) {//•Ç‚Ü‚í‚è‚Ìˆ—
-	DrawFormatString(40, 80, RED, "%d", weakAreaMng.isHitSquareMng(a));
+	//DrawFormatString(40, 80, RED, "%d", weakAreaMng.isHitSquareMng(a));
 
 	isAir = true;//‘«‚É‰½‚©‚ªG‚ê‚È‚¯‚ê‚Î‹ó’†‚É‚¢‚é
-	switch (weakAreaMng.isHitSquareMng(a))
-	{
-	case 0://‚Ô‚Â‚©‚Á‚Ä‚È‚¢
-		break;
-	case 1://LU
-		acceleration.Sety(GRAVITY);
-		center.Sety(a.GetUpLanding(weakAreaMng.GetSquare(0)) + P_WEAK_LU_Y);
-		if (velocity.Getx() < 0) velocity.Setx(0);
-		break;
-	case 2://U
-		if (acceleration.Gety() < 0) {
-			acceleration.Sety(0);
+	for (int i = 0; i < SQU_NUM; i++) {
+		if (a.GetSquare(i).GetisExist()) {//lŠp‚²‚Æ‚É”»’è
+			switch (weakAreaMng.GetSquare(0).isHitSquare(a.GetSquare(i),velocity))//‚±‚±‚Å‚«‚¿‚ñ‚Æ‚ß‚è‚İ‚Ü‚Å”»’è‚Å‚«‚ê‚Î–â‘è‚È‚¢
+			{
+			case 0://‚Ô‚Â‚©‚Á‚Ä‚È‚¢
+				break;
+			case 2://U
+				if (acceleration.Gety() < 0) {
+					acceleration.Sety(0);
+				}
+				if (velocity.Gety() < 0) {
+					velocity.Sety(0);
+				}
+				center.Sety(a.GetUpLanding(weakAreaMng.GetSquare(0)) + P_WEAK_LU_Y);
+				printfDx("U:%d\n", i);
+				break;
+			case 4://R
+				if (velocity.Getx() > 0) velocity.Setx(0);
+				center.Setx(a.GetRightLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_X);
+				printfDx("R:%d\n", i);
+				//printfDx("R!\n");
+				break;
+			case 6://D
+				if (acceleration.Gety() > 0) {
+					acceleration.Sety(0);
+				}
+				if (velocity.Gety() > 0) {
+					velocity.Sety(0);
+				}
+				center.Sety(a.GetLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_Y);
+				if (stateFlag == 2) {//
+					 SetStand(0);
+				}
+				if(i == 0)
+					printfDx("D:%d\n", i);
+				isAir = false;
+				break;
+			case 8://L
+				if (velocity.Getx() < 0) velocity.Setx(0);
+				center.Setx(a.GetLeftLanding(weakAreaMng.GetSquare(0)) + P_WEAK_LU_X);
+				printfDx("L:%d\n", i);
+				break;
+			default:
+				break;
+			}
 		}
-		if (velocity.Gety() < 0) {
-			velocity.Sety(0);
-		}
-		center.Sety(a.GetUpLanding(weakAreaMng.GetSquare(0)) + P_WEAK_LU_Y);
-		acceleration.Sety(GRAVITY);
-		break;
-	case 3://RU
-		acceleration.Sety(GRAVITY);
-		center.Sety(a.GetUpLanding(weakAreaMng.GetSquare(0)) + P_WEAK_LU_Y);
-		center.Setx(a.GetRightLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_X);
-		if (velocity.Getx() > 0) velocity.Setx(0);
-		break;
-	case 4://R
-		if (velocity.Getx() > 0) velocity.Setx(0);
-		center.Setx(a.GetRightLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_X);
-		//printfDx("R!\n");
-		break;
-	case 5://RD
-		if (acceleration.Gety() > 0) {
-			acceleration.Sety(0);
-		}
-		if (velocity.Gety() > 0) {
-			velocity.Sety(0);
-		}
-		center.Sety(a.GetLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_Y);
-		center.Setx(a.GetRightLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_X);
-		if (velocity.Getx() > 0) velocity.Setx(0);
-		isAir = false;
-		//printfDx("RD!\n");
-		break;
-	case 6://D
-		if (acceleration.Gety() > 0) {
-			acceleration.Sety(0);
-		}
-		if (velocity.Gety() > 0) {
-			velocity.Sety(0);
-		}
-		center.Sety(a.GetLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_Y);
-		if (stateFlag == 2) {//
-			//SetStand(0);
-		}
-		isAir = false;
-		break;
-	case 7://LD
-		if (acceleration.Gety() > 0) {
-			acceleration.Sety(0);
-		}
-		if (velocity.Gety() > 0) {
-			velocity.Sety(0);
-		}
-		center.Sety(a.GetLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_Y);
-		if (velocity.Getx() < 0) velocity.Setx(0);
-		isAir = false;
-		break;
-	case 8://L
-		if (velocity.Getx() < 0) velocity.Setx(0);
-		center.Setx(a.GetLeftLanding(weakAreaMng.GetSquare(0)) + P_WEAK_LU_X);
-		break;
-	default:
-		break;
 	}
 	if (isAir)
 		acceleration.Move(0, GRAVITY);
 
-	velocity.Move(acceleration.Getx(), acceleration.Gety());
-	center.Move(velocity.Getx(), velocity.Gety());
+	weakAreaMng.Delete();
+	weakAreaMng.Add(center.Getx() - P_WEAK_LU_X, center.Gety() - P_WEAK_LU_Y, center.Getx() + P_WEAK_RD_X, center.Gety() + P_WEAK_RD_Y);
+
 	return 0;
 }
 
@@ -567,10 +546,10 @@ int Player::Draw() {
 	if (attack > 0)
 		attackAreaMng.testDraw(RED);
 
-	DrawBox(telepo_back.Getx() - 30, telepo_back.Gety() - 30, telepo_back.Getx() + 30, telepo_back.Gety() + 30, WHITE, false);
+	//DrawBox(telepo_back.Getx() - 30, telepo_back.Gety() - 30, telepo_back.Getx() + 30, telepo_back.Gety() + 30, WHITE, false);
 
-	DrawBox(center.Getx() - 96, center.Gety() - 96, center.Getx() + 96, center.Gety() + 96, BLUE, false);
-	DrawBox(center.Getx() - 96*2, center.Gety() - 96 * 2, center.Getx() + 96 * 2, center.Gety() + 96 * 2, BLUE, false);
+	//DrawBox(center.Getx() - 96, center.Gety() - 96, center.Getx() + 96, center.Gety() + 96, BLUE, false);
+	//DrawBox(center.Getx() - 96*2, center.Gety() - 96 * 2, center.Getx() + 96 * 2, center.Gety() + 96 * 2, BLUE, false);
 
 	DrawFormatString(0, 120, RED, "P_state:%d ,a:%f",stateFlag,acceleration.Gety());
 	//DrawFormatString(0, 0, RED, "P_state:%d,weaponFlag:%d,accept:%d", stateFlag, WeaponFlag,acceptFlag);

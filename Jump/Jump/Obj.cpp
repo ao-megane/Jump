@@ -82,7 +82,7 @@ int Square::Move(double x, double y) {
 	RD.Set(RD.Getx() + x, RD.Gety() + y);
 	return 0;
 }
-int Square::isHitSquare(Square a) {//二辺接地が未実装
+int Square::isHitSquare(Square a,Dot velocity) {//二辺接地が未実装 -> velocityで実装
 	bool L = false, R = false, U = false, D = false;
 	if (*this & a) {
 		if (LU.Gety() <= a.GetLU().Gety() && a.GetLU().Gety() <= RD.Gety()) {//下でぶつかってる(触れている)
@@ -98,11 +98,29 @@ int Square::isHitSquare(Square a) {//二辺接地が未実装
 			R = true;
 		}
 	}
-	if (D && L) return 7;
-	if (D && R) return 5;
+	//プレイヤースクエアが壁を読んだ状態,a=wall
+	//足元で釣っかかるので，上に載った優先
+	if (D && L) {
+		if (a.GetRD().Getx() <= GetLU().Getx() - velocity.Getx()) return 8;
+		return 6;
+		/*if (a.GetLU().Gety() <= GetRD().Gety() - velocity.Gety()) return 6;
+		return 8;*/
+	}
+	if (D && R) {
+		if (a.GetLU().Getx() >= GetRD().Getx() - velocity.Getx()) return 4;
+		return 6;
+		/*if (a.GetLU().Gety() <= GetRD().Gety() - velocity.Gety()) return 6;
+		return 4;*/
+	}
+	if (U && L) {
+		if (a.GetRD().Gety() <= GetLU().Gety() - velocity.Gety()) return 2;
+		return 8;
+	}
+	if (U && R) {
+		if (a.GetRD().Gety() <= GetLU().Gety() - velocity.Gety()) return 2;
+		return 4;
+	}
 	if (D) return 6;
-	if (U && L) return 1;
-	if (U && R) return 3;
 	if (U) return 2;
 	if (R) return 4;
 	if (L) return 8;
@@ -110,6 +128,7 @@ int Square::isHitSquare(Square a) {//二辺接地が未実装
 }
 int Square::testDraw(int handle) {
 	DrawBox(LU.Getx(), LU.Gety(), RD.Getx(), RD.Gety(), handle, false);
+	DrawLine(LU.Getx(), LU.Gety(), RD.Getx(), RD.Gety(), handle, false);
 	return 0;
 }
 int Square::Delete() {
@@ -431,10 +450,11 @@ Square SquareMng::GetSquare(int num) {
 }
 int SquareMng::isHitSquareMng(SquareMng a) {//
 	bool L = false, R = false, U = false, D = false;
-	for (int i = 0; i < SQU_NUM; i++) {
+	printfDx("未実装！！！！！");
+	/*for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {
 			for (int j = 0; j < SQU_NUM; j++) {
-				switch(square[i].isHitSquare(a.GetSquare(j))) {
+				switch(square[i].isHitSquare(a.GetSquare(j),velocity)) {
 				case 0:
 					break;
 				case 1:
@@ -476,7 +496,7 @@ int SquareMng::isHitSquareMng(SquareMng a) {//
 	if (U && R) return 3;
 	if (U) return 2;
 	if (R) return 4;
-	if (L) return 8;
+	if (L) return 8;*/
 	return 0;
 }
 
@@ -491,18 +511,18 @@ double SquareMng::GetUP() {
 	return a;
 }
 double SquareMng::GetLanding(Square area) {//areaはSquareMngのどこに着地するか
-	double a = DISP_HEIGHT;
+	double a = DISP_HEIGHT*2.0;
 	int b = 0;
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {	//四角が存在して
 			//printfDx("%d",i);
 			if (!(square[i].GetLU().Getx() >= area.GetRD().Getx()) && !(area.GetLU().Getx() >= square[i].GetRD().Getx())) {	//横方向判定
 				//printfDx("2");
-				if (square[i].GetLU().Gety() >= area.GetLU().Gety()) {	//縦方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
+				if (square[i].GetLU().Gety() + 60 >= area.GetRD().Gety()) {	//縦方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
 					//printfDx("3");
-					if (square[i].GetLU().Gety() - area.GetRD().Gety() < a) {//近いやつ
+					if (square[i].GetLU().Gety() + 60 - area.GetRD().Gety() < a) {//近いやつ
 						//square[i].testDraw(RED);
-						a = square[i].GetLU().Gety() - area.GetRD().Gety();
+						a = square[i].GetRD().Gety() - area.GetRD().Gety();
 						b = i;
 					}
 				}
@@ -517,9 +537,9 @@ double SquareMng::GetUpLanding(Square area) {
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {	//四角が存在して
 			if (!(square[i].GetLU().Getx() > area.GetRD().Getx()) && !(area.GetLU().Getx() > square[i].GetRD().Getx())) {	//横方向判定
-				if (square[i].GetLU().Gety() <= area.GetLU().Gety()) {	//縦方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
-					if (area.GetLU().Gety() - square[i].GetRD().Gety() < a) {//近いやつ
-						a = area.GetLU().Gety() - square[i].GetRD().Gety();
+				if (square[i].GetRD().Gety() - 30 <= area.GetLU().Gety()) {	//縦方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
+					if (area.GetLU().Gety() - square[i].GetRD().Gety() + 30 < a) {//近いやつ
+						a = area.GetLU().Gety() - square[i].GetRD().Gety() + 30;
 						b = i;
 					}
 				}
@@ -534,9 +554,9 @@ double SquareMng::GetLeftLanding(Square area) {
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {	//四角が存在して
 			if (!(square[i].GetLU().Gety() > area.GetRD().Gety()) && !(area.GetLU().Gety() > square[i].GetRD().Gety())) {	//縦方向判定
-				if (square[i].GetLU().Getx() <= area.GetLU().Getx()) {	//横方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
-					if (area.GetLU().Getx() - square[i].GetLU().Getx() < a) {//近いやつ
-						a = square[i].GetLU().Getx() - area.GetLU().Getx();
+				if (square[i].GetRD().Getx() - P_SPEED - 1 <= area.GetLU().Getx()) {	//横方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
+					if (area.GetLU().Getx() - square[i].GetLU().Getx() + P_SPEED + 1 < a) {//近いやつ
+						a = area.GetLU().Getx() - square[i].GetLU().Getx() + P_SPEED + 1;
 						//square[i].testDraw(RED);
 						b = i;
 					}
@@ -552,9 +572,9 @@ double SquareMng::GetRightLanding(Square area) {
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {	//四角が存在して
 			if (!(square[i].GetLU().Gety() > area.GetRD().Gety()) && !(area.GetLU().Gety() > square[i].GetRD().Gety())) {	//縦方向判定
-				if (square[i].GetRD().Getx() >= area.GetRD().Getx()) {	//横方向判定,RDはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
-					if (area.GetRD().Getx() - square[i].GetRD().Getx() < a) {//近いやつ
-						a = square[i].GetRD().Getx() - area.GetRD().Getx();
+				if (square[i].GetLU().Getx() + P_SPEED+1 >= area.GetRD().Getx()) {	//横方向判定,RDはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
+					if (square[i].GetLU().Getx() + P_SPEED+1 - area.GetRD().Getx() < a) {//近いやつ
+						a = square[i].GetLU().Getx() + P_SPEED + 1 - area.GetRD().Getx();
 						//square[i].testDraw(RED);
 						b = i;
 					}
@@ -643,6 +663,10 @@ int imageSquareMng::SetWalls(int a[], int num, int stageflag,int square1_image,i
 			case 3:
 				square[i].SetLength(a[i * 3 + 0], a[i * 3 + 1], SQUARE3_WIDTH, SQUARE3_HEIGHT);
 				square[i].Setimage(square3_image);
+				break;
+			case 4:
+				square[i].SetLength(a[i * 3 + 0], a[i * 3 + 1], SQUARE4_WIDTH, SQUARE4_HEIGHT);
+				//square[i].Setimage(square3_image);
 				break;
 			default:
 				break;

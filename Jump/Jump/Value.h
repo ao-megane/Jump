@@ -81,7 +81,7 @@ const double P_START_POINT[STAGE_NUM * 2] = {
 const int STATICWALLS_NUM = 3;
 static double STATICWALLS[3 * 4]{//壁，画像は別で用意か(床抜け防止),左上，W,H
 	0,0,60,DISP_HEIGHT,
-	0,DISP_HEIGHT - 60,DISP_WIDTH,60 * 10,
+	0,DISP_HEIGHT - 60,DISP_WIDTH,DISP_HEIGHT,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,	
 };
 
@@ -92,8 +92,10 @@ const int SQUARE2_WIDTH = 60;
 const int SQUARE2_HEIGHT = 600;
 const int SQUARE3_WIDTH = 900;
 const int SQUARE3_HEIGHT = 60;
+const int SQUARE4_WIDTH = 180;
+const int SQUARE4_HEIGHT = 60;
 /*------stage1(チュートリアル1)-----*/
-const int STAGE1_NUM = 12;
+const int STAGE1_NUM = 13;
 //static double STAGE1[STAGE1_NUM * 4] = {//左上,W,H
 //	0,0,60,DISP_HEIGHT,
 //	0,DISP_HEIGHT-60,DISP_WIDTH,60*10,
@@ -123,7 +125,8 @@ static int STAGE1[STAGE1_NUM * 3] = {//左上,四角の種類
 	1080,840,1,
 	1560,420,1,
 	1740,720,1,
-	1500,420,2
+	1500,420,2,
+	1500,419,4
 };
 const int STAGE1_COUNT = 30 * 60;//30fps
 
