@@ -57,7 +57,7 @@ const double P_SPEED = 15;
 const int P_DASH_CLOCK = 40;//P_CLOCK/2 フレームに一回足音
 
 const double P_JUMP_NUM = 30.0*3.0;//ジャンプの総フレーム
-const int P_TLP_RANGE = 270;
+const int P_TLP_RANGE = 270 + 60;
 const double P_JUMP_POWER = GRAVITY * 14.0;//ジャンプの高さ
 
 /*-----------------------*/

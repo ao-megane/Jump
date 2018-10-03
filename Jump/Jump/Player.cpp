@@ -467,6 +467,17 @@ int Player::Update1(int count,int key[]) {//状態回り
 int Player::Update2(SquareMng a) {//壁まわりの処理
 	//DrawFormatString(40, 80, RED, "%d", weakAreaMng.isHitSquareMng(a));
 
+	/*-----------テレポ処理---------------*/
+	if (isTelepo) {
+		for (int i = P_TLP_RANGE; i > 0; i--) {
+			if (!a.isAbleTelepo(center, telepo)) {//テレポできなければ
+				telepo.Set(center.Getx() + (double)(i)* cos(CalcDir(center, telepo)), center.Gety() + (double)(i) * -sin(CalcDir(center, telepo)));//もっと狭いとこに更新
+				//telepo.Move(cos(CalcDir(center, telepo)), sin(-cos(CalcDir(center, telepo))));	
+			}
+		}
+	}
+	//したのめり込み判定をテレポ先にも常に行えばいいのでは
+
 	isAir = true;//足に何かが触れなければ空中にいる
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (a.GetSquare(i).GetisExist()) {//四角ごとに判定
@@ -528,15 +539,11 @@ int Player::Update2(SquareMng a) {//壁まわりの処理
 		SetStand(0);
 	}
 
-	/*-----------テレポ処理---------------*/
-	if (isTelepo) {
-		for (int i = P_TLP_RANGE; i > 0; i--) {
-			if (!a.isAbleTelepo(center, telepo)) {//テレポできなければ
-				telepo.Set(center.Getx() + (double)(i) * cos(CalcDir(center, telepo)), center.Gety() + (double)(i) * -sin(CalcDir(center, telepo)));//もっと狭いとこに更新
-				//telepo.Move(cos(CalcDir(center, telepo)), sin(-cos(CalcDir(center, telepo))));	
-			}
-		}
-	}
+	
+	/*if ((telepo - center).Getx() >= 0 && (telepo - center).Getx() >= 0) telepo.Move(-60, -60);
+	if ((telepo - center).Getx() <= 0 && (telepo - center).Getx() >= 0) telepo.Move(+60, -60);
+	if ((telepo - center).Getx() <= 0 && (telepo - center).Getx() <= 0) telepo.Move(+60, +60);
+	if ((telepo - center).Getx() >= 0 && (telepo - center).Getx() <= 0) telepo.Move(-60, +60);*/
 
 	weakAreaMng.Delete();
 	weakAreaMng.Add(center.Getx() - P_WEAK_LU_X, center.Gety() - P_WEAK_LU_Y, center.Getx() + P_WEAK_RD_X, center.Gety() + P_WEAK_RD_Y);
