@@ -120,6 +120,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		case 2://loading
 			DrawFormatString(0, 0, WHITE, "loading");
 			count = 0;
+			sumdamage = 0;
 			StageLoad(stageFlag);
 			player.Set(stageFlag);
 			EnemyMngSet(stageFlag);
@@ -229,7 +230,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		count++;
 		if (CheckHitKey(KEY_INPUT_DELETE)) break;
 
-		//PrintInput(key);
+		PrintInput(key);
 		//fps.Draw();
 		ScreenFlip();
 		fps.Wait();

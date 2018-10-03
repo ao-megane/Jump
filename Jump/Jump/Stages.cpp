@@ -10,7 +10,7 @@ SquareMng staticWalls;
 imageSquareMng Walls;
 imageSquare Door;
 
-int Tutorial_back;
+int Tutorial_back[3];
 int Tutorial_wall_1;
 int Tutorial_wall_2;
 //int Tutorial_wall_1;
@@ -26,7 +26,9 @@ int Doorimage;
 
 int StagesInitialize() {
 	Walls.Initialize();
-	Tutorial_back = LoadGraph("images/maps/base/background.png");
+	Tutorial_back[0] = LoadGraph("images/maps/base/background/1.png");
+	Tutorial_back[1] = LoadGraph("images/maps/base/background/2.png");
+	Tutorial_back[2] = LoadGraph("images/maps/base/background/3.png");
 	Tutorial_wall_1 = LoadGraph("images/maps/base/wall/120_60.png");
 	Tutorial_wall_2 = LoadGraph("images/maps/base/wall/600_60.png");
 	Factory_back = LoadGraph("images/maps/factory/background.png");
@@ -40,10 +42,11 @@ int StageLoad(int stagenum) {
 	Door.Delete();
 	Walls.Delete();
 	staticWalls.Delete();
+
 	switch (stagenum)
 	{
 	case 0:	//stage1
-		BackGround = Tutorial_back;
+		BackGround = Tutorial_back[0];
 		staticWalls.Add(STATICWALLS, STATICWALLS_NUM);
 		Walls.SetWalls(STAGE1,STAGE1_NUM,stagenum,Tutorial_wall_1,Tutorial_wall_2,0);
 		//dynamicWall.Born();
@@ -52,7 +55,7 @@ int StageLoad(int stagenum) {
 		Door.Setimage(Doorimage);
 		break;
 	case 1:
-		BackGround = Tutorial_back;
+		BackGround = Tutorial_back[1];
 		staticWalls.Add(STATICWALLS, STATICWALLS_NUM);
 		Walls.SetWalls(STAGE2, STAGE2_NUM, stagenum, Tutorial_wall_1, Tutorial_wall_2, 0);
 		//dynamicWall.Born();
@@ -61,7 +64,7 @@ int StageLoad(int stagenum) {
 		Door.Setimage(Doorimage);
 		break;
 	case 2:
-		BackGround = Tutorial_back;
+		BackGround = Tutorial_back[2];
 		staticWalls.Add(STATICWALLS, STATICWALLS_NUM);
 		Walls.SetWalls(STAGE3, STAGE3_NUM, stagenum, Tutorial_wall_1, Tutorial_wall_2, 0);
 		//dynamicWall.Born();
@@ -141,7 +144,7 @@ int GetStageLimit() {
 }
 
 int DrawStage(int count) {//count“n‚·•K—v‚È‚¢‚©‚à
-	//DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, BackGround, true);
+	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, BackGround, true);
 	staticWalls.testDraw(GREEN);
 	Walls.Draw();
 	Walls.testDraw(GREEN);

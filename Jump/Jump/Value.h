@@ -24,6 +24,8 @@ const int BROWN = GetColor(46, 33, 13);
 #define THUMB_Y (key[8])//-100～+100 100が最大値
 #define THUMB_X (key[9]) //-100～+100 100が最大値
 #define PAUSE (key[10])
+#define R_THUMB_Y (key[11])//-100～+100 100が最大値
+#define R_THUMB_X (key[12]) //-100～+100 100が最大値
 
 const int Trig = 200; //R2L2のカウントを始めるしきい値
 const int ThumbTrig = 16383; //thumbの無視する範囲 ～32767
@@ -55,7 +57,8 @@ const double P_SPEED = 15;
 const int P_DASH_CLOCK = 40;//P_CLOCK/2 フレームに一回足音
 
 const double P_JUMP_NUM = 30.0*3.0;//ジャンプの総フレーム
-const double P_JUMP_POWER = GRAVITY * 15.0;//ジャンプの高さ
+const int P_TLP_RANGE = 270;
+const double P_JUMP_POWER = GRAVITY * 14.0;//ジャンプの高さ
 
 /*-----------------------*/
 const int DRAWN_W_WIDTH = 180;

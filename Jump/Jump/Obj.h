@@ -232,6 +232,7 @@ public:
 	int SetWalls(int a[], int num, int stageflag, int square1_image, int square2_image, int square3_image);
 	SquareMng GetSquareMng();
 	int Add(double a,double b,double c,double d,int handle);
+	int Delete();
 	int Draw();
 private:
 	imageSquare square[SQU_NUM];

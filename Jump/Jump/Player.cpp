@@ -1,6 +1,7 @@
 #include"Player.h"
 #include"DxLib.h"
 #include"Value.h"
+#include"Chore.h"
 #include<math.h>
 
 int PDash1;
@@ -65,6 +66,7 @@ int Player::Initialize() {
 	acceptFlag = 1;
 	isRightFlag = 1;
 	//isAir = false;
+	isTelepo = false;
 	stateFlag = 0;
 	bodyClock = 0;
 	return 0;
@@ -109,6 +111,7 @@ int Player::Set(int stageflag) {
 	velocity.Set(0, 0);
 	acceleration.Set(0, 0);
 	telepo_back.Set(0, 0);
+	isTelepo = false;
 	return 0;
 }
 
@@ -370,24 +373,43 @@ int dirKeeper;
 int Player::Update1(int count,int key[]) {//ó‘Ô‰ñ‚è
 	weakAreaMng.Delete();
 
-	if (LEFT == 1) {
-		if (telepo_back.Getx() == 0 && telepo_back.Gety() == 0) {
+	if (LEFT > 0) {
+		/*if (telepo_back.Getx() == 0 && telepo_back.Gety() == 0) {
 			telepo_back = center;
 		}
 		else {
 			center = telepo_back;
 			telepo_back.Set(0, 0);
-		}
+		}*/
+		//telepo.Set(center.Getx() + P_TLP_RANGE * cos(CalcDir(R_THUMB_X, R_THUMB_Y)), center.Gety() + P_TLP_RANGE * -sin(CalcDir(R_THUMB_X, R_THUMB_Y)));
+		telepo.Set(center.Getx() + P_TLP_RANGE * cos(CalcDir(THUMB_X, THUMB_Y)), center.Gety() + P_TLP_RANGE * -sin(CalcDir(THUMB_X, THUMB_Y)));
+		isTelepo = true;
+	}
+	if (isTelepo && !LEFT) {
+		center = telepo;
+		isAir = true;
+		isTelepo = false;
 	}
 
 	if (acceptFlag) {//“ü—ÍŽó•tŽž
-		if (THUMB_X > 0) {
-			velocity.Setx(P_SPEED);
-			isRightFlag = true;
-		}
-		else if (THUMB_X < 0) {
-			velocity.Setx(-P_SPEED);
-			isRightFlag = false;
+		if (!isTelepo) {
+			if (THUMB_X > 0) {
+				if (isAir)
+					velocity.Setx(P_SPEED / 1.5 /** THUMB_X / 100.0*/);
+				else
+					velocity.Setx(P_SPEED);
+				isRightFlag = true;
+			}
+			else if (THUMB_X < 0) {
+				if (isAir)
+					velocity.Setx(-P_SPEED / 1.5 /** THUMB_X / 100.0*/);
+				else
+					velocity.Setx(-P_SPEED);
+				isRightFlag = false;
+			}
+			else {
+				velocity.Setx(0);
+			}
 		}
 		else {
 			velocity.Setx(0);
@@ -495,6 +517,14 @@ int Player::Update2(SquareMng a) {//•Ç‚Ü‚í‚è‚Ìˆ—
 	}
 	if (isAir)
 		acceleration.Move(0, GRAVITY);
+	if (center.Gety() > DISP_HEIGHT) {
+		center.Sety(DISP_HEIGHT - 60 - P_WEAK_LU_Y);
+		velocity.Sety(0);
+		acceleration.Sety(0);
+		isAir = false;
+		SetStand(0);
+	}
+
 
 	weakAreaMng.Delete();
 	weakAreaMng.Add(center.Getx() - P_WEAK_LU_X, center.Gety() - P_WEAK_LU_Y, center.Getx() + P_WEAK_RD_X, center.Gety() + P_WEAK_RD_Y);
@@ -542,6 +572,8 @@ int Player::Draw() {
 		center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0,
 		image, true
 	);*/
+	DrawCircle(center.Getx(), center.Gety(), P_TLP_RANGE, RED, 0);
+	DrawCircle(telepo.Getx(), telepo.Gety(), 30, RED, 1);
 
 	if (attack > 0)
 		attackAreaMng.testDraw(RED);

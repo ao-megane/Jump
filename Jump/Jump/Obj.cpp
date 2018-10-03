@@ -694,6 +694,12 @@ int imageSquareMng::Add(double a, double b, double c, double d, int handle) {
 	}
 	return 0;
 }
+int imageSquareMng::Delete() {
+	for (int i = 0; i < SQU_NUM; i++) {
+		square[i].Square::Delete();
+	}
+	return 0;
+}
 int imageSquareMng::Draw() {
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {//‘¶Ý‚·‚ê‚Î

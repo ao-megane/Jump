@@ -40,6 +40,20 @@ void InputUpdata(XINPUT_STATE input, int key[]) {
 			THUMB_X = 100.0 * cos(idir);
 			THUMB_Y = 100.0 * sin(idir);
 		}
+
+		if ((input.ThumbRY * input.ThumbRY + input.ThumbRX * input.ThumbRX) < ThumbTrig * ThumbTrig) {
+			R_THUMB_Y = 0;
+			R_THUMB_X = 0;
+		}
+		else {
+			/*THUMB_Y = (-1) * input.ThumbLY / 32767.0 * 100;
+			THUMB_X = input.ThumbLX / 32767.0 * 100;*/
+			R_THUMB_Y = (1) * input.ThumbRY;
+			R_THUMB_X = input.ThumbRX;
+			idir = CalcDir(R_THUMB_X, R_THUMB_Y);
+			R_THUMB_X = 100.0 * cos(idir);
+			R_THUMB_Y = 100.0 * sin(idir);
+		}
 	}
 
 	//-----------------------------------------------------------------
@@ -67,6 +81,10 @@ void InputUpdata(XINPUT_STATE input, int key[]) {
 			THUMB_Y /= 1.41421356;
 		}
 	}
+
+	/*for (int i = 0; i < 30; i++) {
+		DrawFormatString(100, 100 + i * 20, RED, "%d:%d", i, input.Buttons[i]);
+	}*/
 
 }
 
@@ -101,8 +119,10 @@ void PrintInput(int key[]) {
 	DrawFormatString(0, 280, RED, "L_TRIG:%d", L_TRIG);
 	DrawFormatString(0, 320, RED, "RATIO_X:%d", THUMB_X);
 	DrawFormatString(0, 360, RED, "RATIO_Y:%d", THUMB_Y);
-	DrawFormatString(0, 400, RED, "1:%d", key[10]);
-	DrawFormatString(0, 440, RED, "2:%d", key[11]);
+	DrawFormatString(0, 400, RED, "R_RATIO_X:%d", R_THUMB_X);
+	DrawFormatString(0, 440, RED, "R_RATIO_Y:%d", R_THUMB_Y);
+	/*DrawFormatString(0, 400, RED, "1:%d", key[10]);
+	DrawFormatString(0, 440, RED, "2:%d", key[11]);*/
 	DrawFormatString(0, 480, RED, "3:%d", key[12]);
 	DrawFormatString(0, 520, RED, "4:%d", key[13]);
 	DrawFormatString(0, 560, RED, "5:%d", key[14]);
