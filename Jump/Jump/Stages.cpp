@@ -144,7 +144,7 @@ int GetStageLimit() {
 }
 
 int DrawStage(int count) {//count“n‚·•K—v‚È‚¢‚©‚à
-	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, BackGround, true);
+	//DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, BackGround, true);
 	staticWalls.testDraw(GREEN);
 	Walls.Draw();
 	Walls.testDraw(GREEN);

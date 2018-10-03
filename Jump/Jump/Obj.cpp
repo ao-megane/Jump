@@ -148,7 +148,7 @@ int Square::isHitSquare(Square a,Dot velocity) {//“ñ•ÓÚ’n‚ª–¢ŽÀ‘• -> velocity‚Å
 	return 0;
 }
 int Square::testDraw(int handle) {
-	//DrawBox(LU.Getx(), LU.Gety(), RD.Getx(), RD.Gety(), handle, false);
+	DrawBox(LU.Getx(), LU.Gety(), RD.Getx(), RD.Gety(), handle, false);
 	//DrawLine(LU.Getx(), LU.Gety(), RD.Getx(), RD.Gety(), handle, false);
 	return 0;
 }

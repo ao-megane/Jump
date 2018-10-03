@@ -364,12 +364,6 @@ int Player::Update1(int count,int key[]) {//状態回り
 	}
 
 	if (acceptFlag) {//入力受付時
-		if (!isTelepo) {//テレポ中でなければ(通常状態なら)
-			
-		}
-		else {//テレポ中なら(品定め中なら)
-			velocity.Setx(0);
-		}
 
 		if (isAir) {//空中なら
 			//if (B == 1) SetAirAttack();
@@ -416,6 +410,13 @@ int Player::Update1(int count,int key[]) {//状態回り
 				SetJump(count);
 			}
 		}
+	}
+	//入力受付に関係しない
+	if (!isTelepo) {//テレポ中でなければ(通常状態なら)
+
+	}
+	else {//テレポ中なら(品定め中なら)
+		velocity.Setx(0);
 	}
 
 	switch (stateFlag)
@@ -469,33 +470,37 @@ int Player::Update2(SquareMng a,int count) {//壁まわりの処理
 
 		//テレポ先について，壁判定
 
-		//Square telepoSqu;
-		//telepoSqu.Set(telepo.Getx() - P_WEAK_LU_X, telepo.Gety() - P_WEAK_LU_Y, telepo.Getx() + P_WEAK_LU_X, telepo.Gety() + P_WEAK_LU_Y);
-		//Dot telepoVel;	//プレイヤーとテレポの間の変位(速度)を表すドット(下でいうvelocity)
-		//telepoVel.Set(center.Getx() + CalcDistance(center, telepo) * 0.99 * cos(CalcDir(center, telepo)), center.Gety() + CalcDistance(center, telepo) * 0.99 * -sin(CalcDir(center, telepo)));
-		//for (int i = 0; i < SQU_NUM; i++) {
-		//	if (a.GetSquare(i).GetisExist()) {//四角ごとに判定
-		//		switch (telepoSqu.isHitSquare(a.GetSquare(i), telepoVel))//ここできちんとめり込みまで判定できれば問題ない
-		//		{
-		//		case 0://ぶつかってない
-		//			break;
-		//		case 2://U
-		//			telepo.Sety(a.GetUpLanding(telepoSqu) + P_WEAK_LU_Y);
-		//			break;
-		//		case 4://R
-		//			telepo.Setx(a.GetRightLanding(telepoSqu) - P_WEAK_LU_X);
-		//			break;
-		//		case 6://D
-		//			telepo.Sety(a.GetLanding(telepoSqu) - P_WEAK_LU_Y);
-		//			break;
-		//		case 8://L
-		//			telepo.Setx(a.GetLeftLanding(telepoSqu) + P_WEAK_LU_X);
-		//			break;
-		//		default:
-		//			break;
-		//		}
-		//	}
-		//}
+		Square telepoSqu;
+		telepoSqu.Set(telepo.Getx() - P_WEAK_LU_X, telepo.Gety() - P_WEAK_LU_Y, telepo.Getx() + P_WEAK_LU_X, telepo.Gety() + P_WEAK_LU_Y);
+		telepoSqu.testDraw(RED);
+		Dot telepoVel;	//プレイヤーとテレポの間の変位(速度)を表すドット(下でいうvelocity)
+		telepoVel.Set(CalcDistance(center, telepo) * 0.1 * cos(CalcDir(center, telepo)), CalcDistance(center, telepo) * 0.1 * -sin(CalcDir(center, telepo)));
+		//telepoVel = telepoVel - telepo;
+		//telepoVel = telepo - telepoVel;
+		DrawCircle(center.Getx() + telepoVel.Getx(), center.Gety() + telepoVel.Gety(), 30, BLUE, 1);
+		for (int i = 0; i < SQU_NUM; i++) {
+			if (a.GetSquare(i).GetisExist()) {//四角ごとに判定
+				switch (telepoSqu.isHitSquare(a.GetSquare(i), telepoVel))//ここできちんとめり込みまで判定できれば問題ない
+				{
+				case 0://ぶつかってない
+					break;
+				case 2://U
+					telepo.Sety(a.GetUpLanding(telepoSqu) + P_WEAK_LU_Y);
+					break;
+				case 4://R
+					telepo.Setx(a.GetRightLanding(telepoSqu) - P_WEAK_LU_X);
+					break;
+				case 6://D
+					telepo.Sety(a.GetLanding(telepoSqu) - P_WEAK_LU_Y);
+					break;
+				case 8://L
+					telepo.Setx(a.GetLeftLanding(telepoSqu) + P_WEAK_LU_X);
+					break;
+				default:
+					break;
+				}
+			}
+		}
 
 	}
 	
