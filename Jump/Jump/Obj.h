@@ -171,6 +171,7 @@ class imageSquare : public Square
 public:
 	int Setimage(int image);
 	int Draw();
+	int Draw(bool isRight);
 private:
 	int image;
 };
@@ -244,8 +245,11 @@ public:
 	int SetWalls(int a[], int num, int stageflag, int square1_image, int square2_image, int square3_image);
 	SquareMng GetSquareMng();
 	int Add(double a,double b,double c,double d,int handle);
+	int Setimage(int num, int handle);
+	int SetPosi(int num, double a, double b, double c, double d);
 	int Delete();
 	int Draw();
+	int Draw(bool isRight);
 private:
 	imageSquare square[SQU_NUM];
 };

@@ -148,8 +148,8 @@ int Square::isHitSquare(Square a,Dot velocity) {//ìÒï”ê⁄ínÇ™ñ¢é¿ëï -> velocityÇ≈
 	return 0;
 }
 int Square::testDraw(int handle) {
-	DrawBox(LU.Getx(), LU.Gety(), RD.Getx(), RD.Gety(), handle, false);
-	DrawLine(LU.Getx(), LU.Gety(), RD.Getx(), RD.Gety(), handle, false);
+	//DrawBox(LU.Getx(), LU.Gety(), RD.Getx(), RD.Gety(), handle, false);
+	//DrawLine(LU.Getx(), LU.Gety(), RD.Getx(), RD.Gety(), handle, false);
 	return 0;
 }
 int Square::Delete() {
@@ -619,10 +619,10 @@ bool SquareMng::isAbleTelepo(Dot center, Dot telepo) {
 				//DrawLineByDot(center,RU, RED);
 				double distance = (decoi.GetRD().Getx() - decoi.GetLU().Getx()) / (decoi.GetLU().Gety() - decoi.GetRD().Gety()) * decoi.GetLU().Gety() + decoi.GetLU().Getx();
 				if (distance > 0) {	//ë´å≥Çîrèú
-					DrawLine(center.Getx(), center.Gety(),
+					/*DrawLine(center.Getx(), center.Gety(),
 						center.Getx() + distance * cos( CalcDir(center, telepo)),
 						center.Gety() + distance * sin(-CalcDir(center, telepo)),
-						BLUE);
+						BLUE);*/
 					/*DrawLine(center.Getx(), center.Gety(),
 						center.Getx() + 100 * cos(CalcDir(center, telepo)),
 						center.Gety() + 100 * sin(-CalcDir(center, telepo)),
@@ -678,12 +678,33 @@ int imageSquare::Draw() {
 			Square::GetLU().Getx(), Square::GetRD().Gety(),
 			image, true
 		);
-		DrawLine(Square::GetLU().Getx(), Square::GetLU().Gety(), Square::GetRD().Getx(), Square::GetRD().Gety(), RED);
 	}
-	//printfDx("DRAW");
-
 	return 0;
 }
+int imageSquare::Draw(bool isRight) {
+	if (*Square::GetisExistAd()) {
+		if (isRight) {
+			DrawModiGraph(
+				Square::GetLU().Getx(), Square::GetLU().Gety(),
+				Square::GetRD().Getx(), Square::GetLU().Gety(),
+				Square::GetRD().Getx(), Square::GetRD().Gety(),
+				Square::GetLU().Getx(), Square::GetRD().Gety(),
+				image, true
+			);
+		}
+		else {
+			DrawModiGraph(
+				Square::GetRD().Getx(), Square::GetLU().Gety(),
+				Square::GetLU().Getx(), Square::GetLU().Gety(),
+				Square::GetLU().Getx(), Square::GetRD().Gety(),
+				Square::GetRD().Getx(), Square::GetRD().Gety(),
+				image, true
+			);
+		}
+	}
+	return 0;
+}
+
 
 int intSquare::Setvalue(int a) {
 	value = a;
@@ -747,6 +768,14 @@ int imageSquareMng::Add(double a, double b, double c, double d, int handle) {
 	}
 	return 0;
 }
+int imageSquareMng::Setimage(int num, int handle) {
+	square[num].Setimage(handle);
+	return 0;
+}
+int imageSquareMng::SetPosi(int num, double a, double b, double c, double d) {
+	square[num].Set(a,b,c,d);
+	return 0;
+}
 int imageSquareMng::Delete() {
 	for (int i = 0; i < SQU_NUM; i++) {
 		square[i].Square::Delete();
@@ -756,9 +785,18 @@ int imageSquareMng::Delete() {
 int imageSquareMng::Draw() {
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {//ë∂ç›Ç∑ÇÍÇŒ
-			DrawLine(square[i].GetLU().Getx(), square[i].GetLU().Gety(), square[i].GetRD().Getx(), square[i].GetRD().Gety(), RED);
+			//DrawLine(square[i].GetLU().Getx(), square[i].GetLU().Gety(), square[i].GetRD().Getx(), square[i].GetRD().Gety(), RED);
 			square[i].Square::testDraw(GREEN);
 			square[i].Draw();
+		}
+	}
+	return 0;
+}
+int imageSquareMng::Draw(bool isRight) {
+	for (int i = 0; i < SQU_NUM; i++) {
+		if (square[i].GetisExist()) {//ë∂ç›Ç∑ÇÍÇŒ
+			square[i].Square::testDraw(GREEN);
+			square[i].Draw(isRight);
 		}
 	}
 	return 0;

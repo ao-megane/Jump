@@ -30,7 +30,7 @@ int StagesInitialize() {
 	Tutorial_back[1] = LoadGraph("images/maps/base/background/2.png");
 	Tutorial_back[2] = LoadGraph("images/maps/base/background/3.png");
 	Tutorial_wall_1 = LoadGraph("images/maps/base/wall/120_60.png");
-	Tutorial_wall_2 = LoadGraph("images/maps/base/wall/600_60.png");
+	Tutorial_wall_2 = LoadGraph("images/maps/base/wall/60_600.png");
 	Factory_back = LoadGraph("images/maps/factory/background.png");
 	Factory_wall_1 = LoadGraph("images/maps/factory/wall/120_60.png");
 	Factory_wall_2 = LoadGraph("images/maps/factory/wall/600_60.png");
@@ -144,7 +144,7 @@ int GetStageLimit() {
 }
 
 int DrawStage(int count) {//count“n‚·•K—v‚È‚¢‚©‚à
-	//DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, BackGround, true);
+	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, BackGround, true);
 	staticWalls.testDraw(GREEN);
 	Walls.Draw();
 	Walls.testDraw(GREEN);

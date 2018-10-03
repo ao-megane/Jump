@@ -230,7 +230,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		count++;
 		if (CheckHitKey(KEY_INPUT_DELETE)) break;
 
-		PrintInput(key);
+		//PrintInput(key);
 		//fps.Draw();
 		ScreenFlip();
 		fps.Wait();
