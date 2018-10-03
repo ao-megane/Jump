@@ -34,10 +34,11 @@ public:/*
 	~Dot();*/
 	double Setx(double x);
 	double Sety(double y);
-	double Set(double x, double y);			//左上、右下
+	double Set(double x, double y);	//左上、右下
 	double Getx();
 	double Gety();
 	int Move(double x, double y);
+	int Rotate(double thita);
 
 	void operator = (Dot d) {		//Dotの代入
 		x = d.Getx();
@@ -67,6 +68,13 @@ public:/*
 		b.y = Gety() + d.Gety();
 		return b;
 	};
+	Dot operator - () {
+		Dot b;
+		b.x = -x;
+		b.y = -y;
+		return b;
+	}
+
 
 private:
 	double x;
@@ -113,6 +121,9 @@ public:
 	int SetLength(double x, double y, double w, double h);
 	int Set(double a, double b, double c, double d);
 	int Move(double x, double y);
+	int Move(Dot a);
+	Square GetMove(Dot a);
+	int Rotate(double thita);
 	int isHitSquare(Square a,Dot velocity);//1:LU 2:U 3:RU 4:R 5:RD 6:D 7:LD 8:L 0:当たってない 
 	//int Getup();
 	//int Getleft();
@@ -194,6 +205,7 @@ public:
 	double GetUpLanding(Square area);
 	double GetLeftLanding(Square area);
 	double GetRightLanding(Square area);
+	bool isAbleTelepo(Dot center, Dot telepo);
 	int isHitSquareMng(SquareMng a);//1:LU 2:U 3:RU 4:R 5:RD 6:D 7:LD 8:L 0:当たってない
 	//int isHitSquareMng(SquareMng a,imageSquareMng b);//1:LU 2:U 3:RU 4:R 5:RD 6:D 7:LD 8:L 0:当たってない
 	double GetUP();

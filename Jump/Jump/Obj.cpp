@@ -44,6 +44,12 @@ int Dot::Move(double ax, double ay) {
 	y += ay;
 	return 0;
 }
+int Dot::Rotate(double thita) {
+	double decoi = x;
+	//x = Rotate(x, y);
+	printfDx("Dot::Rotate 未実装！！");
+	return 0;
+}
 double Dot::Getx() {
 	return x;
 }
@@ -80,6 +86,21 @@ int Square::Set(double a, double b, double c, double d) {
 int Square::Move(double x, double y) {
 	LU.Set(LU.Getx() + x, LU.Gety() + y);
 	RD.Set(RD.Getx() + x, RD.Gety() + y);
+	return 0;
+}
+int Square::Move(Dot a) {
+	LU.Set(LU.Getx() + a.Getx(), LU.Gety() + a.Gety());
+	RD.Set(RD.Getx() + a.Getx(), RD.Gety() + a.Gety());
+	return 0;
+}
+Square Square::GetMove(Dot a) {
+	Square b;
+	b.Set(LU.Getx() + a.Getx(), LU.Gety() + a.Gety(), RD.Getx() + a.Getx(), RD.Gety() + a.Gety());
+	return b;
+}
+int Square::Rotate(double thita) {
+	LU = RotateDot(thita, LU);
+	RD = RotateDot(thita, RD);
 	return 0;
 }
 int Square::isHitSquare(Square a,Dot velocity) {//二辺接地が未実装 -> velocityで実装
@@ -583,6 +604,38 @@ double SquareMng::GetRightLanding(Square area) {
 		}
 	}
 	return square[b].GetLU().Getx();
+}
+
+bool SquareMng::isAbleTelepo(Dot center, Dot telepo) {
+	Square decoi;
+	//Dot RU;
+	for (int i = 0; i < SQU_NUM; i++) {
+		if (square[i].GetisExist()) {	//存在すれば
+			decoi = square[i].GetMove(-center);	//平行移動して
+			decoi.Rotate(-CalcDir(center, telepo));	//回転
+			if (decoi.GetLU().Gety() * decoi.GetRD().Gety() < 0) {//横切ってる判定
+				//RU.Set(square[i].GetRD().Getx(), square[i].GetLU().Gety());
+				//printfDx("一歩前！！\n");
+				//DrawLineByDot(center,RU, RED);
+				double distance = (decoi.GetRD().Getx() - decoi.GetLU().Getx()) / (decoi.GetLU().Gety() - decoi.GetRD().Gety()) * decoi.GetLU().Gety() + decoi.GetLU().Getx();
+				if (distance > 0) {	//足元を排除
+					DrawLine(center.Getx(), center.Gety(),
+						center.Getx() + distance * cos( CalcDir(center, telepo)),
+						center.Gety() + distance * sin(-CalcDir(center, telepo)),
+						BLUE);
+					/*DrawLine(center.Getx(), center.Gety(),
+						center.Getx() + 100 * cos(CalcDir(center, telepo)),
+						center.Gety() + 100 * sin(-CalcDir(center, telepo)),
+						BLUE);*/
+					if (CalcDistance(center, telepo) > distance) {	//テレポ圏内ならfalse
+						//printfDx("判定！！\n");
+						return false;
+					}
+				}
+			}
+		}
+	}
+	return true;
 }
 
 int SquareMng::testDraw(int handle) {

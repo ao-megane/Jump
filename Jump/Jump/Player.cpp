@@ -482,12 +482,12 @@ int Player::Update2(SquareMng a) {//壁まわりの処理
 					velocity.Sety(0);
 				}
 				center.Sety(a.GetUpLanding(weakAreaMng.GetSquare(0)) + P_WEAK_LU_Y);
-				printfDx("U:%d\n", i);
+				//printfDx("U:%d\n", i);
 				break;
 			case 4://R
 				if (velocity.Getx() > 0) velocity.Setx(0);
 				center.Setx(a.GetRightLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_X);
-				printfDx("R:%d\n", i);
+				//printfDx("R:%d\n", i);
 				//printfDx("R!\n");
 				break;
 			case 6://D
@@ -501,14 +501,14 @@ int Player::Update2(SquareMng a) {//壁まわりの処理
 				if (stateFlag == 2) {//
 					 SetStand(0);
 				}
-				if(i == 0)
-					printfDx("D:%d\n", i);
+				/*if(i == 0)
+					printfDx("D:%d\n", i);*/
 				isAir = false;
 				break;
 			case 8://L
 				if (velocity.Getx() < 0) velocity.Setx(0);
 				center.Setx(a.GetLeftLanding(weakAreaMng.GetSquare(0)) + P_WEAK_LU_X);
-				printfDx("L:%d\n", i);
+				//printfDx("L:%d\n", i);
 				break;
 			default:
 				break;
@@ -517,6 +517,9 @@ int Player::Update2(SquareMng a) {//壁まわりの処理
 	}
 	if (isAir)
 		acceleration.Move(0, GRAVITY);
+
+	if (velocity.Gety() > 50) velocity.Sety(50);
+
 	if (center.Gety() > DISP_HEIGHT) {
 		center.Sety(DISP_HEIGHT - 60 - P_WEAK_LU_Y);
 		velocity.Sety(0);
@@ -525,6 +528,15 @@ int Player::Update2(SquareMng a) {//壁まわりの処理
 		SetStand(0);
 	}
 
+	/*-----------テレポ処理---------------*/
+	if (isTelepo) {
+		for (int i = P_TLP_RANGE; i > 0; i--) {
+			if (!a.isAbleTelepo(center, telepo)) {//テレポできなければ
+				telepo.Set(center.Getx() + (double)(i) * cos(CalcDir(center, telepo)), center.Gety() + (double)(i) * -sin(CalcDir(center, telepo)));//もっと狭いとこに更新
+				//telepo.Move(cos(CalcDir(center, telepo)), sin(-cos(CalcDir(center, telepo))));	
+			}
+		}
+	}
 
 	weakAreaMng.Delete();
 	weakAreaMng.Add(center.Getx() - P_WEAK_LU_X, center.Gety() - P_WEAK_LU_Y, center.Getx() + P_WEAK_RD_X, center.Gety() + P_WEAK_RD_Y);
