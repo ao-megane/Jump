@@ -10,7 +10,7 @@ int PDashStart[4];
 int PisAir[3];
 int PJumpE[4];
 
-int PStand1;
+int PStand[3];
 
 int PAttacks[21];
 int PAttackw[4];
@@ -25,7 +25,12 @@ int PJump;
 int PGet;
 
 int Player::Initialize() {
-	PStand1 = LoadGraph("images/player/stand/1.png");
+	for (int i = 0; i < 3; i++) {
+		std::string a = "images/player/stand/";
+		a += std::to_string(i);
+		a += ".png";
+		PStand[i] = LoadGraph(a.c_str());
+	}
 	
 	PDash[0] = LoadGraph("images/player/dash/1.png");
 	PDash[1] = LoadGraph("images/player/dash/2.png");
@@ -88,7 +93,7 @@ int Player::Initialize() {
 	velocity.Set(0, 0);
 	attack = 0;
 	//image = PStand1;
-	image.Add(center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() - P_DRAW_HEIGHT / 2.0, center.Getx() + P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0, PStand1);
+	image.Add(center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() - P_DRAW_HEIGHT / 2.0, center.Getx() + P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0, PStand[0]);
 	acceptFlag = 1;
 	isRightFlag = 1;
 	//isAir = false;
@@ -124,6 +129,7 @@ Dot Player::GetCenter() {
 
 
 int Player::Set(int stageflag) {
+	image.Delete();
 	//if(levelFlag = 1)
 	//center.Set(100, GROUND_HEIGHT - P_HEIGHT / 2);
 	//weakArea.Set(center, P_W_WIDTH, P_W_HEIGHT);
@@ -134,7 +140,7 @@ int Player::Set(int stageflag) {
 	isRightFlag = 1;
 	SetStand(0);
 	center.Set(P_START_POINT[2 * stageflag], P_START_POINT[2 * stageflag + 1]);
-	image.Add(center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() - P_DRAW_HEIGHT / 2.0, center.Getx() + P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0, PStand1);
+	image.Add(center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() - P_DRAW_HEIGHT / 2.0, center.Getx() + P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0, PStand[0]);
 	image.Add(center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() - P_DRAW_HEIGHT / 2.0, center.Getx() + P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0, 0);
 	velocity.Set(0, 0);
 	acceleration.Set(0, 0);
@@ -149,13 +155,21 @@ int Player::SetStand(int count) {
 	acceptFlag = 1;
 	acceleration.Set(0, 0);
 	//velocity.Set(0, 0);	//0,0だからstandに入った
-	image.Setimage(0, PStand1);
+	image.Setimage(0, PStand[0]);
 	image.Setimage(1, 0);
 	return 0;
 }
 
 int Player::UpdateStand(int count) {
-	//center.Set(center.Get_x() - GROUND_SPEED, GROUND_HEIGHT - P_HEIGHT / 2);
+	for (int i = 0; i < 3; i++) {
+		if (count < 2 * (i + 1)) {
+			image.Setimage(0, PStand[i]);
+			break;
+		}
+	}
+	if (count > 8) {
+		bodyClock += 7;
+	}
 	return 0;
 }
 
@@ -209,7 +223,6 @@ int Player::UpdateDash(int count) {
 bool isFirstJump;
 int Player::SetJump(int count) {
 	stateFlag = 2;
-	//image = PStand1;
 	bodyClock = count;
 	acceleration.Sety(-P_JUMP_POWER);
 	isFirstJump = true;
@@ -239,20 +252,15 @@ int Player::UpdateJump(int count) {
 		isFirstJump = false;
 		bodyClock += 8;
 	}
-	
-	//if (count >= P_JUMP_NUM) {
-	//	//stateFlag = 0;
-	//	acceptFlag = true;
-	//	bodyClock = count;
-	//}
 	return 0;
 }
 
 int Player::SetAttack_w(int count) {
 	bodyClock = count;
 	stateFlag = 4;
-	//image = PStand1;
 	acceptFlag = false;
+	acceleration.Set(0, 0);
+	velocity.Set(0, 0);
 	attack = 0;
 	return 0;
 }
@@ -277,6 +285,8 @@ int Player::SetAttack_s(int count) {
 	bodyClock = count;
 	stateFlag = 3;
 	acceptFlag = false;
+	acceleration.Set(0, 0);
+	velocity.Set(0, 0);
 	attack = 0;
 	return 0;
 }
@@ -298,20 +308,13 @@ int Player::UpdateAttack_s(int count) {
 int Player::SetDamage(int count) {
 	bodyClock = count;
 	stateFlag = 7;
-	//image = PStand1;
 	acceptFlag = 0;
+	acceleration.Set(0, 0);//要検討
+	velocity.Set(0, 0);
 	attack = 0;
 	return 0;
 }
 int Player::UpdateDamage(int count) {
-	/*if (isRightFlag) {
-	LU.Set(center.Get_x() - P_WIDTH / 2, center.Get_y() - P_HEIGHT / 4);
-	RD.Set(center.Get_x() + P_WIDTH *3/2, center.Get_y() + P_HEIGHT / 4);
-	}
-	else {
-	LU.Set(center.Get_x() - P_WIDTH * 3 / 2, center.Get_y() - P_HEIGHT/4);
-	RD.Set(center.Get_x() + P_WIDTH / 2, center.Get_y() + P_HEIGHT / 4);
-	}*/
 
 	if (count < 17) {//待機
 		acceptFlag = 0;
@@ -452,20 +455,52 @@ int Player::Update1(int count,int key[]) {//状態回り
 	return 0;
 }
 
-int Player::Update2(SquareMng a) {//壁まわりの処理
+int Player::Update2(SquareMng a,int count) {//壁まわりの処理
 	//DrawFormatString(40, 80, RED, "%d", weakAreaMng.isHitSquareMng(a));
 
 	/*-----------テレポ処理---------------*/
-	if (isTelepo) {
+	if (isTelepo) {	//テレポ中
 		for (int i = P_TLP_RANGE; i > 0; i--) {
 			if (!a.isAbleTelepo(center, telepo)) {//テレポできなければ
 				telepo.Set(center.Getx() + (double)(i)* cos(CalcDir(center, telepo)), center.Gety() + (double)(i) * -sin(CalcDir(center, telepo)));//もっと狭いとこに更新
 				//telepo.Move(cos(CalcDir(center, telepo)), sin(-cos(CalcDir(center, telepo))));	
 			}
 		}
-	}
-	//したのめり込み判定をテレポ先にも常に行えばいいのでは
 
+		//テレポ先について，壁判定
+
+		//Square telepoSqu;
+		//telepoSqu.Set(telepo.Getx() - P_WEAK_LU_X, telepo.Gety() - P_WEAK_LU_Y, telepo.Getx() + P_WEAK_LU_X, telepo.Gety() + P_WEAK_LU_Y);
+		//Dot telepoVel;	//プレイヤーとテレポの間の変位(速度)を表すドット(下でいうvelocity)
+		//telepoVel.Set(center.Getx() + CalcDistance(center, telepo) * 0.99 * cos(CalcDir(center, telepo)), center.Gety() + CalcDistance(center, telepo) * 0.99 * -sin(CalcDir(center, telepo)));
+		//for (int i = 0; i < SQU_NUM; i++) {
+		//	if (a.GetSquare(i).GetisExist()) {//四角ごとに判定
+		//		switch (telepoSqu.isHitSquare(a.GetSquare(i), telepoVel))//ここできちんとめり込みまで判定できれば問題ない
+		//		{
+		//		case 0://ぶつかってない
+		//			break;
+		//		case 2://U
+		//			telepo.Sety(a.GetUpLanding(telepoSqu) + P_WEAK_LU_Y);
+		//			break;
+		//		case 4://R
+		//			telepo.Setx(a.GetRightLanding(telepoSqu) - P_WEAK_LU_X);
+		//			break;
+		//		case 6://D
+		//			telepo.Sety(a.GetLanding(telepoSqu) - P_WEAK_LU_Y);
+		//			break;
+		//		case 8://L
+		//			telepo.Setx(a.GetLeftLanding(telepoSqu) + P_WEAK_LU_X);
+		//			break;
+		//		default:
+		//			break;
+		//		}
+		//	}
+		//}
+
+	}
+	
+
+	//プレイヤーの位置について，壁判定
 	isAir = true;//足に何かが触れなければ空中にいる
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (a.GetSquare(i).GetisExist()) {//四角ごとに判定
@@ -498,7 +533,7 @@ int Player::Update2(SquareMng a) {//壁まわりの処理
 				}
 				center.Sety(a.GetLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_Y);
 				if (stateFlag == 2) {//
-					 SetStand(0);
+					SetStand(count);
 				}
 				/*if(i == 0)
 					printfDx("D:%d\n", i);*/
@@ -514,6 +549,7 @@ int Player::Update2(SquareMng a) {//壁まわりの処理
 			}
 		}
 	}
+
 	if (isAir)
 		acceleration.Move(0, GRAVITY);
 
