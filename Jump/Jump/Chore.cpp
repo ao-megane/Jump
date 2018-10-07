@@ -165,10 +165,10 @@ int DrawTitleSentence(int flag) {
 	default:
 		break;
 	}
-	DrawFormatStringToHandle(1350, 960, GRAY, slemagne, "Choose by UP or DOWN");
-	DrawFormatStringToHandle(1350, 1010, GRAY, slemagne, "Select by B");
+	//DrawFormatStringToHandle(1350, 960, GRAY, slemagne, "Choose by UP or DOWN");
+	//DrawFormatStringToHandle(1350, 1010, GRAY, slemagne, "Select by B");
 	//DrawFormatStringToHandle(1250, 1080, GRAY, lemagne, "Select by B");
-	DrawFormatStringToHandle(1350, 1060, GRAY, slemagne, "PLEASE READ MANUAL");
+	//DrawFormatStringToHandle(1350, 1060, GRAY, slemagne, "PLEASE READ MANUAL");
 	return 0;
 }
 

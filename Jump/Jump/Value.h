@@ -84,7 +84,7 @@ const double P_START_POINT[STAGE_NUM * 2] = {
 const int STATICWALLS_NUM = 3;
 static double STATICWALLS[3 * 4]{//ï«ÅCâÊëúÇÕï Ç≈ópà”Ç©(è∞î≤ÇØñhé~),ç∂è„ÅCW,H
 	0,0,60,DISP_HEIGHT,
-	0,DISP_HEIGHT - 60,DISP_WIDTH,DISP_HEIGHT,
+	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,	
 };
 

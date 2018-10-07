@@ -465,46 +465,52 @@ int Player::Update2(SquareMng a,int count) {//壁まわりの処理
 			if (!a.isAbleTelepo(center, telepo)) {//テレポできなければ
 				telepo.Set(center.Getx() + (double)(i)* cos(CalcDir(center, telepo)), center.Gety() + (double)(i) * -sin(CalcDir(center, telepo)));//もっと狭いとこに更新
 				//telepo.Move(cos(CalcDir(center, telepo)), sin(-cos(CalcDir(center, telepo))));	
+				//printfDx("TLP");
 			}
 		}
 
+		//telepo(壁内)ゲット
 		//テレポ先について，壁判定
-
-		Square telepoSqu;
-		telepoSqu.Set(telepo.Getx() - P_WEAK_LU_X, telepo.Gety() - P_WEAK_LU_Y, telepo.Getx() + P_WEAK_LU_X, telepo.Gety() + P_WEAK_LU_Y);
-		telepoSqu.testDraw(RED);
-		Dot telepoVel;	//プレイヤーとテレポの間の変位(速度)を表すドット(下でいうvelocity)
-		telepoVel.Set(CalcDistance(center, telepo) * 0.1 * cos(CalcDir(center, telepo)), CalcDistance(center, telepo) * 0.1 * -sin(CalcDir(center, telepo)));
-		//telepoVel = telepoVel - telepo;
-		//telepoVel = telepo - telepoVel;
-		DrawCircle(center.Getx() + telepoVel.Getx(), center.Gety() + telepoVel.Gety(), 30, BLUE, 1);
+		Square tlpSquare;//壁内テレポを四角にした
+		tlpSquare.Set(telepo.Getx() - P_WEAK_LU_X, telepo.Gety() - P_WEAK_LU_Y, telepo.Getx() + P_WEAK_LU_X, telepo.Gety() + P_WEAK_LU_Y);
+		Dot tlpVel;
+		tlpVel.Set(50* cos(CalcDir(center, telepo)), 50 * -sin(CalcDir(center, telepo)));
+		//DrawCircle(-tlpVel.Getx() + telepo.Getx(), -tlpVel.Gety() + telepo.Gety(), 20, BLUE, 1); 
+		
+		tlpSquare.Set(-tlpVel.Getx() + telepo.Getx() - P_WEAK_LU_X, -tlpVel.Gety() + telepo.Gety() - P_WEAK_LU_Y, -tlpVel.Getx() + telepo.Getx() + P_WEAK_LU_X, -tlpVel.Gety() + telepo.Gety() + P_WEAK_LU_Y);
+		tlpVel.Set(40 * cos(CalcDir(center, telepo)), 40 * -sin(CalcDir(center, telepo)));//現テレポの一歩前(velocity)
+		tlpSquare.testDraw(BLUE);
 		for (int i = 0; i < SQU_NUM; i++) {
 			if (a.GetSquare(i).GetisExist()) {//四角ごとに判定
-				switch (telepoSqu.isHitSquare(a.GetSquare(i), telepoVel))//ここできちんとめり込みまで判定できれば問題ない
+				switch (tlpSquare.isHitSquare(a.GetSquare(i), tlpVel))//ここできちんとめり込みまで判定できれば問題ない
 				{
 				case 0://ぶつかってない
 					break;
-				case 2://U
-					telepo.Sety(a.GetUpLanding(telepoSqu) + P_WEAK_LU_Y);
+				case 2://U//直すべきはこのあたりか
+					telepo.Sety(a.GetUpLanding_tlp(tlpSquare) + P_WEAK_LU_Y);
+					//printfDx("U:%d\n", i);
 					break;
 				case 4://R
-					telepo.Setx(a.GetRightLanding(telepoSqu) - P_WEAK_LU_X);
+					telepo.Setx(a.GetRightLanding_tlp(tlpSquare) - P_WEAK_LU_X);
+					//printfDx("R!\n");
 					break;
 				case 6://D
-					telepo.Sety(a.GetLanding(telepoSqu) - P_WEAK_LU_Y);
+					telepo.Sety(a.GetLanding_tlp(tlpSquare) - P_WEAK_LU_Y);
 					break;
 				case 8://L
-					telepo.Setx(a.GetLeftLanding(telepoSqu) + P_WEAK_LU_X);
+					telepo.Setx(a.GetLeftLanding_tlp(tlpSquare) + P_WEAK_LU_X);
+					//printfDx("L:%d\n", i);
 					break;
 				default:
 					break;
 				}
 			}
 		}
-
+		if (CalcDistance(telepo - center) > P_TLP_RANGE+20) {
+			telepo = center;
+		}
 	}
 	
-
 	//プレイヤーの位置について，壁判定
 	isAir = true;//足に何かが触れなければ空中にいる
 	for (int i = 0; i < SQU_NUM; i++) {
@@ -598,7 +604,7 @@ int Player::GetAttack() {
 
 int Player::Draw() {
 
-	weakAreaMng.testDraw(BLUE);
+	//weakAreaMng.testDraw(BLUE);
 
 	//if (isRightFlag)
 	//	DrawModiGraph(//描画を少しずらす
@@ -624,8 +630,9 @@ int Player::Draw() {
 		center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0,
 		image, true
 	);*/
-	DrawCircle(center.Getx(), center.Gety(), P_TLP_RANGE, RED, 0);
-	DrawCircle(telepo.Getx(), telepo.Gety(), 30, RED, 1);
+	//DrawCircle(center.Getx(), center.Gety(), P_TLP_RANGE, RED, 0);
+	//DrawCircle(telepo.Getx(), telepo.Gety(), 30, RED, 1);
+	DrawBox(telepo.Getx() - P_WEAK_LU_X, telepo.Gety() - P_WEAK_LU_Y, telepo.Getx() + P_WEAK_LU_X, telepo.Gety() + P_WEAK_LU_Y, RED, 0);
 
 	if (attack > 0)
 		attackAreaMng.testDraw(RED);
