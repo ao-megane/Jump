@@ -197,8 +197,8 @@ int Square::isHitSquare_tlp(Square a, Dot telepo, Dot center) {//“ñ•ÓÚ’n‚ª–¢À‘
 }
 
 int Square::testDraw(int handle) {
-	DrawBox(LU.Getx(), LU.Gety(), RD.Getx(), RD.Gety(), handle, false);
-	DrawLine(LU.Getx(), LU.Gety(), RD.Getx(), RD.Gety(), handle, false);
+	DrawBox(Square::GetLU().Getx(), Square::GetLU().Gety(), Square::GetRD().Getx(), Square::GetRD().Gety(), handle, false);
+	//DrawLine(LU.Getx(), LU.Gety(), RD.Getx(), RD.Gety(), handle, false);
 	return 0;
 }
 int Square::Delete() {
@@ -837,14 +837,19 @@ int imageSquare::Draw(bool isRight) {
 
 int intSquare::Setvalue(int a) {
 	value = a;
+	isExist = true;
 	return 0;
 }
 int intSquare::GetValue() {
 	return value;
 }
+//int intSquare::Delete() {
+//	isExist = false;
+//	return 0;
+//}
 
 /*---------------------------------------------------*/
-int imageSquareMng::SetWalls(int a[], int num, int stageflag,int square1_image,int square2_image,int square3_image) {//•Ç‚ğƒZƒbƒg‚·‚é‚½‚ß‚¾‚¯‚ÌŠÖ”CJump‚Å‚µ‚©g‚¦‚È‚¢‚©‚à
+int imageSquareMng::SetWalls(int a[], int num, int stageflag,int square1_image,int square2_image,int square3_image,int square4_image) {//•Ç‚ğƒZƒbƒg‚·‚é‚½‚ß‚¾‚¯‚ÌŠÖ”CJump‚Å‚µ‚©g‚¦‚È‚¢‚©‚à
 	switch (stageflag+1)
 	{
 	case 1:
@@ -869,7 +874,13 @@ int imageSquareMng::SetWalls(int a[], int num, int stageflag,int square1_image,i
 				break;
 			case 4:
 				square[i].SetLength(a[i * 3 + 0], a[i * 3 + 1], SQUARE4_WIDTH, SQUARE4_HEIGHT);
-				//square[i].Setimage(square3_image);
+				square[i].Setimage(square4_image);
+				break;
+			case 5:
+				square[i].SetLength(a[i * 3 + 0], a[i * 3 + 1], SQUARE5_WIDTH, SQUARE5_HEIGHT);
+				break;
+			case 6:
+				square[i].SetLength(a[i * 3 + 0], a[i * 3 + 1], SQUARE6_WIDTH, SQUARE6_HEIGHT);
 				break;
 			default:
 				break;
@@ -931,6 +942,13 @@ int imageSquareMng::Draw(bool isRight) {
 	return 0;
 }
 
+int intSquareMng::Initialize() {
+	for (int i = 0; i < SQU_NUM; i++) {
+		square[i].Set(0, 0, 0, 0);
+		square[i].Square::Delete();
+	}
+	return 0;
+}
 SquareMng intSquareMng::GetSquareMng() {
 	SquareMng a;
 	a.Initialize();
@@ -946,7 +964,6 @@ intSquare intSquareMng::GetSquare(int num) {
 		return square[num];
 	//return;
 }
-
 int intSquareMng::Add(intSquare a) {
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (!square[i].Square::GetisExist()) {
@@ -958,10 +975,15 @@ int intSquareMng::Add(intSquare a) {
 }
 int intSquareMng::Add(double lux, double luy, double rdx, double rdy, int value) {
 	for (int i = 0; i < SQU_NUM; i++) {
+		//printfDx("aaaaaaa");
 		if (!square[i].Square::GetisExist()) {
 			square[i].Square::Set(lux, luy, rdx, rdy);
+			//printfDx("aaaaaaa");
 			square[i].Setvalue(value);
 			break;
+		}
+		else {
+			//printfDx("bbbbbbb");
 		}
 	}
 	return 0;
@@ -981,10 +1003,16 @@ int intSquareMng::Add(intSquareMng* a) {
 int intSquareMng::testDraw(int colorhandle) {
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {//‘¶İ‚·‚ê‚Î
-			//DrawLine(square[i].GetLU().Getx(), square[i].GetLU().Gety(), square[i].GetRD().Getx(), square[i].GetRD().Gety(), RED);
-			square[i].Square::testDraw(colorhandle);
+			//DrawLine(square[i].Square::GetLU().Getx(), square[i].Square::GetLU().Gety(), square[i].Square::GetRD().Getx(), square[i].Square::GetRD().Gety(), RED);
+			square[i].testDraw(colorhandle);
 			//square[i].Draw();
 		}
+	}
+	return 0;
+}
+int intSquareMng::Delete() {
+	for (int i = 0; i < SQU_NUM; i++) {
+		square[i].Delete();
 	}
 	return 0;
 }

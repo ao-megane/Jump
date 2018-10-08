@@ -6,18 +6,13 @@
 
 int PDash[8];
 int PDashStart[4];
-
 int PisAir[3];
 int PJumpE[4];
-
 int PStand[3];
+int PAttacks[46];
+int PAttackw[8];
 
-int PAttacks[21];
-int PAttackw[4];
-
-int PAttackw1;
-int PAttackw2;
-int PAttackw3;
+int PTlp[2];
 
 int Attack_w;
 int Attack_s;
@@ -27,60 +22,54 @@ int PGet;
 int Player::Initialize() {
 	for (int i = 0; i < 3; i++) {
 		std::string a = "images/player/stand/";
-		a += std::to_string(i);
+		a += std::to_string(i+1);
 		a += ".png";
 		PStand[i] = LoadGraph(a.c_str());
 	}
-	
-	PDash[0] = LoadGraph("images/player/dash/1.png");
-	PDash[1] = LoadGraph("images/player/dash/2.png");
-	PDash[2] = LoadGraph("images/player/dash/3.png");
-	PDash[3] = LoadGraph("images/player/dash/4.png");
-	PDash[4] = LoadGraph("images/player/dash/5.png");
-	PDash[5] = LoadGraph("images/player/dash/6.png");
-	PDash[6] = LoadGraph("images/player/dash/7.png");
-	PDash[7] = LoadGraph("images/player/dash/8.png");
-
-	PDashStart[0] = LoadGraph("images/player/dash_start/1.png");
-	PDashStart[1] = LoadGraph("images/player/dash_start/2.png");
-	PDashStart[2] = LoadGraph("images/player/dash_start/3.png");
-	PDashStart[3] = LoadGraph("images/player/dash_start/4.png");
-
-	PJumpE[0] = LoadGraph("images/player/jump/1.png");
-	PJumpE[1] = LoadGraph("images/player/jump/2.png");
-	PJumpE[2] = LoadGraph("images/player/jump/3.png");
-	PJumpE[3] = LoadGraph("images/player/jump/4.png");
-
-	PisAir[0] = LoadGraph("images/player/air_free/1.png");
-	PisAir[1] = LoadGraph("images/player/air_free/2.png");
-	PisAir[2] = LoadGraph("images/player/air_free/3.png");
-
-	for (int i = 0; i < 22; i++) {
+	for (int i = 0; i < 8; i++) {
+		std::string a = "images/player/dash/";
+		a += std::to_string(i+1);
+		a += ".png";
+		PDash[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 4; i++) {
+		std::string a = "images/player/dash_start/";
+		a += std::to_string(i+1);
+		a += ".png";
+		PDashStart[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 4; i++) {
+		std::string a = "images/player/jump/";
+		a += std::to_string(i+1);
+		a += ".png";
+		PJumpE[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 3; i++) {
+		std::string a = "images/player/air_free/";
+		a += std::to_string(i+1);
+		a += ".png";
+		PisAir[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 46; i++) {
 		std::string a = "images/player/attack_s/";
-		a += std::to_string(i);
+		a += std::to_string(i+1);
 		a += ".png";
 		PAttacks[i] = LoadGraph(a.c_str());
 	}
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 8; i++) {
 		std::string a = "images/player/attack_w/";
-		a += std::to_string(i);
+		a += std::to_string(i+1);
 		a += ".png";
 		PAttackw[i] = LoadGraph(a.c_str());
 	}
+	for (int i = 0; i < 2; i++) {
+		std::string a = "images/player/telepo/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		PTlp[i] = LoadGraph(a.c_str());
+	}
+
 	/*
-	PJump1 = LoadGraph("images/player/Jump/1.png");
-	PJump2 = LoadGraph("images/player/Jump/2.png");
-	PJump3 = LoadGraph("images/player/Jump/3.png");
-	PJump4 = LoadGraph("images/player/Jump/4.png");
-
-	PAttacks1 = LoadGraph("images/player/Attacks/1.png");
-	PAttacks2 = LoadGraph("images/player/Attacks/2.png");
-	PAttacks3 = LoadGraph("images/player/Attacks/3.png");
-
-	PAttackw1 = LoadGraph("images/player/Attackw/1.png");
-	PAttackw2 = LoadGraph("images/player/Attackw/2.png");
-	PAttackw3 = LoadGraph("images/player/Attackw/3.png");
-
 	Attack_s = LoadSoundMem("music/knife2.wav");
 	Attack_l = LoadSoundMem("music/knife.wav");
 	Attack_w = LoadSoundMem("music/knife3.wav");
@@ -91,7 +80,8 @@ int Player::Initialize() {
 	center.Set(50, GROUND_HEIGHT);
 	acceleration.Set(0, 0);
 	velocity.Set(0, 0);
-	attack = 0;
+	//attack = 0;
+	telepoGauge = TLP_MAX;
 	//image = PStand1;
 	image.Add(center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() - P_DRAW_HEIGHT / 2.0, center.Getx() + P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0, PStand[0]);
 	acceptFlag = 1;
@@ -133,7 +123,8 @@ int Player::Set(int stageflag) {
 	//if(levelFlag = 1)
 	//center.Set(100, GROUND_HEIGHT - P_HEIGHT / 2);
 	//weakArea.Set(center, P_W_WIDTH, P_W_HEIGHT);
-	attack = 0;
+	//attack = 0;
+	telepoGauge = TLP_MAX;
 	//image = PStand1;
 	acceptFlag = 1;
 	bodyClock = 0;
@@ -142,6 +133,7 @@ int Player::Set(int stageflag) {
 	center.Set(P_START_POINT[2 * stageflag], P_START_POINT[2 * stageflag + 1]);
 	image.Add(center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() - P_DRAW_HEIGHT / 2.0, center.Getx() + P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0, PStand[0]);
 	image.Add(center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() - P_DRAW_HEIGHT / 2.0, center.Getx() + P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0, 0);
+	attackAreaMng.Initialize();
 	velocity.Set(0, 0);
 	acceleration.Set(0, 0);
 	telepo_back.Set(0, 0);
@@ -214,7 +206,7 @@ int Player::UpdateDash(int count) {
 		image.Setimage(0, PDash[7]);
 	}
 	else {
-		bodyClock += 16;
+		bodyClock += 15;
 		isFirstDash = false;
 	}
 	return 0;
@@ -261,23 +253,28 @@ int Player::SetAttack_w(int count) {
 	acceptFlag = false;
 	acceleration.Set(0, 0);
 	velocity.Set(0, 0);
-	attack = 0;
+	//attack = 0;
 	return 0;
 }
 int Player::UpdateAttack_w(int count) {
-	for (int i = 0; i < 4; i++) {
-		if (count < 2 * (i + 1)) {
+	for (int i = 0; i < 8; i++) {
+		if (count < i) {
 			image.Setimage(0, PAttackw[i]);
 			break;
 		}
 	}
-	if (count > 8) {
+
+	if (count == 3 || count == 4) {
+		attackAreaMng.Add(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, 10);
+		//DrawBox(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, RED, true);
+	}
+
+	if (count >= 8) {
 		acceptFlag = true;
 		SetStand(0);
 	}
 	if (count == 5)
 		PlayAttack_w();
-	return 0;
 	return 0;
 }
 
@@ -287,22 +284,27 @@ int Player::SetAttack_s(int count) {
 	acceptFlag = false;
 	acceleration.Set(0, 0);
 	velocity.Set(0, 0);
-	attack = 0;
+	//attack = 0;
 	return 0;
 }
-int Player::UpdateAttack_s(int count) {
-	for (int i = 0; i < 21; i++) {
-		if (count < 2 * (i + 1)) {
+int Player::UpdateAttack_s(int count) {//40-1-5
+	for (int i = 0; i < 46; i++) {
+		if (count < i) {
 			image.Setimage(0, PAttacks[i]);
 			break;
 		}
 	}
-	if (count > 42) {
+
+	if (count == 41) {
+		attackAreaMng.Add(center.Getx() - 30, center.Gety() - 60, center.Getx() + 120, center.Gety() + 30, 100);
+		//printfDx("SSSSS");
+		//DrawBox(center.Getx() - 30, center.Gety() - 60, center.Getx() + 120, center.Gety() + 30, RED, true);
+	}
+	if (count >= 46) {
 		acceptFlag = true;
 		SetStand(0);
 	}
-	if (count == 17)
-		PlayAttack_s();
+
 	return 0;
 }
 int Player::SetDamage(int count) {
@@ -311,7 +313,7 @@ int Player::SetDamage(int count) {
 	acceptFlag = 0;
 	acceleration.Set(0, 0);//要検討
 	velocity.Set(0, 0);
-	attack = 0;
+	//attack = 0;
 	return 0;
 }
 int Player::UpdateDamage(int count) {
@@ -320,11 +322,11 @@ int Player::UpdateDamage(int count) {
 		acceptFlag = 0;
 	}
 	else if (count < 20) {//攻撃
-		attack = 40;
+		//attack = 40;
 		//attackArea.Set(LU, RD);
 	}
 	else if (count < 40) {//余韻
-		attack = 0;
+		//attack = 0;
 	}
 	else if (count >= 40) {//モーション終わり
 		acceptFlag = 1;
@@ -352,13 +354,19 @@ int Player::UpdateDamage(int count) {
 int dirKeeper;
 int Player::Update1(int count,int key[]) {//状態回り
 	weakAreaMng.Delete();
+	attackAreaMng.Delete();
 
-	if (LEFT > 0) {
+	if (count % 30 == 0) {
+		telepoGauge += 1;
+	}
+
+	if (LEFT > 0 && telepoGauge >= 100) {
 		telepo.Set(center.Getx() + P_TLP_RANGE * cos(CalcDir(THUMB_X, THUMB_Y)), center.Gety() + P_TLP_RANGE * -sin(CalcDir(THUMB_X, THUMB_Y)));
 		isTelepo = true;
 	}
 	if (isTelepo && !LEFT) {
 		center = telepo;
+		telepoGauge -= 100;
 		isAir = true;
 		isTelepo = false;
 	}
@@ -592,14 +600,15 @@ int Player::Update2(SquareMng a,int count) {//壁まわりの処理
 int Player::GetStateFlag() {
 	return stateFlag;
 }
-SquareMng Player::GetAttackAreaMng() {
-	return attackAreaMng;
-}
+//SquareMng Player::GetAttackAreaMng() {
+//	return attackAreaMng;
+//}
 SquareMng Player::GetWeakAreaMng() {
 	return weakAreaMng;
 }
 int Player::GetAttack() {
-	return attack;
+	//return attack;
+	return 0;
 }
 
 int Player::Draw() {
@@ -620,6 +629,25 @@ int Player::Draw() {
 	//		center.Get_x() - P_D_WIDTH / 2, center.Get_y() + P_D_HEIGHT / 2 + P_DIFF_H,
 	//		center.Get_x() + P_D_WIDTH / 2, center.Get_y() + P_D_HEIGHT / 2 + P_DIFF_H,
 	//		image, true);
+	if (isTelepo) {
+		if (telepoGauge >= 200) {
+			DrawModiGraph(
+				telepo.Getx() - 30, telepo.Gety() - 30,
+				telepo.Getx() + 30, telepo.Gety() - 30,
+				telepo.Getx() + 30, telepo.Gety() + 30,
+				telepo.Getx() - 30, telepo.Gety() + 30,
+				PTlp[0], true);
+		}
+		else if (telepoGauge >= 100) {
+			DrawModiGraph(
+				telepo.Getx() - 30, telepo.Gety() - 30,
+				telepo.Getx() + 30, telepo.Gety() - 30,
+				telepo.Getx() + 30, telepo.Gety() + 30,
+				telepo.Getx() - 30, telepo.Gety() + 30,
+				PTlp[1], true);
+		}
+	}
+
 	image.Draw(isRightFlag);
 
 	//if(isRightFlag)
@@ -630,12 +658,17 @@ int Player::Draw() {
 		center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0,
 		image, true
 	);*/
-	//DrawCircle(center.Getx(), center.Gety(), P_TLP_RANGE, RED, 0);
+	DrawCircle(center.Getx(), center.Gety(), P_TLP_RANGE, RED, 0);
 	//DrawCircle(telepo.Getx(), telepo.Gety(), 30, RED, 1);
-	DrawBox(telepo.Getx() - P_WEAK_LU_X, telepo.Gety() - P_WEAK_LU_Y, telepo.Getx() + P_WEAK_LU_X, telepo.Gety() + P_WEAK_LU_Y, RED, 0);
+	//DrawBox(telepo.Getx() - P_WEAK_LU_X, telepo.Gety() - P_WEAK_LU_Y, telepo.Getx() + P_WEAK_LU_X, telepo.Gety() + P_WEAK_LU_Y, RED, 0);
 
-	if (attack > 0)
-		attackAreaMng.testDraw(RED);
+	//if (attack > 0)
+	attackAreaMng.testDraw(RED);
+	/*for (int i = 0; i < SQU_NUM; i++) {
+		DrawBox(
+			attackAreaMng.GetSquare(i).GetLU().Getx(), attackAreaMng.GetSquare(i).GetLU().Gety(),
+			attackAreaMng.GetSquare(i).GetRD().Getx(), attackAreaMng.GetSquare(i).GetRD().Gety(), RED, 1);
+	}*/
 
 	//DrawBox(telepo_back.Getx() - 30, telepo_back.Gety() - 30, telepo_back.Getx() + 30, telepo_back.Gety() + 30, WHITE, false);
 

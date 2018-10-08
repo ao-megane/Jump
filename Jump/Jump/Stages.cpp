@@ -6,14 +6,15 @@
 int BackGround;
 int Limit;
 
-SquareMng staticWalls;
-imageSquareMng Walls;
+SquareMng Walls_judge;
+imageSquareMng Walls_view;
 imageSquare Door;
 
 int Tutorial_back[3];
 int Tutorial_wall_1;
 int Tutorial_wall_2;
-//int Tutorial_wall_1;
+int Tutorial_wall_3;
+int Tutorial_wall_4;
 int Factory_back;
 int Factory_wall_1;
 int Factory_wall_2;
@@ -25,12 +26,15 @@ int Doorimage;
 
 
 int StagesInitialize() {
-	Walls.Initialize();
+	Walls_view.Initialize();
+	Walls_judge.Initialize();
 	Tutorial_back[0] = LoadGraph("images/maps/base/background/1.png");
 	Tutorial_back[1] = LoadGraph("images/maps/base/background/2.png");
 	Tutorial_back[2] = LoadGraph("images/maps/base/background/3.png");
 	Tutorial_wall_1 = LoadGraph("images/maps/base/wall/120_60.png");
 	Tutorial_wall_2 = LoadGraph("images/maps/base/wall/60_600.png");
+	Tutorial_wall_3 = LoadGraph("images/maps/base/wall/840_60.png");
+	Tutorial_wall_4 = LoadGraph("images/maps/base/wall/600_60.png");
 	Factory_back = LoadGraph("images/maps/factory/background.png");
 	Factory_wall_1 = LoadGraph("images/maps/factory/wall/120_60.png");
 	Factory_wall_2 = LoadGraph("images/maps/factory/wall/600_60.png");
@@ -40,15 +44,15 @@ int StagesInitialize() {
 
 int StageLoad(int stagenum) {
 	Door.Delete();
-	Walls.Delete();
-	staticWalls.Delete();
+	Walls_view.Delete();
+	Walls_judge.Delete();
 
 	switch (stagenum)
 	{
 	case 0:	//stage1
 		BackGround = Tutorial_back[0];
-		staticWalls.Add(STATICWALLS, STATICWALLS_NUM);
-		Walls.SetWalls(STAGE1,STAGE1_NUM,stagenum,Tutorial_wall_1,Tutorial_wall_2,0);
+		Walls_judge.Add(STAGE1_judge, STAGE1_judge_NUM);
+		Walls_view.SetWalls(STAGE1_view,STAGE1_view_NUM,stagenum,Tutorial_wall_1,Tutorial_wall_2,Tutorial_wall_3, Tutorial_wall_4);
 		//dynamicWall.Born();
 		Limit = STAGE1_COUNT;
 		Door.Set(DISP_WIDTH - 120, DISP_HEIGHT - 180, DISP_WIDTH - 60, DISP_HEIGHT - 60);
@@ -56,8 +60,8 @@ int StageLoad(int stagenum) {
 		break;
 	case 1:
 		BackGround = Tutorial_back[1];
-		staticWalls.Add(STATICWALLS, STATICWALLS_NUM);
-		Walls.SetWalls(STAGE2, STAGE2_NUM, stagenum, Tutorial_wall_1, Tutorial_wall_2, 0);
+		Walls_judge.Add(STAGE2_judge, STAGE2_judge_NUM);
+		Walls_view.SetWalls(STAGE2_view, STAGE2_view_NUM, stagenum, Tutorial_wall_1, Tutorial_wall_2, Tutorial_wall_3, Tutorial_wall_4);
 		//dynamicWall.Born();
 		Limit = STAGE2_COUNT;
 		Door.Set(DISP_WIDTH - 120, DISP_HEIGHT - 180, DISP_WIDTH - 60, DISP_HEIGHT - 60);
@@ -65,8 +69,8 @@ int StageLoad(int stagenum) {
 		break;
 	case 2:
 		BackGround = Tutorial_back[2];
-		staticWalls.Add(STATICWALLS, STATICWALLS_NUM);
-		Walls.SetWalls(STAGE3, STAGE3_NUM, stagenum, Tutorial_wall_1, Tutorial_wall_2, 0);
+		Walls_judge.Add(STAGE3_judge, STAGE3_judge_NUM);
+		Walls_view.SetWalls(STAGE3_view, STAGE3_view_NUM, stagenum, Tutorial_wall_1, Tutorial_wall_2, Tutorial_wall_3, Tutorial_wall_4);
 		//dynamicWall.Born();
 		Limit = STAGE3_COUNT;
 		Door.Set(DISP_WIDTH - 120, DISP_HEIGHT - 180, DISP_WIDTH - 60, DISP_HEIGHT - 60);
@@ -74,16 +78,21 @@ int StageLoad(int stagenum) {
 		break;
 	case 3:
 		BackGround = Factory_back;
-		staticWalls.Add(STATICWALLS, STATICWALLS_NUM);
-		Walls.SetWalls(STAGE4, STAGE4_NUM, stagenum, Factory_wall_1, Factory_wall_2, 0);
+		Walls_judge.Add(STAGE1_judge, STAGE1_judge_NUM);
+		Walls_view.SetWalls(STAGE1_view, STAGE1_view_NUM, stagenum, Tutorial_wall_1, Tutorial_wall_2, Tutorial_wall_3, Tutorial_wall_4);
 		//dynamicWall.Born();
-		Limit = STAGE4_COUNT;
+		Limit = STAGE1_COUNT;
+		Door.Set(DISP_WIDTH - 120, DISP_HEIGHT - 180, DISP_WIDTH - 60, DISP_HEIGHT - 60);
+		Door.Setimage(Doorimage);
 		break;
 	case 4:
 		BackGround = Factory_back;
-		staticWalls.Add(STATICWALLS, STATICWALLS_NUM);
-		Walls.SetWalls(STAGE5, STAGE5_NUM, stagenum, Factory_wall_1, Factory_wall_2, 0);
+		Walls_judge.Add(STAGE1_judge, STAGE1_judge_NUM);
+		Walls_view.SetWalls(STAGE1_view, STAGE1_view_NUM, stagenum, Tutorial_wall_1, Tutorial_wall_2, Tutorial_wall_3, Tutorial_wall_4);
 		//dynamicWall.Born();
+		Limit = STAGE1_COUNT;
+		Door.Set(DISP_WIDTH - 120, DISP_HEIGHT - 180, DISP_WIDTH - 60, DISP_HEIGHT - 60);
+		Door.Setimage(Doorimage);
 		Limit = STAGE5_COUNT;
 		break;
 	default:
@@ -133,21 +142,22 @@ int StageUpdata(int stagenum, int count, int flag,Dot pcenter) {//大体のステージ
 	return 0;
 }
 
-SquareMng GetStageStaticWalls() {
-	return staticWalls;
+SquareMng GetStageWalls_judge() {
+	return Walls_judge;
 }
-SquareMng GetStageWalls() {
-	return Walls.GetSquareMng();
+SquareMng GetStageWalls_view() {
+	printfDx("いらないはず");
+	return Walls_view.GetSquareMng();
 }
 int GetStageLimit() {
 	return Limit;
 }
 
 int DrawStage(int count) {//count渡す必要ないかも
-	//DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, BackGround, true);
-	staticWalls.testDraw(GREEN);
-	Walls.Draw();
-	Walls.testDraw(GREEN);
+	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, BackGround, true);
+	//staticWalls.testDraw(GREEN);
+	Walls_view.Draw();
+	Walls_judge.testDraw(GREEN);
 	Door.Draw();
 	//DrawGraph(0, 0, Tutorial_wall_1, true);
 	return 0;

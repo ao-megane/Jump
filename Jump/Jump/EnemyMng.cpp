@@ -9,7 +9,7 @@ int Enemy::Initialize() {
 	isExist = false;
 	isRight = false;
 	imageMng.SquareMng::Initialize();
-	attackMng.SquareMng::Initialize();
+	attackMng.Initialize();
 	weakMng.Initialize();
 	//searchArea.Initialize();
 	return 0;
@@ -43,7 +43,7 @@ int Enemy::Set(int x, int y) {
 
 int Drawn::Updata(int count, Dot Pcener) {
 	//center“®‚¢‚½‚è‚·‚é
-	Enemy::GetattackMngAd()->SquareMng::Delete();
+	Enemy::GetattackMngAd()->Delete();
 	Enemy::GetweakMngAd()->SquareMng::Delete();
 	Enemy::GetimageMngAd()->SquareMng::Delete();
 	

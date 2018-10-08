@@ -10,9 +10,9 @@ bool StageBeforeDescription(int stageFlag, int key[]);
 
 int StageUpdata(int stagenum, int count, int flag,Dot pcenter);	//•Ç‚ª“®‚¢‚½‚è
 
-SquareMng GetStageStaticWalls();
+SquareMng GetStageWalls_judge();
 
-SquareMng GetStageWalls();
+SquareMng GetStageWalls_view();
 
 int GetStageLimit();
 

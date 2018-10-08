@@ -141,7 +141,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				keepCount = count;
 				flag = 6;
 			}
-			player.Update2(GetStageStaticWalls() + GetStageWalls(),count);
+			player.Update2(GetStageWalls_judge(),count);
 			damage = EnemyMngUpdata(count, player.GetCenter());
 			if (player.GetStateFlag() != 7 && damage) {//ƒ_ƒ[ƒW‚ª•Ô‚Á‚Ä‚­‚é
 				//count += damage * 30.0;

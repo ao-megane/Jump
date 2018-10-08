@@ -161,7 +161,7 @@ public:
 			return true;
 	};
 
-private:
+protected:
 	Dot LU;
 	Dot RD;
 	bool isExist;
@@ -182,7 +182,9 @@ class intSquare : public Square
 public:
 	int Setvalue(int value);
 	int GetValue();
+	//int Delete();
 	int operator = (intSquare a) {
+		printfDx("intSquare‚Ì=‚Í‰ö‚µ‚¢\n");
 		*Square::GetLUAd() = a.Square::GetLU();
 		*Square::GetRDAd() = a.Square::GetRD();
 		value = a.GetValue();
@@ -247,7 +249,7 @@ private:
 
 class imageSquareMng : public SquareMng {
 public:
-	int SetWalls(int a[], int num, int stageflag, int square1_image, int square2_image, int square3_image);
+	int SetWalls(int a[], int num, int stageflag, int square1_image, int square2_image, int square3_image, int square4_image);
 	SquareMng GetSquareMng();
 	int Add(double a,double b,double c,double d,int handle);
 	int Setimage(int num, int handle);
@@ -259,15 +261,17 @@ private:
 	imageSquare square[SQU_NUM];
 };
 
-class intSquareMng : public SquareMng {
+class intSquareMng{
 public:
 	//int SetWalls(int a[], int num, int stageflag, int square1_image, int square2_image, int square3_image);
+	int Initialize();
 	SquareMng GetSquareMng();
 	int Add(intSquare a);
 	int Add(intSquareMng* a);
 	int Add(double lux, double luy, double rdx, double rdy, int value);
 	intSquare GetSquare(int num);
 	int testDraw(int colorhandle);
+	int Delete();
 	int operator & (Dot a) {
 		for (int i = 0; i < SQU_NUM; i++) {
 			if (square[i].GetisExist()) {
