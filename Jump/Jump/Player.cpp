@@ -265,7 +265,8 @@ int Player::UpdateAttack_w(int count) {
 	}
 
 	if (count == 3 || count == 4) {
-		attackAreaMng.Add(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, 10);
+		if(isRightFlag) attackAreaMng.Add(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, 10);
+		else attackAreaMng.Add(center.Getx() - 210, center.Gety() - 210, center.Getx() + 90, center.Gety() + 30, 10);
 		//DrawBox(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, RED, true);
 	}
 
@@ -296,7 +297,8 @@ int Player::UpdateAttack_s(int count) {//40-1-5
 	}
 
 	if (count == 41) {
-		attackAreaMng.Add(center.Getx() - 30, center.Gety() - 60, center.Getx() + 120, center.Gety() + 30, 100);
+		if(isRightFlag) attackAreaMng.Add(center.Getx() - 30, center.Gety() - 60, center.Getx() + 120, center.Gety() + 30, 100);
+		else attackAreaMng.Add(center.Getx() - 120, center.Gety() - 60, center.Getx() + 30, center.Gety() + 30, 100);
 		//printfDx("SSSSS");
 		//DrawBox(center.Getx() - 30, center.Gety() - 60, center.Getx() + 120, center.Gety() + 30, RED, true);
 	}
@@ -367,6 +369,9 @@ int Player::Update1(int count,int key[]) {//ó‘Ô‰ñ‚è
 	if (isTelepo && !LEFT) {
 		center = telepo;
 		telepoGauge -= 100;
+		if (acceleration.Gety() >= 0) {
+			acceleration.Sety(-P_JUMP_POWER/4.0);
+		}
 		isAir = true;
 		isTelepo = false;
 	}
@@ -514,7 +519,7 @@ int Player::Update2(SquareMng a,int count) {//•Ç‚Ü‚í‚è‚Ìˆ—
 				}
 			}
 		}
-		if (CalcDistance(telepo - center) > P_TLP_RANGE+20) {
+		if (CalcDistance(telepo - center) > P_TLP_RANGE+400) {
 			telepo = center;
 		}
 	}
@@ -597,12 +602,27 @@ int Player::Update2(SquareMng a,int count) {//•Ç‚Ü‚í‚è‚Ìˆ—
 	return 0;
 }
 
+int Player::Addtelepo() {
+	int a = 0;
+	for (int i = 0; i < SQU_NUM; i++) {
+		if (attackAreaMng.GetintSquare(i).GetisExist()) {
+			if (a < attackAreaMng.GetintSquare(i).GetValue())
+				a = attackAreaMng.GetintSquare(i).GetValue();
+		}
+	}
+	a += 20;
+	if (a > 100) a = 100;
+	telepoGauge += a;
+
+	return 0;
+}
+
 int Player::GetStateFlag() {
 	return stateFlag;
 }
-//SquareMng Player::GetAttackAreaMng() {
-//	return attackAreaMng;
-//}
+intSquareMng Player::GetAttackAreaMng() {
+	return attackAreaMng;
+}
 SquareMng Player::GetWeakAreaMng() {
 	return weakAreaMng;
 }

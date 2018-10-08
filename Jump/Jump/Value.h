@@ -62,10 +62,17 @@ const int P_TLP_RANGE = 270 + 60;
 const double P_JUMP_POWER = GRAVITY * 14.0;//ジャンプの高さ
 
 /*-----------------------*/
+const int DRAWN_NUM = 10;
 const int DRAWN_W_WIDTH = 180;
 const int DRAWN_W_HEIGHT = 180;
 const int DRAWN_A_WIDTH = 120;
 const int DRAWN_A_HEIGHT = 120;
+/*------------------------*/
+const int JUNK_NUM = 10;
+const int JUNK_W_WIDTH = 60;
+const int JUNK_W_HEIGHT = 60;
+const int JUNK_A_WIDTH = 0;
+const int JUNK_A_HEIGHT = 0;
 
 /*------システム--------*/
 const int STAGE_NUM = 10;
@@ -227,6 +234,6 @@ static int STAGE5[STAGE5_NUM * 3] = {//左上,四角の種類
 const int STAGE5_COUNT = 30 * 60;//30fps
 
 
-const int DRAWN_NUM = 10;
+
 
 #endif // !VALUE_H

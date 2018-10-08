@@ -265,11 +265,12 @@ class intSquareMng{
 public:
 	//int SetWalls(int a[], int num, int stageflag, int square1_image, int square2_image, int square3_image);
 	int Initialize();
+	int isHitSquareMng(SquareMng a);
 	SquareMng GetSquareMng();
 	int Add(intSquare a);
 	int Add(intSquareMng* a);
 	int Add(double lux, double luy, double rdx, double rdy, int value);
-	intSquare GetSquare(int num);
+	intSquare GetintSquare(int num);
 	int testDraw(int colorhandle);
 	int Delete();
 	int operator & (Dot a) {

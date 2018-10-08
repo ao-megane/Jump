@@ -149,6 +149,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				player.SetDamage(count);
 				toUIDamage(damage, count);
 			}
+			if (EnemyMngDamage(player.GetAttackAreaMng(),count)) {
+				player.Addtelepo();
+			}
 
 			if (player.GetStateFlag() != 7) {//”íƒ_ƒ’†‚Å‚È‚¯‚ê‚Î
 				//player.GetWeakAreaMng().isDamageSquareMng(GetEnemyMngAttackArea)

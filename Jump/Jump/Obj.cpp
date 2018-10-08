@@ -959,11 +959,29 @@ SquareMng intSquareMng::GetSquareMng() {
 	}
 	return a;
 }
-intSquare intSquareMng::GetSquare(int num) {
+intSquare intSquareMng::GetintSquare(int num) {
 	//if (square[num].Square::GetisExist())
 		return square[num];
 	//return;
 }
+int intSquareMng::isHitSquareMng(SquareMng a) {
+	int max = 0;
+	for (int i = 0; i < SQU_NUM; i++) {
+		if (square[i].Square::GetisExist()) {
+			for (int j = 0; j < SQU_NUM; j++) {
+				if (a.GetSquare(j).GetisExist()) {//—¼•û‘¶Ý‚·‚ê‚Î
+					if (square[i] & a.GetSquare(j)) {
+						if (square[i].GetValue() > max) {
+							max = square[i].GetValue();
+						}
+					}
+				}
+			}
+		}
+	}
+	return max;
+}
+
 int intSquareMng::Add(intSquare a) {
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (!square[i].Square::GetisExist()) {
@@ -993,8 +1011,8 @@ int intSquareMng::Add(intSquareMng* a) {
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (!square[i].Square::GetisExist()) {
 			for (; j < SQU_NUM; j++) {
-				if(a->GetSquare(j).Square::GetisExist())
-					square[i] = a->GetSquare(j);
+				if(a->GetintSquare(j).Square::GetisExist())
+					square[i] = a->GetintSquare(j);
 			}
 		}
 	}

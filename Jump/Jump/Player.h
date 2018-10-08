@@ -34,6 +34,8 @@ public:/*
 	//int UpdateAttack_air(int count);
 	//int UpdateKunai(int count);
 
+	int Addtelepo();
+
 	int PlayAttack_s();	//Œø‰Ê‰¹
 	int PlayAttack_w();
 	int PlayGet();
@@ -42,7 +44,7 @@ public:/*
 	int GetStateFlag();
 	int GetIsRightFlag();
 	Dot GetCenter();
-	SquareMng GetAttackAreaMng();
+	intSquareMng GetAttackAreaMng();
 	SquareMng GetWeakAreaMng();
 	Dot weapon;
 	int GetAttack();
