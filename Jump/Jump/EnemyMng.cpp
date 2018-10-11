@@ -138,6 +138,9 @@ int EnemyMngSet(int stageFlag) {
 	for (int i = 0; i < DRAWN_NUM; i++) {
 		drawn[i].Enemy::Initialize();
 	}
+	for (int i = 0; i < JUNK_NUM; i++) {
+		junk[i].Enemy::Initialize();
+	}
 	switch (stageFlag)
 	{
 	case 0://“G‚È‚µ

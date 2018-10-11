@@ -306,8 +306,8 @@ int Player::UpdateAttack_air(int count) {
 	}
 
 	if (count == 3 || count == 4) {
-		if (isRightFlag) attackAreaMng.Add(center.Getx() - 90, center.Gety() - 120, center.Getx() + 240, center.Gety() + 120, 10);
-		else attackAreaMng.Add(center.Getx() - 210, center.Gety() - 210, center.Getx() + 90, center.Gety() + 30, 10);
+		if (isRightFlag) attackAreaMng.Add(center.Getx() - 90, center.Gety() - 120, center.Getx() + 240-60, center.Gety() + 120, 10);
+		else attackAreaMng.Add(center.Getx() - 240+60, center.Gety() - 120, center.Getx() + 90, center.Gety() + 120, 10);
 		//DrawBox(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, RED, true);
 	}
 
@@ -412,7 +412,7 @@ int Player::Update1(int count,int key[]) {//ó‘Ô‰ñ‚è
 		telepoGauge -= 100;
 		if (acceleration.Gety() >= 0) {
 			acceleration.Sety(-P_JUMP_POWER/4.0);
-			if(velocity.Gety() <= 0) velocity.Sety(0);
+			if(velocity.Gety() >= 0) velocity.Sety(0);
 		}
 		isAir = true;
 		isTelepo = false;
