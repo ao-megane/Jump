@@ -11,6 +11,7 @@ int PJumpE[4];
 int PStand[3];
 int PAttacks[46];
 int PAttackw[8];
+int PAttackair[8];
 
 int PTlp[2];
 
@@ -61,6 +62,12 @@ int Player::Initialize() {
 		a += std::to_string(i+1);
 		a += ".png";
 		PAttackw[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 8; i++) {
+		std::string a = "images/player/attack_air/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		PAttackair[i] = LoadGraph(a.c_str());
 	}
 	for (int i = 0; i < 2; i++) {
 		std::string a = "images/player/telepo/";
@@ -117,7 +124,7 @@ Dot Player::GetCenter() {
 }
 
 
-
+bool isFirstJump;
 int Player::Set(int stageflag) {
 	image.Delete();
 	//if(levelFlag = 1)
@@ -138,6 +145,7 @@ int Player::Set(int stageflag) {
 	acceleration.Set(0, 0);
 	telepo_back.Set(0, 0);
 	isTelepo = false;
+	isFirstJump = true;
 	return 0;
 }
 
@@ -212,11 +220,12 @@ int Player::UpdateDash(int count) {
 	return 0;
 }
 
-bool isFirstJump;
 int Player::SetJump(int count) {
 	stateFlag = 2;
 	bodyClock = count;
-	acceleration.Sety(-P_JUMP_POWER);
+	if(isFirstJump)
+	 acceleration.Sety(-P_JUMP_POWER);
+	image.Setimage(0, PisAir[0]);
 	isFirstJump = true;
 	PlayJump();
 	return 0;
@@ -273,6 +282,39 @@ int Player::UpdateAttack_w(int count) {
 	if (count >= 8) {
 		acceptFlag = true;
 		SetStand(0);
+	}
+	if (count == 5)
+		PlayAttack_w();
+	return 0;
+}
+
+int Player::SetAttack_air(int count) {
+	bodyClock = count;
+	stateFlag = 5;
+	acceptFlag = false;
+	//acceleration.Set(0, 0);
+	velocity.Set(0, 0);
+	//attack = 0;
+	return 0;
+}
+int Player::UpdateAttack_air(int count) {
+	for (int i = 0; i < 8; i++) {
+		if (count < i) {
+			image.Setimage(0, PAttackair[i]);
+			break;
+		}
+	}
+
+	if (count == 3 || count == 4) {
+		if (isRightFlag) attackAreaMng.Add(center.Getx() - 90, center.Gety() - 120, center.Getx() + 240, center.Gety() + 120, 10);
+		else attackAreaMng.Add(center.Getx() - 210, center.Gety() - 210, center.Getx() + 90, center.Gety() + 30, 10);
+		//DrawBox(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, RED, true);
+	}
+
+	if (count >= 8) {
+		acceptFlag = true;
+		SetJump(0);
+		isFirstJump = false;
 	}
 	if (count == 5)
 		PlayAttack_w();
@@ -353,7 +395,6 @@ int Player::UpdateDamage(int count) {
 	return 0;
 }
 
-int dirKeeper;
 int Player::Update1(int count,int key[]) {//ó‘Ô‰ñ‚è
 	weakAreaMng.Delete();
 	attackAreaMng.Delete();
@@ -371,6 +412,7 @@ int Player::Update1(int count,int key[]) {//ó‘Ô‰ñ‚è
 		telepoGauge -= 100;
 		if (acceleration.Gety() >= 0) {
 			acceleration.Sety(-P_JUMP_POWER/4.0);
+			if(velocity.Gety() <= 0) velocity.Sety(0);
 		}
 		isAir = true;
 		isTelepo = false;
@@ -393,6 +435,9 @@ int Player::Update1(int count,int key[]) {//ó‘Ô‰ñ‚è
 				velocity.Setx(0);
 			}
 			stateFlag = 2;
+			if (B == 1) {
+				SetAttack_air(count);
+			}
 		}
 		else {//’nã‚È‚ç
 			if (THUMB_X > 0) {
@@ -450,7 +495,7 @@ int Player::Update1(int count,int key[]) {//ó‘Ô‰ñ‚è
 		UpdateAttack_w(count - bodyClock);
 		break;
 	case 5:
-		//UpdateAttack_air(count - bodyClock);
+		UpdateAttack_air(count - bodyClock);
 		break;
 	case 6:
 		//UpdateAttack_air(count - bodyClock);
@@ -462,8 +507,10 @@ int Player::Update1(int count,int key[]) {//ó‘Ô‰ñ‚è
 		break;
 	}
 
-	velocity.Move(acceleration.Getx(), acceleration.Gety());
-	center.Move(velocity.Getx(), velocity.Gety());
+	if (stateFlag != 5) {//‹ó’†UŒ‚’†‚ÍˆÚ“®‚µ‚È‚¢
+		velocity.Move(acceleration.Getx(), acceleration.Gety());
+		center.Move(velocity.Getx(), velocity.Gety());
+	}
 	weakAreaMng.Add(center.Getx() - P_WEAK_LU_X, center.Gety() - P_WEAK_LU_Y, center.Getx() + P_WEAK_RD_X, center.Gety() + P_WEAK_RD_Y);	
 
 	return 0;
@@ -574,7 +621,7 @@ int Player::Update2(SquareMng a,int count) {//•Ç‚Ü‚í‚è‚Ìˆ—
 		}
 	}
 
-	if (isAir)
+	if (isAir && stateFlag != 5)
 		acceleration.Move(0, GRAVITY);
 
 	if (velocity.Gety() > 50) velocity.Sety(50);

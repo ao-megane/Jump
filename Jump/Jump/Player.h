@@ -17,6 +17,7 @@ public:/*
 	int SetJump(int count);
 	int SetAttack_s(int count);
 	int SetAttack_w(int count);
+	int SetAttack_air(int count);
 	int SetDamage(int count);
 	//int SetAttack_air(int count);
 	//int SetKunai(int count);
@@ -30,6 +31,7 @@ public:/*
 	int UpdateJump(int count);
 	int UpdateAttack_s(int count);
 	int UpdateAttack_w(int count);
+	int UpdateAttack_air(int count);
 	int UpdateDamage(int count);
 	//int UpdateAttack_air(int count);
 	//int UpdateKunai(int count);
