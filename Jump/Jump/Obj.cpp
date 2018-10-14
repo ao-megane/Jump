@@ -774,9 +774,11 @@ bool SquareMng::isAbleTelepo(Dot center, Dot telepo) {
 			else {//2.4ÛŒÀ
 				//printfDx("2.4\n");
 				decoi = square[i].GetMove(-center);	//•½sˆÚ“®‚µ‚Ä
+
 				RU.Set(decoi.GetRD().Getx(), decoi.GetLU().Gety());
 				LD.Set(decoi.GetLU().Getx(), decoi.GetRD().Gety());
 				decoi.Set(LD, RU);
+
 				decoi.Rotate(-CalcDir(center, telepo));	//‰ñ“]
 				if (decoi.GetLU().Gety() * decoi.GetRD().Gety() <= 0) {//‰¡Ø‚Á‚Ä‚é”»’è
 					double distance = (decoi.GetRD().Getx() - decoi.GetLU().Getx()) / (decoi.GetLU().Gety() - decoi.GetRD().Gety()) * decoi.GetLU().Gety() + decoi.GetLU().Getx();
