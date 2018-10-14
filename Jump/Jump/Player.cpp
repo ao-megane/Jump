@@ -447,7 +447,7 @@ int Player::Update1(int count,int key[]) {//状態回り
 		isAir = true;
 		isTelepo = false;
 		acceptFlag = true;
-		stateFlag = 2;
+		//stateFlag = 2;
 		image.Setimage(2, 0);
 		Tlp_disappearMngBorn(count, center);
 	}
@@ -563,29 +563,34 @@ int Player::Update2(SquareMng a,int count) {//壁まわりの処理
 			}
 		}
 
+		
 		//telepo(壁内)ゲット
 		//テレポ先について，壁判定
 		Square tlpSquare;//壁内テレポを四角にした
 		tlpSquare.Set(telepo.Getx() - P_WEAK_LU_X, telepo.Gety() - P_WEAK_LU_Y, telepo.Getx() + P_WEAK_LU_X, telepo.Gety() + P_WEAK_LU_Y);
 		Dot tlpVel;
 		tlpVel.Set(50* cos(CalcDir(center, telepo)), 50 * -sin(CalcDir(center, telepo)));
-		//DrawCircle(-tlpVel.Getx() + telepo.Getx(), -tlpVel.Gety() + telepo.Gety(), 20, BLUE, 1); 
-		
+		//tlpVel.Set(15 * cos(CalcDir(center, telepo)), 15 * -sin(CalcDir(center, telepo)));//現テレポの一歩前(velocity)
+
 		tlpSquare.Set(-tlpVel.Getx() + telepo.Getx() - P_WEAK_LU_X, -tlpVel.Gety() + telepo.Gety() - P_WEAK_LU_Y, -tlpVel.Getx() + telepo.Getx() + P_WEAK_LU_X, -tlpVel.Gety() + telepo.Gety() + P_WEAK_LU_Y);
-		tlpVel.Set(40 * cos(CalcDir(center, telepo)), 40 * -sin(CalcDir(center, telepo)));//現テレポの一歩前(velocity)
-		tlpSquare.testDraw(BLUE);
+		//tlpVel.Set(15 * cos(CalcDir(center, telepo)), 15 * -sin(CalcDir(center, telepo)));//現テレポの一歩前(velocity)
+		//tlpSquare.testDraw(BLUE);
+		
 		for (int i = 0; i < SQU_NUM; i++) {
 			if (a.GetSquare(i).GetisExist()) {//四角ごとに判定
 				switch (tlpSquare.isHitSquare(a.GetSquare(i), tlpVel))//ここできちんとめり込みまで判定できれば問題ない
+				//switch (tlpSquare.isHitSquare_tlp(a.GetSquare(i), telepo, center,tlpVel))
 				{
 				case 0://ぶつかってない
 					break;
 				case 2://U//直すべきはこのあたりか
 					telepo.Sety(a.GetUpLanding_tlp(tlpSquare) + P_WEAK_LU_Y);
+					//telepo.Sety(a.GetUpLanding_tlp(Dot center, Dot telepo));
 					//printfDx("U:%d\n", i);
 					break;
 				case 4://R
 					telepo.Setx(a.GetRightLanding_tlp(tlpSquare) - P_WEAK_LU_X);
+					//printfDx("RIGHT!!!\n");
 					//printfDx("R!\n");
 					break;
 				case 6://D
@@ -600,7 +605,7 @@ int Player::Update2(SquareMng a,int count) {//壁まわりの処理
 				}
 			}
 		}
-		if (CalcDistance(telepo - center) > P_TLP_RANGE+400) {
+		if (CalcDistance(telepo - center) > P_TLP_RANGE+30) {
 			telepo = center;
 		}
 	}

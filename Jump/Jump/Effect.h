@@ -11,6 +11,7 @@ public:
 	int Set(int count, Dot a);
 	bool GetisExist();
 	int Draw();
+	int Delete();
 	Effect();
 	~Effect();
 
@@ -42,7 +43,7 @@ int Tlp_appearMngBorn(int count, Dot center);
 int Tlp_disappearMngBorn(int count, Dot center);
 
 int EffectMngUpdate(int count);
-
+int EffectMngDelete();
 int EffectMngDraw();
 
 #endif // !EFFECT_H

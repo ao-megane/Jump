@@ -14,6 +14,10 @@ int Effect::Set(int count, Dot a) {
 bool Effect::GetisExist() {
 	return isExist;
 }
+int Effect::Delete() {
+	isExist = false;
+	return 0;
+}
 int Effect::Draw() {
 	if (isExist)
 		image.Draw();
@@ -96,6 +100,18 @@ int EffectMngUpdate(int count) {
 		}
 		if (tlp_disappe[i].GetisExist()) {
 			tlp_disappe[i].Update(count);
+		}
+	}
+	return 0;
+}
+
+int EffectMngDelete() {
+	for (int i = 0; i < 4; i++) {
+		if (tlp_appe[i].GetisExist()) {
+			tlp_appe[i].Effect::Delete();
+		}
+		if (tlp_disappe[i].GetisExist()) {
+			tlp_disappe[i].Effect::Delete();
 		}
 	}
 	return 0;

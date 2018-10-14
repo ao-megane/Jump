@@ -75,6 +75,12 @@ const int JUNK_W_WIDTH = 60;
 const int JUNK_W_HEIGHT = 60;
 const int JUNK_A_WIDTH = 0;
 const int JUNK_A_HEIGHT = 0;
+/*------------------------*/
+const int BRI_WALL_NUM = 2;
+const int BRI_WALL_W_WIDTH = 60;
+const int BRI_WALL_W_HEIGHT = 160;
+const int BRI_WALL_A_WIDTH = 0;
+const int BRI_WALL_A_HEIGHT = 0;
 
 /*------ƒVƒXƒeƒ€--------*/
 const int STAGE_NUM = 10;

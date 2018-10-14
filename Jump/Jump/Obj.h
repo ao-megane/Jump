@@ -125,7 +125,7 @@ public:
 	Square GetMove(Dot a);
 	int Rotate(double thita);
 	int isHitSquare(Square a,Dot velocity);//1:LU 2:U 3:RU 4:R 5:RD 6:D 7:LD 8:L 0:“–‚½‚Á‚Ä‚È‚¢ 
-	int isHitSquare_tlp(Square a,Dot telepo, Dot Pcenter);
+	int isHitSquare_tlp(Square a,Dot telepo, Dot Pcenter,Dot velocity);
 	//int Getup();
 	//int Getleft();
 	//bool isHitCenter(double p_radius,double e_radius);
@@ -143,6 +143,9 @@ public:
 	};
 	void operator + (Dot a) {
 		Set(LU + a, RD + a);
+	};
+	void operator = (Square a) {
+		Set(a.GetLU(), a.GetRD());
 	};
 	bool operator & (Square a) {	//‚ ‚½‚è”»’è‰‰Zq@true ‚Åd‚È‚Á‚Ä‚é
 	//if (a[2]<b[0] || a[0]>b[2] || a[1] > b[3] || a[3] < b[1]) return “–‚½‚Á‚Ä‚È‚¢
@@ -171,6 +174,7 @@ class imageSquare : public Square
 {
 public:
 	int Setimage(int image);
+	int Delete();
 	int Draw();
 	int Draw(bool isRight);
 private:

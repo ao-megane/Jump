@@ -149,44 +149,68 @@ int Square::isHitSquare(Square a,Dot velocity) {//二辺接地が未実装 -> velocityで
 	return 0;
 }
 
-int Square::isHitSquare_tlp(Square a, Dot telepo, Dot center) {//二辺接地が未実装 -> velocityで実装
+int Square::isHitSquare_tlp(Square a, Dot telepo, Dot center,Dot velocity) {//二辺接地が未実装 -> velocityで実装
 	//テレポ先の四角.ishitsquare_tlp(壁，テレポ先のドット，テレポ前の中心)
 	bool L = false, R = false, U = false, D = false;
 	Dot decoi = telepo - center;	//プレイヤーから見てどの方向へ飛ぶか
-	if (a & telepo) {	//壁とテレポ先がぶつかれば
-		if (decoi.Getx() > 0 && decoi.Gety() > 0) {//下でぶつかってる(触れている)
+	Dot RU, LD;
+	Square decoi_squ;
+	decoi_squ = a;
+	if (decoi_squ & telepo) {	//壁とテレポ先がぶつかれば
+		if (decoi.Getx() > 0 && decoi.Gety() > 0) {//第1象限
+			/*RU.Set(decoi_squ.GetRD().Getx(), decoi_squ.GetLU().Gety());
+			LD.Set(decoi_squ.GetLU().Getx(), decoi_squ.GetRD().Gety());
+			decoi_squ.Set(LD, RU);*/
+		}
+		if (decoi.Getx() < 0 && decoi.Gety() > 0) {//第2象限
+			//なにもなし
+		}
+		if (decoi.Getx() < 0 && decoi.Gety() < 0) {//第3象限
+			/*RU.Set(decoi_squ.GetRD().Getx(), decoi_squ.GetLU().Gety());
+			LD.Set(decoi_squ.GetLU().Getx(), decoi_squ.GetRD().Gety());
+			decoi_squ.Set(LD, RU);*/
+		}
+		if (decoi.Getx() > 0 && decoi.Gety() < 0) {//第4象限
+			//なにもなし
+		}
+	}
+
+	//プレイヤースクエアが壁を読んだ状態,a=wall
+	//足元で釣っかかるので，上に載った優先
+	if (*this & decoi_squ) {
+		if (LU.Gety() <= decoi_squ.GetLU().Gety() && decoi_squ.GetLU().Gety() <= RD.Gety()) {//下でぶつかってる(触れている)
 			D = true;
 		}
-		if (decoi.Getx() < 0 && decoi.Gety() > 0) {//左でぶつかってる(触れている)
-			D = true;
+		if (LU.Getx() <= decoi_squ.GetRD().Getx() && decoi_squ.GetRD().Getx() <= RD.Getx()) {//左でぶつかってる(触れている)
+			L = true;
 		}
-		if (decoi.Getx() > 0 && decoi.Gety() > 0) {//上でぶつかってる(触れている)
+		if (LU.Gety() <= decoi_squ.GetRD().Gety() && decoi_squ.GetRD().Gety() <= RD.Gety()) {//上でぶつかってる(触れている)
 			U = true;
 		}
-		if (decoi.Getx() > 0 && decoi.Gety() > 0) {//右でぶつかってる(触れている)
-			U = true;
+		if (LU.Getx() <= decoi_squ.GetLU().Getx() && decoi_squ.GetLU().Getx() <= RD.Getx()) {//右でぶつかってる(触れている)
+			R = true;
 		}
 	}
 	//プレイヤースクエアが壁を読んだ状態,a=wall
 	//足元で釣っかかるので，上に載った優先
 	if (D && L) {
-		if (a.GetRD().Getx() <= GetLU().Getx() - center.Getx()) return 8;
+		if (decoi_squ.GetRD().Getx() <= GetLU().Getx() - velocity.Getx()) return 8;
 		return 6;
-		/*if (a.GetLU().Gety() <= GetRD().Gety() - center.Gety()) return 6;
+		/*if (a.GetLU().Gety() <= GetRD().Gety() - velocity.Gety()) return 6;
 		return 8;*/
 	}
 	if (D && R) {
-		if (a.GetLU().Getx() >= GetRD().Getx() - center.Getx()) return 4;
+		if (decoi_squ.GetLU().Getx() >= GetRD().Getx() - velocity.Getx()) return 4;
 		return 6;
-		/*if (a.GetLU().Gety() <= GetRD().Gety() - center.Gety()) return 6;
+		/*if (a.GetLU().Gety() <= GetRD().Gety() - velocity.Gety()) return 6;
 		return 4;*/
 	}
 	if (U && L) {
-		if (a.GetRD().Gety() <= GetLU().Gety() - center.Gety()) return 2;
+		if (decoi_squ.GetRD().Gety() <= GetLU().Gety() - velocity.Gety()) return 2;
 		return 8;
 	}
 	if (U && R) {
-		if (a.GetRD().Gety() <= GetLU().Gety() - center.Gety()) return 2;
+		if (decoi_squ.GetRD().Gety() <= GetLU().Gety() - velocity.Gety()) return 2;
 		return 4;
 	}
 	if (D) return 6;
@@ -642,9 +666,9 @@ double SquareMng::GetRightLanding(Square area) {
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {	//四角が存在して
 			if (!(square[i].GetLU().Gety() > area.GetRD().Gety()) && !(area.GetLU().Gety() > square[i].GetRD().Gety())) {	//縦方向判定
-				if (square[i].GetLU().Getx() + P_SPEED + 30 >= area.GetRD().Getx()) {	//横方向判定,RDはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
-					if (square[i].GetLU().Getx() + P_SPEED + 30 - area.GetRD().Getx() < a) {//近いやつ
-						a = square[i].GetLU().Getx() + P_SPEED + 30 - area.GetRD().Getx();
+				if (square[i].GetLU().Getx() + P_SPEED + 0 >= area.GetRD().Getx()) {	//横方向判定,RDはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
+					if (square[i].GetLU().Getx() + P_SPEED + 0 - area.GetRD().Getx() < a) {//近いやつ
+						a = square[i].GetLU().Getx() + P_SPEED  + 0 - area.GetRD().Getx();
 						//square[i].testDraw(RED);
 						b = i;
 					}
@@ -723,30 +747,32 @@ double SquareMng::GetRightLanding_tlp(Square area) {//壁がテレポ先を読んでる
 			}
 		}
 	}
+	//printfDx("RIGHT!!!\n");
 	return square[b].GetLU().Getx();
+	//return 0;
 }
 
 bool SquareMng::isAbleTelepo(Dot center, Dot telepo) {
 	Square decoi;
-	Dot RU,LD;
+	Dot RU, LD;
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {	//存在すれば
 			if ((telepo - center).Getx()*(telepo - center).Gety() <= 0) {//1.3象限
-				//printfDx("1.3!\n");
+				//printfDx("1.3\n");
 				decoi = square[i].GetMove(-center);	//平行移動して
 				decoi.Rotate(-CalcDir(center, telepo));	//回転
 				if (decoi.GetLU().Gety() * decoi.GetRD().Gety() <= 0) {//横切ってる判定
 					double distance = (decoi.GetRD().Getx() - decoi.GetLU().Getx()) / (decoi.GetLU().Gety() - decoi.GetRD().Gety()) * decoi.GetLU().Gety() + decoi.GetLU().Getx();
 					if (distance > 0) {	//足元を排除
 						if (CalcDistance(center, telepo) > distance) {	//テレポ圏内ならfalse
-							//printfDx("判定！！\n");
+							//printfDx("出来ない！！！！\n");
 							return false;
 						}
 					}
 				}
 			}
 			else {//2.4象限
-				//printfDx("2.4!\n");
+				//printfDx("2.4\n");
 				decoi = square[i].GetMove(-center);	//平行移動して
 				RU.Set(decoi.GetRD().Getx(), decoi.GetLU().Gety());
 				LD.Set(decoi.GetLU().Getx(), decoi.GetRD().Gety());
@@ -756,7 +782,7 @@ bool SquareMng::isAbleTelepo(Dot center, Dot telepo) {
 					double distance = (decoi.GetRD().Getx() - decoi.GetLU().Getx()) / (decoi.GetLU().Gety() - decoi.GetRD().Gety()) * decoi.GetLU().Gety() + decoi.GetLU().Getx();
 					if (distance > 0) {	//足元を排除
 						if (CalcDistance(center, telepo) > distance) {	//テレポ圏内ならfalse
-							//printfDx("判定！！\n");
+							//printfDx("出来ない！！！！\n");
 							return false;
 						}
 					}
@@ -764,6 +790,7 @@ bool SquareMng::isAbleTelepo(Dot center, Dot telepo) {
 			}
 		}
 	}
+	//printfDx("出来る！！！！\n");
 	return true;
 }
 
@@ -785,6 +812,10 @@ int SquareMng::Delete() {
 /*----------------------------------------------*/
 int imageSquare::Setimage(int handle) {
 	image = handle;
+	return 0;
+}
+int imageSquare::Delete() {
+	isExist = false;
 	return 0;
 }
 SquareMng imageSquareMng::GetSquareMng() {
@@ -899,7 +930,7 @@ int imageSquareMng::SetWalls(int a[], int num, int stageflag,int square1_image,i
 }
 int imageSquareMng::Add(double a, double b, double c, double d, int handle) {
 	for (int i = 0; i < SQU_NUM; i++) {
-		if (!square[i].GetisExist()) {
+		if (!*square[i].Square::GetisExistAd()) {
 			square[i].Set(a, b, c, d);
 			square[i].Setimage(handle);
 			//printfDx("%d", i);
@@ -918,13 +949,13 @@ int imageSquareMng::SetPosi(int num, double a, double b, double c, double d) {
 }
 int imageSquareMng::Delete() {
 	for (int i = 0; i < SQU_NUM; i++) {
-		square[i].Square::Delete();
+		square[i].Delete();
 	}
 	return 0;
 }
 int imageSquareMng::Draw() {
 	for (int i = 0; i < SQU_NUM; i++) {
-		if (square[i].GetisExist()) {//存在すれば
+		if (*square[i].Square::GetisExistAd()) {//存在すれば
 			//DrawLine(square[i].GetLU().Getx(), square[i].GetLU().Gety(), square[i].GetRD().Getx(), square[i].GetRD().Gety(), RED);
 			square[i].Square::testDraw(GREEN);
 			square[i].Draw();

@@ -126,6 +126,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			StageLoad(stageFlag);
 			player.Set(stageFlag);
 			EnemyMngSet(stageFlag);
+			EffectMngDelete();
 			//SetKeyPosi();
 			//EnemyMngSet();
 			flag = 3;
@@ -143,7 +144,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				keepCount = count;
 				flag = 6;
 			}
-			player.Update2(GetStageWalls_judge(),count);
+			//if (stageFlag != 1) {
+				//player.Update2(GetStageWalls_judge(), count);
+			//}
+			//else if (stageFlag == 1) {
+				player.Update2(GetStageWalls_judge() + GetBriWall(), count);
+			//}
 			damage = EnemyMngUpdata(count, player.GetCenter());
 			if (player.GetStateFlag() != 7 && damage) {//É_ÉÅÅ[ÉWÇ™ï‘Ç¡ÇƒÇ≠ÇÈ
 				//count += damage * 30.0;
