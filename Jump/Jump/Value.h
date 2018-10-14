@@ -39,6 +39,8 @@ const double GRAVITY = 0.1;
 
 const int SQU_NUM = 20*2;
 
+const double TELEPO_DRAW_HEIGHT = 96.0;
+const double TELEPO_DRAW_WIDTH = 96.0;
 /*-----------------------------*/
 const double P_RATIO = 1.0;
 const double P_WEAK_LU_X = 32;

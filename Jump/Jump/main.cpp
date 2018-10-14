@@ -3,6 +3,7 @@
 #include"Player.h"
 #include"Stages.h"
 #include"EnemyMng.h"
+#include"Effect.h"
 #include"Value.h"
 #include"Chore.h"
 #include"fps.h"
@@ -34,6 +35,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	InputInitialize(key);
 	EnemyMngInitialize();
 	player.Initialize();
+	EffectMngInitialize();
 	StagesInitialize();
 	SystemInitialize();
 	SetRand();
@@ -164,10 +166,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			if (PAUSE == 1) {
 				flag = 9;
 			}
+			EffectMngUpdate(count);
 
 			DrawStage(stageFlag);
 			EnemyMngDraw();
 			player.Draw();
+			EffectMngDraw();
 			DrawUI(GetStageLimit() - sumdamage*30 - count);
 			DrawFormatString(DISP_WIDTH - 100, 100, RED, "%2d", sumdamage);
 			break;

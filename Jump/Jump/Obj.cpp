@@ -934,7 +934,7 @@ int imageSquareMng::Draw() {
 }
 int imageSquareMng::Draw(bool isRight) {
 	for (int i = 0; i < SQU_NUM; i++) {
-		if (square[i].GetisExist()) {//‘¶Ý‚·‚ê‚Î
+		if (square[i].Square::GetisExist()) {//‘¶Ý‚·‚ê‚Î
 			square[i].Square::testDraw(GREEN);
 			square[i].Draw(isRight);
 		}

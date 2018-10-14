@@ -2,10 +2,11 @@
 #include"DxLib.h"
 #include"Value.h"
 #include"Chore.h"
+#include"Effect.h"
 #include<math.h>
 
-int PDash[8];
-int PDashStart[4];
+int PDash[16];
+int PDashStart[8];
 int PisAir[3];
 int PJumpE[4];
 int PStand[3];
@@ -13,7 +14,8 @@ int PAttacks[46];
 int PAttackw[8];
 int PAttackair[8];
 
-int PTlp[2];
+int PTlp_targ1[4];
+int PTlp_targ2[4];
 
 int Attack_w;
 int Attack_s;
@@ -27,13 +29,13 @@ int Player::Initialize() {
 		a += ".png";
 		PStand[i] = LoadGraph(a.c_str());
 	}
-	for (int i = 0; i < 8; i++) {
+	for (int i = 0; i < 16; i++) {
 		std::string a = "images/player/dash/";
 		a += std::to_string(i+1);
 		a += ".png";
 		PDash[i] = LoadGraph(a.c_str());
 	}
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 8; i++) {
 		std::string a = "images/player/dash_start/";
 		a += std::to_string(i+1);
 		a += ".png";
@@ -69,11 +71,17 @@ int Player::Initialize() {
 		a += ".png";
 		PAttackair[i] = LoadGraph(a.c_str());
 	}
-	for (int i = 0; i < 2; i++) {
-		std::string a = "images/player/telepo/";
+	for (int i = 0; i < 4; i++) {
+		std::string a = "images/player/telepo_targ/left1/";
 		a += std::to_string(i + 1);
 		a += ".png";
-		PTlp[i] = LoadGraph(a.c_str());
+		PTlp_targ1[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 4; i++) {
+		std::string a = "images/player/telepo_targ/left2/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		PTlp_targ2[i] = LoadGraph(a.c_str());
 	}
 
 	/*
@@ -136,14 +144,15 @@ int Player::Set(int stageflag) {
 	acceptFlag = 1;
 	bodyClock = 0;
 	isRightFlag = 1;
-	SetStand(0);
+	//SetStand(0);
 	center.Set(P_START_POINT[2 * stageflag], P_START_POINT[2 * stageflag + 1]);
 	image.Add(center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() - P_DRAW_HEIGHT / 2.0, center.Getx() + P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0, PStand[0]);
 	image.Add(center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() - P_DRAW_HEIGHT / 2.0, center.Getx() + P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0, 0);
+	image.Add(telepo.Getx() - TELEPO_DRAW_WIDTH / 2.0, telepo.Gety() - TELEPO_DRAW_HEIGHT / 2.0, telepo.Getx() + TELEPO_DRAW_WIDTH / 2.0, telepo.Gety() + TELEPO_DRAW_HEIGHT / 2.0, 0);
 	attackAreaMng.Initialize();
 	velocity.Set(0, 0);
 	acceleration.Set(0, 0);
-	telepo_back.Set(0, 0);
+	//telepo_back.Set(0, 0);
 	isTelepo = false;
 	isFirstJump = true;
 	return 0;
@@ -183,40 +192,22 @@ int Player::SetDash(int count) {
 	return 0;
 }
 int Player::UpdateDash(int count) {
-
-	if (count < 2) {
-		image.Setimage(0, PDash[0]);
-		if (isFirstDash) image.Setimage(1, PDashStart[0]);
+	image.Setimage(0, PDash[0]);
+	for (int i = 0; i < 16; i++) {
+		if (count < i) {
+			image.Setimage(0, PDash[i]);
+			if (isFirstDash && count < 8)
+				image.Setimage(1, PDashStart[i]);
+			else
+				image.Setimage(1, 0);
+			break;
+		}
 	}
-	else if (count < 4) {
-		image.Setimage(0, PDash[1]);
-		if (isFirstDash) image.Setimage(1, PDashStart[1]);
-	}
-	else if (count < 6) {
-		image.Setimage(0, PDash[2]);
-		if (isFirstDash) image.Setimage(1, PDashStart[2]);
-	}
-	else if (count < 8) {
-		image.Setimage(0, PDash[3]);
-		if (isFirstDash) image.Setimage(1, PDashStart[3]);
-	}
-	else if (count < 10) {
-		image.Setimage(0, PDash[4]);
-		if (isFirstDash) image.Setimage(1, 0);
-	}
-	else if (count < 12) {
-		image.Setimage(0, PDash[5]);
-	}
-	else if (count < 14) {
-		image.Setimage(0, PDash[6]);
-	}
-	else if (count < 16) {
-		image.Setimage(0, PDash[7]);
-	}
-	else {
-		bodyClock += 15;
+	if (count >= 16) {
+		bodyClock += 16;
 		isFirstDash = false;
 	}
+	
 	return 0;
 }
 
@@ -274,8 +265,9 @@ int Player::UpdateAttack_w(int count) {
 	}
 
 	if (count == 3 || count == 4) {
-		if(isRightFlag) attackAreaMng.Add(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, 10);
-		else attackAreaMng.Add(center.Getx() - 210, center.Gety() - 210, center.Getx() + 90, center.Gety() + 30, 10);
+		//if(isRightFlag) attackAreaMng.Add(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, 10);
+		if (isRightFlag) attackAreaMng.Add(center.Getx() - 50, center.Gety() - 100, center.Getx() + 180, center.Gety() + 60, 10);
+		else attackAreaMng.Add(center.Getx() - 180, center.Gety() - 100, center.Getx() + 50, center.Gety() + 60, 10);
 		//DrawBox(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, RED, true);
 	}
 
@@ -313,14 +305,14 @@ int Player::UpdateAttack_air(int count) {
 
 	if (count >= 8) {
 		acceptFlag = true;
-		SetJump(0);
+		//SetJump(0);
+		image.Setimage(0, PisAir[3]);
 		isFirstJump = false;
 	}
 	if (count == 5)
 		PlayAttack_w();
 	return 0;
 }
-
 int Player::SetAttack_s(int count) {
 	bodyClock = count;
 	stateFlag = 3;
@@ -338,11 +330,16 @@ int Player::UpdateAttack_s(int count) {//40-1-5
 		}
 	}
 
+	if (count >= 28 && count <= 38) {
+		center.Move(6.4, 0);
+	}
+	if (count >= 40 && count <= 46) {
+		center.Move(-10.67, 0);
+	}
+
 	if (count == 41) {
-		if(isRightFlag) attackAreaMng.Add(center.Getx() - 30, center.Gety() - 60, center.Getx() + 120, center.Gety() + 30, 100);
-		else attackAreaMng.Add(center.Getx() - 120, center.Gety() - 60, center.Getx() + 30, center.Gety() + 30, 100);
-		//printfDx("SSSSS");
-		//DrawBox(center.Getx() - 30, center.Gety() - 60, center.Getx() + 120, center.Gety() + 30, RED, true);
+		if(isRightFlag) attackAreaMng.Add(center.Getx() - 0, center.Gety() - 60, center.Getx() + 170, center.Gety() + 30, 100);
+		else attackAreaMng.Add(center.Getx() - 170, center.Gety() - 60, center.Getx() + 0, center.Gety() + 30, 100);
 	}
 	if (count >= 46) {
 		acceptFlag = true;
@@ -351,6 +348,35 @@ int Player::UpdateAttack_s(int count) {//40-1-5
 
 	return 0;
 }
+
+int Player::SetTelepo(int count) {
+	bodyClock = count;
+	stateFlag = 6;
+	acceptFlag = false;
+	//acceleration.Set(0, 0);
+	//velocity.Set(0, 0);
+	//attack = 0;
+	return 0;
+}
+int Player::UpdateTelepo(int count) {//
+	for (int i = 0; i < 4; i++) {
+		if (count < i) {
+			if(telepoGauge < 100)
+				image.Setimage(2, PTlp_targ1[i]);
+			else
+				image.Setimage(2, PTlp_targ2[i]);
+			//printfDx("aaaaaa");
+			break;
+		}
+	}
+
+	if (count >= 4) {
+		bodyClock += 4;
+	}
+
+	return 0;
+}
+
 int Player::SetDamage(int count) {
 	bodyClock = count;
 	stateFlag = 7;
@@ -396,18 +422,22 @@ int Player::UpdateDamage(int count) {
 }
 
 int Player::Update1(int count,int key[]) {//ó‘Ô‰ñ‚è
+	image.Delete();
 	weakAreaMng.Delete();
 	attackAreaMng.Delete();
 
 	if (count % 30 == 0) {
 		telepoGauge += 1;
 	}
-
+	if (LEFT == 1 && telepoGauge >= 100) {
+		SetTelepo(count);
+	}
 	if (LEFT > 0 && telepoGauge >= 100) {
 		telepo.Set(center.Getx() + P_TLP_RANGE * cos(CalcDir(THUMB_X, THUMB_Y)), center.Gety() + P_TLP_RANGE * -sin(CalcDir(THUMB_X, THUMB_Y)));
 		isTelepo = true;
 	}
 	if (isTelepo && !LEFT) {
+		Tlp_appearMngBorn(count, center);
 		center = telepo;
 		telepoGauge -= 100;
 		if (acceleration.Gety() >= 0) {
@@ -416,6 +446,10 @@ int Player::Update1(int count,int key[]) {//ó‘Ô‰ñ‚è
 		}
 		isAir = true;
 		isTelepo = false;
+		acceptFlag = true;
+		stateFlag = 2;
+		image.Setimage(2, 0);
+		Tlp_disappearMngBorn(count, center);
 	}
 
 	if (acceptFlag) {//“ü—ÍŽó•tŽž
@@ -498,7 +532,7 @@ int Player::Update1(int count,int key[]) {//ó‘Ô‰ñ‚è
 		UpdateAttack_air(count - bodyClock);
 		break;
 	case 6:
-		//UpdateAttack_air(count - bodyClock);
+		UpdateTelepo(count - bodyClock);
 		break;
 	case 7:
 		UpdateDamage(count - bodyClock);
@@ -645,6 +679,7 @@ int Player::Update2(SquareMng a,int count) {//•Ç‚Ü‚í‚è‚Ìˆ—
 
 	image.SetPosi(0, center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() - P_DRAW_HEIGHT / 2.0, center.Getx() + P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0);
 	image.SetPosi(1, center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() - P_DRAW_HEIGHT / 2.0, center.Getx() + P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0);
+	image.SetPosi(2, telepo.Getx() - TELEPO_DRAW_WIDTH / 2.0, telepo.Gety() - TELEPO_DRAW_HEIGHT / 2.0, telepo.Getx() + TELEPO_DRAW_WIDTH / 2.0, telepo.Gety() + TELEPO_DRAW_HEIGHT / 2.0);
 
 	return 0;
 }
@@ -680,71 +715,11 @@ int Player::GetAttack() {
 
 int Player::Draw() {
 
-	//weakAreaMng.testDraw(BLUE);
-
-	//if (isRightFlag)
-	//	DrawModiGraph(//•`‰æ‚ð­‚µ‚¸‚ç‚·
-	//		center.Getx() - P_DRAW_WIDTH / 2, center.Gety() - P_DRAW_HEIGHT / 2,
-	//		center.Getx() + P_DRAW_WIDTH / 2, center.Gety() - P_DRAW_HEIGHT / 2,
-	//		center.Getx() + P_DRAW_WIDTH / 2, center.Gety() + P_DRAW_HEIGHT / 2,
-	//		center.Getx() - P_DRAW_WIDTH / 2, center.Gety() + P_DRAW_HEIGHT / 2,
-	//		image,true);
-	//else
-	//	DrawModiGraph(
-	//		center.Get_x() + P_D_WIDTH / 2, center.Get_y() - P_D_HEIGHT / 2 + P_DIFF_H,
-	//		center.Get_x() - P_D_WIDTH / 2, center.Get_y() - P_D_HEIGHT / 2 + P_DIFF_H,
-	//		center.Get_x() - P_D_WIDTH / 2, center.Get_y() + P_D_HEIGHT / 2 + P_DIFF_H,
-	//		center.Get_x() + P_D_WIDTH / 2, center.Get_y() + P_D_HEIGHT / 2 + P_DIFF_H,
-	//		image, true);
-	if (isTelepo) {
-		if (telepoGauge >= 200) {
-			DrawModiGraph(
-				telepo.Getx() - 30, telepo.Gety() - 30,
-				telepo.Getx() + 30, telepo.Gety() - 30,
-				telepo.Getx() + 30, telepo.Gety() + 30,
-				telepo.Getx() - 30, telepo.Gety() + 30,
-				PTlp[0], true);
-		}
-		else if (telepoGauge >= 100) {
-			DrawModiGraph(
-				telepo.Getx() - 30, telepo.Gety() - 30,
-				telepo.Getx() + 30, telepo.Gety() - 30,
-				telepo.Getx() + 30, telepo.Gety() + 30,
-				telepo.Getx() - 30, telepo.Gety() + 30,
-				PTlp[1], true);
-		}
-	}
-
 	image.Draw(isRightFlag);
 
-	//if(isRightFlag)
-	/*DrawModiGraph(
-		center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() - P_DRAW_HEIGHT / 2.0,
-		center.Getx() + P_DRAW_WIDTH / 2.0, center.Gety() - P_DRAW_HEIGHT / 2.0,
-		center.Getx() + P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0,
-		center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0,
-		image, true
-	);*/
 	DrawCircle(center.Getx(), center.Gety(), P_TLP_RANGE, RED, 0);
-	//DrawCircle(telepo.Getx(), telepo.Gety(), 30, RED, 1);
-	//DrawBox(telepo.Getx() - P_WEAK_LU_X, telepo.Gety() - P_WEAK_LU_Y, telepo.Getx() + P_WEAK_LU_X, telepo.Gety() + P_WEAK_LU_Y, RED, 0);
 
-	//if (attack > 0)
 	attackAreaMng.testDraw(RED);
-	/*for (int i = 0; i < SQU_NUM; i++) {
-		DrawBox(
-			attackAreaMng.GetSquare(i).GetLU().Getx(), attackAreaMng.GetSquare(i).GetLU().Gety(),
-			attackAreaMng.GetSquare(i).GetRD().Getx(), attackAreaMng.GetSquare(i).GetRD().Gety(), RED, 1);
-	}*/
-
-	//DrawBox(telepo_back.Getx() - 30, telepo_back.Gety() - 30, telepo_back.Getx() + 30, telepo_back.Gety() + 30, WHITE, false);
-
-	//DrawBox(center.Getx() - 96, center.Gety() - 96, center.Getx() + 96, center.Gety() + 96, BLUE, false);
-	//DrawBox(center.Getx() - 96*2, center.Gety() - 96 * 2, center.Getx() + 96 * 2, center.Gety() + 96 * 2, BLUE, false);
-
-	//DrawFormatString(0, 120, RED, "P_state:%d ,a:%f",stateFlag,acceleration.Gety());
-	//DrawFormatString(0, 0, RED, "P_state:%d,weaponFlag:%d,accept:%d", stateFlag, WeaponFlag,acceptFlag);
-	
 
 	return 0;
 }
