@@ -217,7 +217,7 @@ public:
 	//double GetUpLanding_tlp(Square area);
 	//double GetLeftLanding_tlp(Square area);
 	//double GetRightLanding_tlp(Square area);
-	Dot SetTelepo(Dot center, Dot telepo);
+	Dot SetTelepo(Dot center, Dot telepo, Square teleposqu);
 	bool isAbleTelepo(Dot center, Dot telepo);
 	int isHitSquareMng(SquareMng a);//1:LU 2:U 3:RU 4:R 5:RD 6:D 7:LD 8:L 0:“–‚½‚Á‚Ä‚È‚¢
 	//int isHitSquareMng(SquareMng a,imageSquareMng b);//1:LU 2:U 3:RU 4:R 5:RD 6:D 7:LD 8:L 0:“–‚½‚Á‚Ä‚È‚¢

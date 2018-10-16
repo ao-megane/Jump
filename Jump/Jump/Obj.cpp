@@ -670,7 +670,7 @@ double SquareMng::GetRightLanding(Square area) {
 					if (square[i].GetLU().Getx() + P_SPEED + 0 - area.GetRD().Getx() < a) {//‹ß‚¢‚â‚Â
 						a = square[i].GetLU().Getx() + P_SPEED  + 0 - area.GetRD().Getx();
 						//square[i].testDraw(RED);
-						b = i;
+b = i;
 					}
 				}
 			}
@@ -752,29 +752,45 @@ double SquareMng::GetRightLanding(Square area) {
 //	//return 0;
 //}
 
-Dot SquareMng::SetTelepo(Dot center, Dot telepo) {
-	telepo.Move(cos(CalcDir(center, telepo)), -sin(CalcDir(center, telepo)));//‚¿‚å‚Á‚Æ–ß‚·(ŒÌˆÓ‚É‚Ô‚Â‚¯‚È‚¨‚·)
+Dot SquareMng::SetTelepo(Dot center, Dot telepo,Square teleposqu) {
+	telepo.Move(3 * cos(CalcDir(center, telepo)), 3 * -sin(CalcDir(center, telepo)));//‚¿‚å‚Á‚Æ–ß‚·(ŒÌˆÓ‚É‚Ô‚Â‚¯‚È‚¨‚·)
 	Square decoi;
-	Dot kakashi;
+	Dot kakashi;//return —p
+	Dot oritelepo;
+	oritelepo = telepo;
 	kakashi = telepo;
 	//testDraw(RED);
 
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {	//‘¶Ý‚·‚ê‚Î
 			decoi = square[i].GetMove(-center);
-
+			telepo = oritelepo;
 			if ((telepo - center).Getx() >= 0 && (telepo - center).Gety() <= 0) {//‘æˆêÛŒÀ
+				telepo.Set(teleposqu.GetRD().Getx(), teleposqu.GetLU().Gety());
 				if (decoi.GetRD().Getx() >= 0 && decoi.GetLU().Gety() <= 0) {//”»’è‘ÎÛ
 					 //decoi.testDraw(RED);
 					if ((telepo - center).Getx() >= decoi.GetLU().Getx() && (telepo - center).Gety() <= decoi.GetRD().Gety()) {//ŽG”»’è
-						if (CalcDir(decoi.GetLU()) >= CalcDir(center, telepo) && CalcDir(decoi.GetRD()) <= CalcDir(center, telepo)) {//Šp“x‚Ü‚ÅŒ©‚é
+						if (CalcDir(decoi.GetLU()) >= CalcDir(center, telepo) && (CalcDir(decoi.GetRD()) <= CalcDir(center, telepo) || CalcDir(decoi.GetRD()) > PI / 2.0)) {//Šp“x‚Ü‚ÅŒ©‚é
 							//‚Ô‚Â‚©‚Á‚Ä‚ê‚Î
-							printfDx("a");
-							//if(CalcDir())
-							if (square[i].GetLU().Getx() <= kakashi.Getx())
-								kakashi.Setx(square[i].GetLU().Getx() - P_WEAK_LU_Y);
-							if (square[i].GetRD().Gety() <= kakashi.Gety())
-								kakashi.Sety(square[i].GetRD().Gety() + P_WEAK_LU_Y);
+							//printfDx("a");
+							if (CalcDir(decoi.GetRD()) > PI / 2.0){//c’·‘Î‰ž
+								//printfDx("e");
+								if (kakashi.Getx() > square[i].GetLU().Getx() - P_WEAK_LU_Y)
+									kakashi.Setx(square[i].GetLU().Getx() - P_WEAK_LU_Y);
+							}
+							else if (CalcDir(decoi.GetLU().Getx(), decoi.GetRD().Gety()) >= PI / 2.0) {//‰¡’·‘Î‰ž
+								if (kakashi.Gety() < square[i].GetRD().Gety() + P_WEAK_LU_Y)
+									kakashi.Sety(square[i].GetRD().Gety() + P_WEAK_LU_Y);
+							}
+							else if (CalcDir(decoi.GetLU().Getx(), decoi.GetRD().Gety()) >= CalcDir(center, telepo)) {
+								if(kakashi.Gety() < square[i].GetRD().Gety() + P_WEAK_LU_Y)
+									kakashi.Sety(square[i].GetRD().Gety() + P_WEAK_LU_Y);
+							}
+							else {
+								//printfDx("f");
+								if(kakashi.Getx() > square[i].GetLU().Getx() - P_WEAK_LU_Y)
+									kakashi.Setx(square[i].GetLU().Getx() - P_WEAK_LU_Y);
+							}
 						}
 					}
 				}
@@ -801,12 +817,32 @@ Dot SquareMng::SetTelepo(Dot center, Dot telepo) {
 				}
 			}
 			else if ((telepo - center).Getx() >= 0 && (telepo - center).Gety() >= 0) {//‘æŽlÛŒÀ
+				telepo.Set(teleposqu.GetRD().Getx(), teleposqu.GetRD().Gety());
 				if (decoi.GetRD().Getx() >= 0 && decoi.GetRD().Gety() >= 0) {
 					//decoi.testDraw(RED);
 					if ((telepo - center).Getx() >= decoi.GetLU().Getx() && (telepo - center).Gety() >= decoi.GetLU().Gety()) {//ŽG”»’è
-						if (CalcDir(decoi.GetRD().Getx(), decoi.GetLU().Gety()) >= CalcDir(center, telepo) && CalcDir(decoi.GetLU().Getx(), decoi.GetRD().Gety()) <= CalcDir(center, telepo)) {//Šp“x‚Ü‚ÅŒ©‚é
+						if ((CalcDir(decoi.GetRD().Getx(), decoi.GetLU().Gety()) >= CalcDir(center, telepo) || CalcDir(decoi.GetRD().Getx(), decoi.GetLU().Gety()) <= PI / 2.0) && CalcDir(decoi.GetLU().Getx(), decoi.GetRD().Gety()) <= CalcDir(center, telepo)) {//Šp“x‚Ü‚ÅŒ©‚é
 							//‚Ô‚Â‚©‚Á‚Ä‚ê‚Î
-
+							if (CalcDir(decoi.GetLU()) <= PI / 2.0) {//c’·‘Î‰ž
+								//printfDx("a");
+								if (kakashi.Getx() > square[i].GetLU().Getx() - P_WEAK_LU_Y)
+									kakashi.Setx(square[i].GetLU().Getx() - P_WEAK_LU_Y);
+							}
+							else if (CalcDir(decoi.GetLU()) <= 3.0 / 2.0 * PI) {//‰¡’·‘Î‰ž
+								//printfDx("b");
+								if (kakashi.Gety() > square[i].GetLU().Gety() - P_WEAK_LU_Y)
+									kakashi.Sety(square[i].GetLU().Gety() - P_WEAK_LU_Y);
+							}
+							else if (CalcDir(decoi.GetLU()) <= CalcDir(center, telepo)) {
+								//printfDx("c");
+								if (kakashi.Gety() > square[i].GetLU().Gety() - P_WEAK_LU_Y)
+									kakashi.Sety(square[i].GetLU().Gety() - P_WEAK_LU_Y);
+							}
+							else {
+								//printfDx("d");
+								if(kakashi.Getx() > square[i].GetLU().Getx() - P_WEAK_LU_Y)
+									kakashi.Setx(square[i].GetLU().Getx() - P_WEAK_LU_Y);
+							}
 						}
 					}
 				}
@@ -814,6 +850,7 @@ Dot SquareMng::SetTelepo(Dot center, Dot telepo) {
 		}
 	}
 	//printfDx("o—ˆ‚éIIII\n");
+	kakashi.Move(-3 * cos(CalcDir(center, telepo)), -3 * -sin(CalcDir(center, telepo)));//‚¿‚å‚Á‚Æ–ß‚·(ŒÌˆÓ‚É‚Ô‚Â‚¯‚È‚¨‚·)‚ð–ß‚·
 	return kakashi;
 }
 
@@ -832,7 +869,7 @@ bool SquareMng::isAbleTelepo(Dot center, Dot telepo) {
 				if (decoi.GetRD().Getx() >= 0 && decoi.GetLU().Gety() <= 0) {//”»’è‘ÎÛ
 					//decoi.testDraw(RED);
 					if ((telepo - center).Getx() >= decoi.GetLU().Getx() && (telepo - center).Gety() <= decoi.GetRD().Gety()) {//ŽG”»’è
-						if (CalcDir(decoi.GetLU()) >= CalcDir(center, telepo) && CalcDir(decoi.GetRD()) <= CalcDir(center, telepo)) {//Šp“x‚Ü‚ÅŒ©‚é
+						if (CalcDir(decoi.GetLU()) >= CalcDir(center, telepo) && (CalcDir(decoi.GetRD()) <= CalcDir(center, telepo) || CalcDir(decoi.GetRD()) > PI/2.0)) {//Šp“x‚Ü‚ÅŒ©‚é
 							return false;
 						}
 					}
@@ -862,7 +899,7 @@ bool SquareMng::isAbleTelepo(Dot center, Dot telepo) {
 				if (decoi.GetRD().Getx() >= 0 && decoi.GetRD().Gety() >= 0) {
 					//decoi.testDraw(RED);
 					if ((telepo - center).Getx() >= decoi.GetLU().Getx() && (telepo - center).Gety() >= decoi.GetLU().Gety()) {//ŽG”»’è
-						if (CalcDir(decoi.GetRD().Getx(),decoi.GetLU().Gety()) >= CalcDir(center, telepo) && CalcDir(decoi.GetLU().Getx(),decoi.GetRD().Gety()) <= CalcDir(center, telepo)) {//Šp“x‚Ü‚ÅŒ©‚é
+						if ((CalcDir(decoi.GetRD().Getx(),decoi.GetLU().Gety()) >= CalcDir(center, telepo) || CalcDir(decoi.GetRD().Getx(), decoi.GetLU().Gety()) <= PI/2.0)&& CalcDir(decoi.GetLU().Getx(),decoi.GetRD().Gety()) <= CalcDir(center, telepo)) {//Šp“x‚Ü‚ÅŒ©‚é
 							return false;
 						}
 					}
