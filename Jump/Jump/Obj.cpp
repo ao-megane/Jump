@@ -801,6 +801,22 @@ Dot SquareMng::SetTelepo(Dot center, Dot telepo,Square teleposqu) {
 					if ((telepo - center).Getx() <= decoi.GetRD().Getx() && (telepo - center).Gety() <= decoi.GetRD().Gety()) {//éGîªíË
 						if (CalcDir(decoi.GetLU().Getx(), decoi.GetRD().Gety()) >= CalcDir(center, telepo) && CalcDir(decoi.GetRD().Getx(), decoi.GetLU().Gety()) <= CalcDir(center, telepo)) {//äpìxÇ‹Ç≈å©ÇÈ
 							//Ç‘Ç¬Ç©Ç¡ÇƒÇÍÇŒ
+							if (CalcDir(decoi.GetRD()) >= PI * 3.0 / 2.0) {//ècí∑ëŒâû
+								if (kakashi.Getx() < square[i].GetRD().Getx() + P_WEAK_LU_Y)
+									kakashi.Setx(square[i].GetRD().Getx() + P_WEAK_LU_Y);
+							}
+							else if (CalcDir(decoi.GetRD()) <= 1.0 / 2.0 * PI) {//â°í∑ëŒâû
+								if (kakashi.Gety() < square[i].GetRD().Gety() + P_WEAK_LU_Y)
+									kakashi.Sety(square[i].GetRD().Gety() + P_WEAK_LU_Y);
+							}
+							else if (CalcDir(decoi.GetRD()) <= CalcDir(center, telepo)) {
+								if (kakashi.Gety() < square[i].GetRD().Gety() + P_WEAK_LU_Y)
+									kakashi.Sety(square[i].GetRD().Gety() + P_WEAK_LU_Y);
+							}
+							else {
+								if (kakashi.Getx() < square[i].GetRD().Getx() + P_WEAK_LU_Y)
+									kakashi.Setx(square[i].GetRD().Getx() + P_WEAK_LU_Y);
+							}
 						}
 					}
 				}
@@ -811,7 +827,22 @@ Dot SquareMng::SetTelepo(Dot center, Dot telepo,Square teleposqu) {
 					if ((telepo - center).Getx() <= decoi.GetRD().Getx() && (telepo - center).Gety() >= decoi.GetLU().Gety()) {//éGîªíË
 						if (CalcDir(decoi.GetRD()) >= CalcDir(center, telepo) && CalcDir(decoi.GetLU()) <= CalcDir(center, telepo)) {//äpìxÇ‹Ç≈å©ÇÈ
 							//Ç‘Ç¬Ç©Ç¡ÇƒÇÍÇŒ
-
+							if (CalcDir(decoi.GetLU()) <= PI ) {//ècí∑ëŒâû
+								if (kakashi.Getx() < square[i].GetRD().Getx() + P_WEAK_LU_Y)
+									kakashi.Setx(square[i].GetRD().Getx() + P_WEAK_LU_Y);
+							}
+							else if (CalcDir(decoi.GetRD()) >= 3.0 / 2.0 * PI) {//â°í∑ëŒâû
+								if (kakashi.Gety() > square[i].GetLU().Gety() - P_WEAK_LU_Y)
+									kakashi.Sety(square[i].GetLU().Gety() - P_WEAK_LU_Y);
+							}
+							else if (CalcDir(decoi.GetRD().Getx(),decoi.GetLU().Gety()) >= CalcDir(center, telepo)) {
+								if (kakashi.Gety() > square[i].GetLU().Gety() - P_WEAK_LU_Y)
+									kakashi.Sety(square[i].GetLU().Gety() - P_WEAK_LU_Y);
+							}
+							else {
+								if (kakashi.Getx() < square[i].GetRD().Getx() + P_WEAK_LU_Y)
+									kakashi.Setx(square[i].GetRD().Getx() + P_WEAK_LU_Y);
+							}
 						}
 					}
 				}
