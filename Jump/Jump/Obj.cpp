@@ -760,6 +760,7 @@ bool SquareMng::isAbleTelepo(Dot center, Dot telepo) {
 			if ((telepo - center).Getx()*(telepo - center).Gety() <= 0) {//1.3象限
 				//printfDx("1.3\n");
 				decoi = square[i].GetMove(-center);	//平行移動して
+
 				decoi.Rotate(-CalcDir(center, telepo));	//回転
 				if (decoi.GetLU().Gety() * decoi.GetRD().Gety() <= 0) {//横切ってる判定
 					double distance = (decoi.GetRD().Getx() - decoi.GetLU().Getx()) / (decoi.GetLU().Gety() - decoi.GetRD().Gety()) * decoi.GetLU().Gety() + decoi.GetLU().Getx();
@@ -769,10 +770,12 @@ bool SquareMng::isAbleTelepo(Dot center, Dot telepo) {
 							return false;
 						}
 					}
+					//DrawFormatString(300, 300, RED, "%f", distance);
 				}
 			}
 			else {//2.4象限
 				//printfDx("2.4\n");
+				//decoi = square[i];	//平行移動して
 				decoi = square[i].GetMove(-center);	//平行移動して
 
 				RU.Set(decoi.GetRD().Getx(), decoi.GetLU().Gety());
@@ -780,14 +783,19 @@ bool SquareMng::isAbleTelepo(Dot center, Dot telepo) {
 				decoi.Set(LD, RU);
 
 				decoi.Rotate(-CalcDir(center, telepo));	//回転
+
+				decoi.testDraw(RED);
+
 				if (decoi.GetLU().Gety() * decoi.GetRD().Gety() <= 0) {//横切ってる判定
+					
 					double distance = (decoi.GetRD().Getx() - decoi.GetLU().Getx()) / (decoi.GetLU().Gety() - decoi.GetRD().Gety()) * decoi.GetLU().Gety() + decoi.GetLU().Getx();
-					if (distance > 0) {	//足元を排除
-						if (CalcDistance(center, telepo) > distance) {	//テレポ圏内ならfalse
+					if (distance >= 0) {	//足元を排除
+						if (CalcDistance(center, telepo) >= distance) {	//テレポ圏内ならfalse
 							//printfDx("出来ない！！！！\n");
 							return false;
 						}
 					}
+					//DrawFormatString(300, 300, RED, "%f",distance);
 				}
 			}
 		}

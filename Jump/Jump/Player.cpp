@@ -369,6 +369,7 @@ int Player::UpdateTelepo(int count) {//
 			break;
 		}
 	}
+	UpdateStand(count);
 
 	if (count >= 4) {
 		bodyClock += 4;
@@ -436,7 +437,7 @@ int Player::Update1(int count,int key[]) {//状態回り
 		telepo.Set(center.Getx() + P_TLP_RANGE * cos(CalcDir(THUMB_X, THUMB_Y)), center.Gety() + P_TLP_RANGE * -sin(CalcDir(THUMB_X, THUMB_Y)));
 		isTelepo = true;
 	}
-	if (isTelepo && !LEFT) {
+	if (isTelepo && !LEFT) {//テレポ！！
 		Tlp_appearMngBorn(count, center);
 		center = telepo;
 		telepoGauge -= 100;
@@ -474,23 +475,28 @@ int Player::Update1(int count,int key[]) {//状態回り
 			}
 		}
 		else {//地上なら
-			if (THUMB_X > 0) {
-				if (stateFlag != 1) {
-					SetDash(count);
+			if (stateFlag != 6) {//テレポ中横移動はしない
+				if (THUMB_X > 0) {
+					if (stateFlag != 1) {
+						SetDash(count);
+					}
+					velocity.Setx(P_SPEED);
+					isRightFlag = true;
 				}
-				velocity.Setx(P_SPEED);
-				isRightFlag = true;
-			}
-			else if (THUMB_X < 0) {
-				if (stateFlag != 1) {
-					SetDash(count);
+				else if (THUMB_X < 0) {
+					if (stateFlag != 1) {
+						SetDash(count);
+					}
+					velocity.Setx(-P_SPEED);
+					isRightFlag = false;
 				}
-				velocity.Setx(-P_SPEED);
-				isRightFlag = false;
+				else {
+					if (stateFlag != 0) SetStand(count);
+					velocity.Setx(0);
+				}
 			}
 			else {
-				if (stateFlag != 0) SetStand(count);
-				velocity.Setx(0);
+				velocity.Set(0, 0);
 			}
 			if (B == 1) {
 				SetAttack_w(count);
@@ -595,6 +601,7 @@ int Player::Update2(SquareMng a,int count) {//壁まわりの処理
 					break;
 				case 6://D
 					telepo.Sety(a.GetLanding_tlp(tlpSquare) - P_WEAK_LU_Y);
+					//printfDx("D!\n");
 					break;
 				case 8://L
 					telepo.Setx(a.GetLeftLanding_tlp(tlpSquare) + P_WEAK_LU_X);

@@ -174,11 +174,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			EffectMngUpdate(count);
 
-			DrawStage(stageFlag);
+			//DrawStage(stageFlag);
 			EnemyMngDraw();
 			player.Draw();
-			EffectMngDraw();
-			DrawUI(GetStageLimit() - sumdamage*30 - count);
+			//EffectMngDraw();
+			DrawUI(GetStageLimit() - sumdamage * 30 - count);
 			DrawFormatString(DISP_WIDTH - 100, 100, RED, "%2d", sumdamage);
 			break;
 		case 5://gameover

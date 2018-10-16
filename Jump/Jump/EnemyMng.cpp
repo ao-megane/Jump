@@ -190,7 +190,7 @@ int EnemyMngSet(int stageFlag) {
 		break;
 	case 1://
 		drawn[0].Set(180, 300, 0, 0, 0, 0);
-		briWall[0].Set(1770, DISP_HEIGHT - 150, 0, 0, 0, 0);
+		briWall[0].Set(1770, DISP_HEIGHT - 130, 0, 0, 0, 0);
 		break;
 	case 2://テレポチュートリアル
 		junk[0].Set(90, 570, 0, 0, 0, 0);
