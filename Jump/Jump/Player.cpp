@@ -558,7 +558,7 @@ int Player::Update1(int count,int key[]) {//状態回り
 
 int Player::Update2(SquareMng a,int count) {//壁まわりの処理
 	//DrawFormatString(40, 80, RED, "%d", weakAreaMng.isHitSquareMng(a));
-
+	a.testDraw(GREEN);
 	/*-----------テレポ処理---------------*/
 	if (isTelepo) {	//テレポ中
 		for (int i = P_TLP_RANGE; i > 0; i--) {
@@ -568,53 +568,53 @@ int Player::Update2(SquareMng a,int count) {//壁まわりの処理
 				//printfDx("TLP");
 			}
 		}
-
+		telepo = a.SetTelepo(center, telepo);
 		
 		//telepo(壁内)ゲット
 		//テレポ先について，壁判定
-		Square tlpSquare;//壁内テレポを四角にした
-		tlpSquare.Set(telepo.Getx() - P_WEAK_LU_X, telepo.Gety() - P_WEAK_LU_Y, telepo.Getx() + P_WEAK_LU_X, telepo.Gety() + P_WEAK_LU_Y);
-		Dot tlpVel;
-		tlpVel.Set(50* cos(CalcDir(center, telepo)), 50 * -sin(CalcDir(center, telepo)));
-		//tlpVel.Set(15 * cos(CalcDir(center, telepo)), 15 * -sin(CalcDir(center, telepo)));//現テレポの一歩前(velocity)
+		//Square tlpSquare;//壁内テレポを四角にした
+		//tlpSquare.Set(telepo.Getx() - P_WEAK_LU_X, telepo.Gety() - P_WEAK_LU_Y, telepo.Getx() + P_WEAK_LU_X, telepo.Gety() + P_WEAK_LU_Y);
+		//Dot tlpVel;
+		//tlpVel.Set(50* cos(CalcDir(center, telepo)), 50 * -sin(CalcDir(center, telepo)));
+		////tlpVel.Set(15 * cos(CalcDir(center, telepo)), 15 * -sin(CalcDir(center, telepo)));//現テレポの一歩前(velocity)
 
-		tlpSquare.Set(-tlpVel.Getx() + telepo.Getx() - P_WEAK_LU_X, -tlpVel.Gety() + telepo.Gety() - P_WEAK_LU_Y, -tlpVel.Getx() + telepo.Getx() + P_WEAK_LU_X, -tlpVel.Gety() + telepo.Gety() + P_WEAK_LU_Y);
-		//tlpVel.Set(15 * cos(CalcDir(center, telepo)), 15 * -sin(CalcDir(center, telepo)));//現テレポの一歩前(velocity)
-		//tlpSquare.testDraw(BLUE);
-		
-		for (int i = 0; i < SQU_NUM; i++) {
-			if (a.GetSquare(i).GetisExist()) {//四角ごとに判定
-				switch (tlpSquare.isHitSquare(a.GetSquare(i), tlpVel))//ここできちんとめり込みまで判定できれば問題ない
-				//switch (tlpSquare.isHitSquare_tlp(a.GetSquare(i), telepo, center,tlpVel))
-				{
-				case 0://ぶつかってない
-					break;
-				case 2://U//直すべきはこのあたりか
-					telepo.Sety(a.GetUpLanding_tlp(tlpSquare) + P_WEAK_LU_Y);
-					//telepo.Sety(a.GetUpLanding_tlp(Dot center, Dot telepo));
-					//printfDx("U:%d\n", i);
-					break;
-				case 4://R
-					telepo.Setx(a.GetRightLanding_tlp(tlpSquare) - P_WEAK_LU_X);
-					//printfDx("RIGHT!!!\n");
-					//printfDx("R!\n");
-					break;
-				case 6://D
-					telepo.Sety(a.GetLanding_tlp(tlpSquare) - P_WEAK_LU_Y);
-					//printfDx("D!\n");
-					break;
-				case 8://L
-					telepo.Setx(a.GetLeftLanding_tlp(tlpSquare) + P_WEAK_LU_X);
-					//printfDx("L:%d\n", i);
-					break;
-				default:
-					break;
-				}
-			}
-		}
-		if (CalcDistance(telepo - center) > P_TLP_RANGE+30) {
-			telepo = center;
-		}
+		//tlpSquare.Set(-tlpVel.Getx() + telepo.Getx() - P_WEAK_LU_X, -tlpVel.Gety() + telepo.Gety() - P_WEAK_LU_Y, -tlpVel.Getx() + telepo.Getx() + P_WEAK_LU_X, -tlpVel.Gety() + telepo.Gety() + P_WEAK_LU_Y);
+		////tlpVel.Set(15 * cos(CalcDir(center, telepo)), 15 * -sin(CalcDir(center, telepo)));//現テレポの一歩前(velocity)
+		////tlpSquare.testDraw(BLUE);
+		//
+		//for (int i = 0; i < SQU_NUM; i++) {
+		//	if (a.GetSquare(i).GetisExist()) {//四角ごとに判定
+		//		switch (tlpSquare.isHitSquare(a.GetSquare(i), tlpVel))//ここできちんとめり込みまで判定できれば問題ない
+		//		//switch (tlpSquare.isHitSquare_tlp(a.GetSquare(i), telepo, center,tlpVel))
+		//		{
+		//		case 0://ぶつかってない
+		//			break;
+		//		case 2://U//直すべきはこのあたりか
+		//			telepo.Sety(a.GetUpLanding_tlp(tlpSquare) + P_WEAK_LU_Y);
+		//			//telepo.Sety(a.GetUpLanding_tlp(Dot center, Dot telepo));
+		//			//printfDx("U:%d\n", i);
+		//			break;
+		//		case 4://R
+		//			telepo.Setx(a.GetRightLanding_tlp(tlpSquare) - P_WEAK_LU_X);
+		//			//printfDx("RIGHT!!!\n");
+		//			//printfDx("R!\n");
+		//			break;
+		//		case 6://D
+		//			telepo.Sety(a.GetLanding_tlp(tlpSquare) - P_WEAK_LU_Y);
+		//			//printfDx("D!\n");
+		//			break;
+		//		case 8://L
+		//			telepo.Setx(a.GetLeftLanding_tlp(tlpSquare) + P_WEAK_LU_X);
+		//			//printfDx("L:%d\n", i);
+		//			break;
+		//		default:
+		//			break;
+		//		}
+		//	}
+		//}
+		//if (CalcDistance(telepo - center) > P_TLP_RANGE+30) {
+		//	telepo = center;
+		//}
 	}
 	
 	//プレイヤーの位置について，壁判定

@@ -213,10 +213,11 @@ public:
 	double GetUpLanding(Square area);
 	double GetLeftLanding(Square area);
 	double GetRightLanding(Square area);
-	double GetLanding_tlp(Square area);//テレポ先をどうはじくか
-	double GetUpLanding_tlp(Square area);
-	double GetLeftLanding_tlp(Square area);
-	double GetRightLanding_tlp(Square area);
+	//double GetLanding_tlp(Square area);//テレポ先をどうはじくか
+	//double GetUpLanding_tlp(Square area);
+	//double GetLeftLanding_tlp(Square area);
+	//double GetRightLanding_tlp(Square area);
+	Dot SetTelepo(Dot center, Dot telepo);
 	bool isAbleTelepo(Dot center, Dot telepo);
 	int isHitSquareMng(SquareMng a);//1:LU 2:U 3:RU 4:R 5:RD 6:D 7:LD 8:L 0:当たってない
 	//int isHitSquareMng(SquareMng a,imageSquareMng b);//1:LU 2:U 3:RU 4:R 5:RD 6:D 7:LD 8:L 0:当たってない

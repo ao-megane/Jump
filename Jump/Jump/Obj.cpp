@@ -679,123 +679,193 @@ double SquareMng::GetRightLanding(Square area) {
 	return square[b].GetLU().Getx();
 }
 
-double SquareMng::GetLanding_tlp(Square area) {//areaはSquareMngのどこに着地するか
-	double a = DISP_HEIGHT * 2.0;
-	int b = 0;
+//double SquareMng::GetLanding_tlp(Square area) {//areaはSquareMngのどこに着地するか
+//	double a = DISP_HEIGHT * 2.0;
+//	int b = 0;
+//	for (int i = 0; i < SQU_NUM; i++) {
+//		if (square[i].GetisExist()) {	//四角が存在して
+//			if (!(square[i].GetLU().Getx() > area.GetRD().Getx()) && !(area.GetLU().Getx() > square[i].GetRD().Getx())) {	//横方向判定
+//				if (square[i].GetLU().Gety() + 60 >= area.GetRD().Gety()) {	//縦方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
+//					if (square[i].GetLU().Gety() + 60 - area.GetRD().Gety() < a) {//近いやつ
+//						a = square[i].GetLU().Gety() + 60 - area.GetRD().Gety();
+//						b = i;
+//					}
+//				}
+//			}
+//		}
+//	}
+//	return square[b].GetLU().Gety();
+//}
+//double SquareMng::GetUpLanding_tlp(Square area) {
+//	double a = DISP_HEIGHT;
+//	int b = 0;
+//	for (int i = 0; i < SQU_NUM; i++) {
+//		if (square[i].GetisExist()) {	//四角が存在して
+//			if (!(square[i].GetLU().Getx() > area.GetRD().Getx()) && !(area.GetLU().Getx() > square[i].GetRD().Getx())) {	//横方向判定
+//				if (square[i].GetRD().Gety() - 60 <= area.GetLU().Gety()) {	//縦方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
+//					if (area.GetLU().Gety() - square[i].GetRD().Gety() + 60 < a) {//近いやつ
+//						a = area.GetLU().Gety() - square[i].GetRD().Gety() + 60;
+//						b = i;
+//					}
+//				}
+//			}
+//		}
+//	}
+//	return square[b].GetRD().Gety();
+//}
+//double SquareMng::GetLeftLanding_tlp(Square area) {
+//	double a = DISP_WIDTH;
+//	int b = 0;
+//	for (int i = 0; i < SQU_NUM; i++) {
+//		if (square[i].GetisExist()) {	//四角が存在して
+//			if (!(square[i].GetLU().Gety() >= area.GetRD().Gety()) && !(area.GetLU().Gety() >= square[i].GetRD().Gety())) {	//縦方向判定
+//				if (square[i].GetRD().Getx() - 60 <= area.GetLU().Getx()) {	//横方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
+//					if (area.GetLU().Getx() - square[i].GetLU().Getx() + 60 < a) {//近いやつ
+//						a = area.GetLU().Getx() - square[i].GetLU().Getx() + 60;
+//						//square[i].testDraw(RED);
+//						b = i;
+//					}
+//				}
+//			}
+//		}
+//	}
+//	return square[b].GetRD().Getx();
+//}
+//double SquareMng::GetRightLanding_tlp(Square area) {//壁がテレポ先を読んでる
+//	double a = DISP_WIDTH;
+//	int b = 0;
+//	for (int i = 0; i < SQU_NUM; i++) {
+//		if (square[i].GetisExist()) {	//四角が存在して
+//			if (!(square[i].GetLU().Gety() >= area.GetRD().Gety()) && !(area.GetLU().Gety() >= square[i].GetRD().Gety())) {	//縦方向判定
+//				if (square[i].GetLU().Getx() + 60 >= area.GetRD().Getx()) {	//横方向判定,RDはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
+//					if (square[i].GetLU().Getx() + 60 - area.GetRD().Getx() < a) {//近いやつ
+//						a = square[i].GetLU().Getx() + 60 - area.GetRD().Getx();
+//						//square[i].testDraw(RED);
+//						b = i;
+//					}
+//				}
+//			}
+//		}
+//	}
+//	//printfDx("RIGHT!!!\n");
+//	return square[b].GetLU().Getx();
+//	//return 0;
+//}
+
+Dot SquareMng::SetTelepo(Dot center, Dot telepo) {
+	telepo.Move(cos(CalcDir(center, telepo)), -sin(CalcDir(center, telepo)));//ちょっと戻す(故意にぶつけなおす)
+	Square decoi;
+	Dot kakashi;
+	kakashi = telepo;
+	//testDraw(RED);
+
 	for (int i = 0; i < SQU_NUM; i++) {
-		if (square[i].GetisExist()) {	//四角が存在して
-			if (!(square[i].GetLU().Getx() > area.GetRD().Getx()) && !(area.GetLU().Getx() > square[i].GetRD().Getx())) {	//横方向判定
-				if (square[i].GetLU().Gety() + 60 >= area.GetRD().Gety()) {	//縦方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
-					if (square[i].GetLU().Gety() + 60 - area.GetRD().Gety() < a) {//近いやつ
-						a = square[i].GetLU().Gety() + 60 - area.GetRD().Gety();
-						b = i;
+		if (square[i].GetisExist()) {	//存在すれば
+			decoi = square[i].GetMove(-center);
+
+			if ((telepo - center).Getx() >= 0 && (telepo - center).Gety() <= 0) {//第一象限
+				if (decoi.GetRD().Getx() >= 0 && decoi.GetLU().Gety() <= 0) {//判定対象
+					 //decoi.testDraw(RED);
+					if ((telepo - center).Getx() >= decoi.GetLU().Getx() && (telepo - center).Gety() <= decoi.GetRD().Gety()) {//雑判定
+						if (CalcDir(decoi.GetLU()) >= CalcDir(center, telepo) && CalcDir(decoi.GetRD()) <= CalcDir(center, telepo)) {//角度まで見る
+							//ぶつかってれば
+							printfDx("a");
+							//if(CalcDir())
+							if (square[i].GetLU().Getx() <= kakashi.Getx())
+								kakashi.Setx(square[i].GetLU().Getx() - P_WEAK_LU_Y);
+							if (square[i].GetRD().Gety() <= kakashi.Gety())
+								kakashi.Sety(square[i].GetRD().Gety() + P_WEAK_LU_Y);
+						}
+					}
+				}
+			}
+			else if ((telepo - center).Getx() <= 0 && (telepo - center).Gety() <= 0) {//第二象限
+				if (decoi.GetLU().Getx() <= 0 && decoi.GetLU().Gety() <= 0) {
+					//decoi.testDraw(RED);
+					if ((telepo - center).Getx() <= decoi.GetRD().Getx() && (telepo - center).Gety() <= decoi.GetRD().Gety()) {//雑判定
+						if (CalcDir(decoi.GetLU().Getx(), decoi.GetRD().Gety()) >= CalcDir(center, telepo) && CalcDir(decoi.GetRD().Getx(), decoi.GetLU().Gety()) <= CalcDir(center, telepo)) {//角度まで見る
+							//ぶつかってれば
+						}
+					}
+				}
+			}
+			else if ((telepo - center).Getx() <= 0 && (telepo - center).Gety() >= 0) {//第三象限
+				if (decoi.GetLU().Getx() <= 0 && decoi.GetRD().Gety() >= 0) {
+					//decoi.testDraw(RED);
+					if ((telepo - center).Getx() <= decoi.GetRD().Getx() && (telepo - center).Gety() >= decoi.GetLU().Gety()) {//雑判定
+						if (CalcDir(decoi.GetRD()) >= CalcDir(center, telepo) && CalcDir(decoi.GetLU()) <= CalcDir(center, telepo)) {//角度まで見る
+							//ぶつかってれば
+
+						}
+					}
+				}
+			}
+			else if ((telepo - center).Getx() >= 0 && (telepo - center).Gety() >= 0) {//第四象限
+				if (decoi.GetRD().Getx() >= 0 && decoi.GetRD().Gety() >= 0) {
+					//decoi.testDraw(RED);
+					if ((telepo - center).Getx() >= decoi.GetLU().Getx() && (telepo - center).Gety() >= decoi.GetLU().Gety()) {//雑判定
+						if (CalcDir(decoi.GetRD().Getx(), decoi.GetLU().Gety()) >= CalcDir(center, telepo) && CalcDir(decoi.GetLU().Getx(), decoi.GetRD().Gety()) <= CalcDir(center, telepo)) {//角度まで見る
+							//ぶつかってれば
+
+						}
 					}
 				}
 			}
 		}
 	}
-	return square[b].GetLU().Gety();
-}
-double SquareMng::GetUpLanding_tlp(Square area) {
-	double a = DISP_HEIGHT;
-	int b = 0;
-	for (int i = 0; i < SQU_NUM; i++) {
-		if (square[i].GetisExist()) {	//四角が存在して
-			if (!(square[i].GetLU().Getx() > area.GetRD().Getx()) && !(area.GetLU().Getx() > square[i].GetRD().Getx())) {	//横方向判定
-				if (square[i].GetRD().Gety() - 60 <= area.GetLU().Gety()) {	//縦方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
-					if (area.GetLU().Gety() - square[i].GetRD().Gety() + 60 < a) {//近いやつ
-						a = area.GetLU().Gety() - square[i].GetRD().Gety() + 60;
-						b = i;
-					}
-				}
-			}
-		}
-	}
-	return square[b].GetRD().Gety();
-}
-double SquareMng::GetLeftLanding_tlp(Square area) {
-	double a = DISP_WIDTH;
-	int b = 0;
-	for (int i = 0; i < SQU_NUM; i++) {
-		if (square[i].GetisExist()) {	//四角が存在して
-			if (!(square[i].GetLU().Gety() >= area.GetRD().Gety()) && !(area.GetLU().Gety() >= square[i].GetRD().Gety())) {	//縦方向判定
-				if (square[i].GetRD().Getx() - 60 <= area.GetLU().Getx()) {	//横方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
-					if (area.GetLU().Getx() - square[i].GetLU().Getx() + 60 < a) {//近いやつ
-						a = area.GetLU().Getx() - square[i].GetLU().Getx() + 60;
-						//square[i].testDraw(RED);
-						b = i;
-					}
-				}
-			}
-		}
-	}
-	return square[b].GetRD().Getx();
-}
-double SquareMng::GetRightLanding_tlp(Square area) {//壁がテレポ先を読んでる
-	double a = DISP_WIDTH;
-	int b = 0;
-	for (int i = 0; i < SQU_NUM; i++) {
-		if (square[i].GetisExist()) {	//四角が存在して
-			if (!(square[i].GetLU().Gety() >= area.GetRD().Gety()) && !(area.GetLU().Gety() >= square[i].GetRD().Gety())) {	//縦方向判定
-				if (square[i].GetLU().Getx() + 60 >= area.GetRD().Getx()) {	//横方向判定,RDはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
-					if (square[i].GetLU().Getx() + 60 - area.GetRD().Getx() < a) {//近いやつ
-						a = square[i].GetLU().Getx() + 60 - area.GetRD().Getx();
-						//square[i].testDraw(RED);
-						b = i;
-					}
-				}
-			}
-		}
-	}
-	//printfDx("RIGHT!!!\n");
-	return square[b].GetLU().Getx();
-	//return 0;
+	//printfDx("出来る！！！！\n");
+	return kakashi;
 }
 
 bool SquareMng::isAbleTelepo(Dot center, Dot telepo) {
 	Square decoi;
 	Dot RU, LD;
+	//testDraw(RED);
+
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {	//存在すれば
-			if ((telepo - center).Getx()*(telepo - center).Gety() <= 0) {//1.3象限
-				//printfDx("1.3\n");
-				decoi = square[i].GetMove(-center);	//平行移動して
+			//square[i].testDraw(RED);
+			decoi = square[i].GetMove(-center);
+			//decoi.testDraw(GREEN);
 
-				decoi.Rotate(-CalcDir(center, telepo));	//回転
-				if (decoi.GetLU().Gety() * decoi.GetRD().Gety() <= 0) {//横切ってる判定
-					double distance = (decoi.GetRD().Getx() - decoi.GetLU().Getx()) / (decoi.GetLU().Gety() - decoi.GetRD().Gety()) * decoi.GetLU().Gety() + decoi.GetLU().Getx();
-					if (distance > 0) {	//足元を排除
-						if (CalcDistance(center, telepo) > distance) {	//テレポ圏内ならfalse
-							//printfDx("出来ない！！！！\n");
+			if ((telepo - center).Getx() >= 0 && (telepo - center).Gety() <= 0) {//第一象限
+				if (decoi.GetRD().Getx() >= 0 && decoi.GetLU().Gety() <= 0) {//判定対象
+					//decoi.testDraw(RED);
+					if ((telepo - center).Getx() >= decoi.GetLU().Getx() && (telepo - center).Gety() <= decoi.GetRD().Gety()) {//雑判定
+						if (CalcDir(decoi.GetLU()) >= CalcDir(center, telepo) && CalcDir(decoi.GetRD()) <= CalcDir(center, telepo)) {//角度まで見る
 							return false;
 						}
 					}
-					//DrawFormatString(300, 300, RED, "%f", distance);
 				}
 			}
-			else {//2.4象限
-				//printfDx("2.4\n");
-				//decoi = square[i];	//平行移動して
-				decoi = square[i].GetMove(-center);	//平行移動して
-
-				RU.Set(decoi.GetRD().Getx(), decoi.GetLU().Gety());
-				LD.Set(decoi.GetLU().Getx(), decoi.GetRD().Gety());
-				decoi.Set(LD, RU);
-
-				decoi.Rotate(-CalcDir(center, telepo));	//回転
-
-				decoi.testDraw(RED);
-
-				if (decoi.GetLU().Gety() * decoi.GetRD().Gety() <= 0) {//横切ってる判定
-					
-					double distance = (decoi.GetRD().Getx() - decoi.GetLU().Getx()) / (decoi.GetLU().Gety() - decoi.GetRD().Gety()) * decoi.GetLU().Gety() + decoi.GetLU().Getx();
-					if (distance >= 0) {	//足元を排除
-						if (CalcDistance(center, telepo) >= distance) {	//テレポ圏内ならfalse
-							//printfDx("出来ない！！！！\n");
+			else if ((telepo - center).Getx() <= 0 && (telepo - center).Gety() <= 0) {//第二象限
+				if (decoi.GetLU().Getx() <= 0 && decoi.GetLU().Gety() <= 0) {
+					//decoi.testDraw(RED);
+					if ((telepo - center).Getx() <= decoi.GetRD().Getx() && (telepo - center).Gety() <= decoi.GetRD().Gety()) {//雑判定
+						if (CalcDir(decoi.GetLU().Getx(),decoi.GetRD().Gety()) >= CalcDir(center, telepo) && CalcDir(decoi.GetRD().Getx(),decoi.GetLU().Gety()) <= CalcDir(center, telepo)) {//角度まで見る
 							return false;
 						}
 					}
-					//DrawFormatString(300, 300, RED, "%f",distance);
+				}
+			}
+			else if ((telepo - center).Getx() <= 0 && (telepo - center).Gety() >= 0) {//第三象限
+				if (decoi.GetLU().Getx() <= 0 && decoi.GetRD().Gety() >= 0) {
+					//decoi.testDraw(RED);
+					if ((telepo - center).Getx() <= decoi.GetRD().Getx() && (telepo - center).Gety() >= decoi.GetLU().Gety()) {//雑判定
+						if (CalcDir(decoi.GetRD()) >= CalcDir(center, telepo) && CalcDir(decoi.GetLU()) <= CalcDir(center, telepo)) {//角度まで見る
+							return false;
+						}
+					}
+				}
+			}
+			else if ((telepo - center).Getx() >= 0 && (telepo - center).Gety() >= 0) {//第四象限
+				if (decoi.GetRD().Getx() >= 0 && decoi.GetRD().Gety() >= 0) {
+					//decoi.testDraw(RED);
+					if ((telepo - center).Getx() >= decoi.GetLU().Getx() && (telepo - center).Gety() >= decoi.GetLU().Gety()) {//雑判定
+						if (CalcDir(decoi.GetRD().Getx(),decoi.GetLU().Gety()) >= CalcDir(center, telepo) && CalcDir(decoi.GetLU().Getx(),decoi.GetRD().Gety()) <= CalcDir(center, telepo)) {//角度まで見る
+							return false;
+						}
+					}
 				}
 			}
 		}
