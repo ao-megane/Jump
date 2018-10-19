@@ -796,6 +796,7 @@ Dot SquareMng::SetTelepo(Dot center, Dot telepo,Square teleposqu) {
 				}
 			}
 			else if ((telepo - center).Getx() <= 0 && (telepo - center).Gety() <= 0) {//‘æ“ñÛŒÀ
+				telepo.Set(teleposqu.GetLU().Getx(), teleposqu.GetLU().Gety());
 				if (decoi.GetLU().Getx() <= 0 && decoi.GetLU().Gety() <= 0) {
 					//decoi.testDraw(RED);
 					if ((telepo - center).Getx() <= decoi.GetRD().Getx() && (telepo - center).Gety() <= decoi.GetRD().Gety()) {//ŽG”»’è
