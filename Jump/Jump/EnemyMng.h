@@ -10,6 +10,7 @@ public:
 	int Set(int x, int y);
 	int Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy);
 	int SetHP(int hp);
+	int JudgeWall(SquareMng walls,double speed);
 	intSquareMng* GetattackMngAd();
 	Dot* GetcenterAd();
 	imageSquareMng* GetimageMngAd();
@@ -21,6 +22,7 @@ protected:
 	bool isRight;
 	int bodyClock;
 	Dot center;
+	Dot velocity;
 	imageSquareMng imageMng;
 	intSquareMng attackMng;
 	SquareMng weakMng;

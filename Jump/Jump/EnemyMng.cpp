@@ -54,56 +54,63 @@ int Enemy::SetHP(int a) {
 	HP = a;
 	return 0;
 }
-
-int Drawn::Updata(int count, Dot Pcenter,SquareMng walls) {
-	Dot velocity;
-	velocity.Set(DRAWN_SPEED * cos(CalcDir(center, Pcenter)), DRAWN_SPEED * -sin(CalcDir(center, Pcenter)));
-	//center動いたりする
-	Enemy::GetcenterAd()->Move(velocity.Getx(), velocity.Gety());
-
-	Enemy::GetweakMngAd()->SquareMng::Delete();
-	Enemy::GetweakMngAd()->Add(Enemy::GetcenterAd()->Getx() - DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DRAWN_W_HEIGHT / 2.0,
-		Enemy::GetcenterAd()->Getx() + DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_W_HEIGHT / 2.0);
-
-	if (Enemy::stateFlag == 3) {
-		//printfDx("ダメージ！\n");
-		UpdataDamage(count - Enemy::bodyClock);
-	}
-
+int Enemy::JudgeWall(SquareMng walls,double speed) {
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (walls.GetSquare(i).GetisExist()) {//四角ごとに判定
-			switch (Enemy::GetweakMngAd()->GetSquare(0).isHitSquare(walls.GetSquare(i), velocity))//ここできちんとめり込みまで判定できれば問題ない
+			switch (weakMng.GetSquare(0).isHitSquare(walls.GetSquare(i), velocity))//ここできちんとめり込みまで判定できれば問題ない
 			{
 			case 0://ぶつかってない
 				break;
 			case 2://U
-				Enemy::GetcenterAd()->Sety(walls.GetUpLanding(Enemy::GetweakMngAd()->GetSquare(0), DRAWN_SPEED) + DRAWN_W_HEIGHT / 2.0);
+				center.Sety(walls.GetUpLanding(weakMng.GetSquare(0), speed) + DRAWN_W_HEIGHT / 2.0);
+				//printfDx("U");
 				break;
 			case 4://R
-				Enemy::GetcenterAd()->Setx(walls.GetRightLanding(Enemy::GetweakMngAd()->GetSquare(0), DRAWN_SPEED) - DRAWN_W_HEIGHT / 2.0);
+				center.Setx(walls.GetRightLanding(weakMng.GetSquare(0), speed) - DRAWN_W_HEIGHT / 2.0);
+				//printfDx("R");
 				break;
 			case 6://D
-				Enemy::GetcenterAd()->Sety(walls.GetLanding(Enemy::GetweakMngAd()->GetSquare(0), DRAWN_SPEED) - DRAWN_W_WIDTH / 2.0);
+				center.Sety(walls.GetLanding(weakMng.GetSquare(0), speed) - DRAWN_W_WIDTH / 2.0);
+				//printfDx("D");
 				break;
 			case 8://L
-				Enemy::GetcenterAd()->Setx(walls.GetLeftLanding(Enemy::GetweakMngAd()->GetSquare(0), DRAWN_SPEED) + DRAWN_W_WIDTH / 2.0);
+				center.Setx(walls.GetLeftLanding(weakMng.GetSquare(0), speed) + DRAWN_W_WIDTH / 2.0);
+				//printfDx("L");
 				break;
 			default:
 				break;
 			}
 		}
 	}
+	return 0;
+}
 
+int Drawn::Updata(int count, Dot Pcenter,SquareMng walls) {
 	Enemy::GetattackMngAd()->Delete();
-	Enemy::GetweakMngAd()->SquareMng::Delete();
+	Enemy::GetweakMngAd()->Delete();
 	Enemy::GetimageMngAd()->Delete();
 
-	Enemy::GetattackMngAd()->Add(Enemy::GetcenterAd()->Getx() - DRAWN_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DRAWN_A_HEIGHT / 2.0,
-		Enemy::GetcenterAd()->Getx() + DRAWN_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_A_HEIGHT / 2.0, 10);
+	/*-------状態セット系-------*/
+	if (Enemy::stateFlag == 3) {
+		//printfDx("ダメージ！\n");
+		UpdataDamage(count - Enemy::bodyClock);
+	}
 
+	/*--------状態セット終わったら移動系-----------*/
+	velocity.Set(DRAWN_SPEED * cos(CalcDir(center, Pcenter)), DRAWN_SPEED * -sin(CalcDir(center, Pcenter)));
+	Enemy::GetcenterAd()->Move(velocity.Getx(), velocity.Gety());
 	Enemy::GetweakMngAd()->Add(Enemy::GetcenterAd()->Getx() - DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DRAWN_W_HEIGHT / 2.0,
 		Enemy::GetcenterAd()->Getx() + DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_W_HEIGHT / 2.0);
 
+	JudgeWall(walls, DRAWN_SPEED);//center更新
+
+
+	Enemy::GetweakMngAd()->SquareMng::Delete();
+
+	Enemy::GetattackMngAd()->Add(Enemy::GetcenterAd()->Getx() - DRAWN_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DRAWN_A_HEIGHT / 2.0,
+		Enemy::GetcenterAd()->Getx() + DRAWN_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_A_HEIGHT / 2.0, 10);
+	Enemy::GetweakMngAd()->Add(Enemy::GetcenterAd()->Getx() - DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DRAWN_W_HEIGHT / 2.0,
+		Enemy::GetcenterAd()->Getx() + DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_W_HEIGHT / 2.0);
 	Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DRAWN_W_HEIGHT / 2.0,
 		Enemy::GetcenterAd()->Getx() + DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_W_HEIGHT / 2.0,DrawnStand1);
 	

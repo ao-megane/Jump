@@ -104,42 +104,44 @@ int Square::Rotate(double thita) {
 	return 0;
 }
 
-int Square::isHitSquare(Square a,Dot velocity) {//“ñ•ÓÚ’n‚ª–¢À‘• -> velocity‚ÅÀ‘•
+int Square::isHitSquare(Square walls,Dot velocity) {//“ñ•ÓÚ’n‚ª–¢À‘• -> velocity‚ÅÀ‘•
 	bool L = false, R = false, U = false, D = false;
-	if (*this & a) {
-		if (LU.Gety() <= a.GetLU().Gety() && a.GetLU().Gety() <= RD.Gety()) {//‰º‚Å‚Ô‚Â‚©‚Á‚Ä‚é(G‚ê‚Ä‚¢‚é)
+	if (*this & walls) {
+		if (LU.Gety() <= walls.GetLU().Gety() && walls.GetLU().Gety() <= RD.Gety()) {//‰º‚Å‚Ô‚Â‚©‚Á‚Ä‚é(G‚ê‚Ä‚¢‚é)
 			D = true;
 		}
-		if (LU.Getx() <= a.GetRD().Getx() && a.GetRD().Getx() <= RD.Getx()) {//¶‚Å‚Ô‚Â‚©‚Á‚Ä‚é(G‚ê‚Ä‚¢‚é)
+		if (LU.Getx() <= walls.GetRD().Getx() && walls.GetRD().Getx() <= RD.Getx()) {//¶‚Å‚Ô‚Â‚©‚Á‚Ä‚é(G‚ê‚Ä‚¢‚é)
 			L = true;
 		}
-		if (LU.Gety() <= a.GetRD().Gety() && a.GetRD().Gety() <= RD.Gety()) {//ã‚Å‚Ô‚Â‚©‚Á‚Ä‚é(G‚ê‚Ä‚¢‚é)
+		if (LU.Gety() <= walls.GetRD().Gety() && walls.GetRD().Gety() <= RD.Gety()) {//ã‚Å‚Ô‚Â‚©‚Á‚Ä‚é(G‚ê‚Ä‚¢‚é)
 			U = true;
 		}
-		if (LU.Getx() <= a.GetLU().Getx() && a.GetLU().Getx() <= RD.Getx()) {//‰E‚Å‚Ô‚Â‚©‚Á‚Ä‚é(G‚ê‚Ä‚¢‚é)
+		if (LU.Getx() <= walls.GetLU().Getx() && walls.GetLU().Getx() <= RD.Getx()) {//‰E‚Å‚Ô‚Â‚©‚Á‚Ä‚é(G‚ê‚Ä‚¢‚é)
 			R = true;
 		}
 	}
-	//ƒvƒŒƒCƒ„[ƒXƒNƒGƒA‚ª•Ç‚ğ“Ç‚ñ‚¾ó‘Ô,a=wall
+
 	//‘«Œ³‚Å’Ş‚Á‚©‚©‚é‚Ì‚ÅCã‚ÉÚ‚Á‚½—Dæ
+	//velocity‚ª‹É’[‚É¬‚³‚©‚Á‚½‚è‚·‚é‚Æ‚¨‚©‚µ‚­‚È‚éH
 	if (D && L) {
-		if (a.GetRD().Getx() <= GetLU().Getx() - velocity.Getx()) return 8;
+		if (velocity.Getx() >= 0) return 6;
+		if (walls.GetRD().Getx() <= GetLU().Getx() - velocity.Getx()) return 8;
 		return 6;
-		/*if (a.GetLU().Gety() <= GetRD().Gety() - velocity.Gety()) return 6;
-		return 8;*/
 	}
 	if (D && R) {
-		if (a.GetLU().Getx() >= GetRD().Getx() - velocity.Getx()) return 4;
+		if (velocity.Getx() <= 0) return 6;
+		if (walls.GetLU().Getx() >= GetRD().Getx() - velocity.Getx()) return 4;
 		return 6;
-		/*if (a.GetLU().Gety() <= GetRD().Gety() - velocity.Gety()) return 6;
-		return 4;*/
 	}
 	if (U && L) {
-		if (a.GetRD().Gety() <= GetLU().Gety() - velocity.Gety()) return 2;
+		//printfDx("\naaaa\n");
+		if (velocity.Getx() >= 0) return 2;
+		if (walls.GetRD().Gety() <= GetLU().Gety() - velocity.Gety()) return 2;
 		return 8;
 	}
 	if (U && R) {
-		if (a.GetRD().Gety() <= GetLU().Gety() - velocity.Gety()) return 2;
+		if (velocity.Gety() >= 0) return 4;
+		if (walls.GetRD().Gety() <= GetLU().Gety() - velocity.Gety()) return 2;
 		return 4;
 	}
 	if (D) return 6;
@@ -649,8 +651,8 @@ double SquareMng::GetLeftLanding(Square area, int margin) {
 		if (square[i].GetisExist()) {	//lŠp‚ª‘¶İ‚µ‚Ä
 			if (!(square[i].GetLU().Gety() > area.GetRD().Gety()) && !(area.GetLU().Gety() > square[i].GetRD().Gety())) {	//c•ûŒü”»’è
 				if (square[i].GetRD().Getx() - margin <= area.GetLU().Getx()) {	//‰¡•ûŒü”»’è,LU‚Í‚ß‚è‚±‚İ‘ÎôC‚¤‚Ü‚­‚¢‚©‚È‚¯‚ê‚ÎÄl(RD‚©‚çmargin‚Å‚â‚é‚©)
-					if (area.GetLU().Getx() - square[i].GetLU().Getx() + margin < a) {//‹ß‚¢‚â‚Â
-						a = area.GetLU().Getx() - square[i].GetLU().Getx() + margin;
+					if (area.GetLU().Getx() - square[i].GetLU().Getx() - margin < a) {//‹ß‚¢‚â‚Â
+						a = area.GetLU().Getx() - square[i].GetLU().Getx() - margin;
 						//square[i].testDraw(RED);
 						b = i;
 					}
