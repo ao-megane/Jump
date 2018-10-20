@@ -17,7 +17,7 @@ int BriStand1;
 int Enemy::Initialize() {
 	isExist = false;
 	isRight = false;
-	imageMng.SquareMng::Initialize();
+	image.SquareMng::Initialize();
 	attackMng.Initialize();
 	weakMng.Initialize();
 	search.Initialize();
@@ -33,19 +33,17 @@ Dot* Enemy::GetcenterAd() {
 	return &center;
 }
 imageSquareMng* Enemy::GetimageMngAd() {
-	return &imageMng;
+	return &image;
 }
 SquareMng* Enemy::GetweakMngAd() {
 	return &weakMng;
 }
 
-int Enemy::Set(int x, int y, double serchLUx, double serchLUy, double serchRDx, double serchRDy) {
+int Enemy::Set(int x, int y, double serchLUx, double serchLUy, double serchRDx, double serchRDy,int hp) {
 	isExist = true;
 	center.Set(x, y);
 	search.Add(serchLUx, serchLUy, serchRDx, serchRDy);
-	//printfDx("bbbbbb%f,%f\n", serchLUx, serchLUy);
-	//printfDx("aaaaaa%f,%f\n", search.GetSquare(0).GetLU().Getx(), search.GetSquare(0).GetLU().Gety());
-	//printfDx("%d,%d\n", center.Getx(), center.Gety());
+	HP = hp;
 	return 0;
 }
 int Enemy::Set(int x, int y) {
@@ -88,20 +86,25 @@ int Enemy::JudgeWall(SquareMng walls,double speed) {
 	return 0;
 }
 int Enemy::Draw() {
-	/*Enemy::GetimageMngAd()->Draw();
-	Enemy::GetweakMngAd()->testDraw(BLUE);
-	Enemy::GetattackMngAd()->testDraw(RED);*/
 	search.testDraw(BLUE);
-	imageMng.Draw(isRight);
+	image.Draw(isRight);
 	attackMng.testDraw(RED);
 	//printfDx("%f,%f\n", search.GetSquare(0).GetLU().Getx(), search.GetSquare(0).GetLU().Gety());
 	return 0;
 }
 
+int Drawn::Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy, int HP) {
+	Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, HP);
+	return 0;
+}
 int Drawn::Updata(int count, Dot Pcenter,SquareMng walls) {
 	Enemy::GetattackMngAd()->Delete();
 	Enemy::GetweakMngAd()->Delete();
 	Enemy::GetimageMngAd()->Delete();
+
+	/*---とりあえずノーマルの画像を入れる---*/
+	Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DRAWN_W_HEIGHT / 2.0,
+		Enemy::GetcenterAd()->Getx() + DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_W_HEIGHT / 2.0, DrawnStand1);
 
 	/*-------状態セット系-------*/
 	if (Enemy::stateFlag == 3) {
@@ -110,7 +113,7 @@ int Drawn::Updata(int count, Dot Pcenter,SquareMng walls) {
 	}
 
 	/*--------状態セット終わったら移動系-----------*/
-	if (search & Pcenter) {
+	if ((search & Pcenter) && stateFlag != 3) {
 		velocity.Set(DRAWN_SPEED * cos(CalcDir(center, Pcenter)), DRAWN_SPEED * -sin(CalcDir(center, Pcenter)));
 		if (Pcenter.Getx() - center.Getx() <= 0) {
 			isRight = false;
@@ -134,18 +137,30 @@ int Drawn::Updata(int count, Dot Pcenter,SquareMng walls) {
 		Enemy::GetcenterAd()->Getx() + DRAWN_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_A_HEIGHT / 2.0, 10);
 	Enemy::GetweakMngAd()->Add(Enemy::GetcenterAd()->Getx() - DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DRAWN_W_HEIGHT / 2.0,
 		Enemy::GetcenterAd()->Getx() + DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_W_HEIGHT / 2.0);
-	Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DRAWN_W_HEIGHT / 2.0,
-		Enemy::GetcenterAd()->Getx() + DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_W_HEIGHT / 2.0,DrawnStand1);
+	
 	
 	return *Enemy::GetattackMngAd() & Pcenter;
 }
 int Drawn::SetDamage(int damage, int count) {
+	if (stateFlag == 3) return 0;
+
 	HP -= damage;
+	if (HP <= 0) {
+		Enemy::isExist = false;
+		//SetExposion(count);
+	}
 	Enemy::bodyClock = count;
 	Enemy::stateFlag = 3;
 	return 0;
 }
 int Drawn::UpdataDamage(int count) {
+	if (count % 4 < 2) {
+		image.Setimage(0, 0);
+	}
+	else {
+		image.Setimage(0, DrawnStand1);
+	}
+
 	if (count > 30) stateFlag = 0;
 	return 0;
 }
@@ -158,11 +173,8 @@ int Drawn::UpdataDamage(int count) {
 //	return 0;
 //}
 
-int Tank::Set(int x, int y, bool haveS, int serchLUx, int serchLUy, int serchRDx, int serchRDy) {
-	Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy);
-	/*isExist = true;
-	center.Set(x, y);
-	search.GetSquare(0).Set(serchLUx, serchLUy, serchRDx, serchRDy);*/
+int Tank::Set(int x, int y, bool haveS, int serchLUx, int serchLUy, int serchRDx, int serchRDy,int HP) {
+	Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy,HP);
 	haveShield = haveS;
 	return 0;
 }
@@ -171,6 +183,16 @@ int Tank::Updata(int count, Dot Pcenter,SquareMng walls) {
 	Enemy::GetweakMngAd()->Delete();
 	Enemy::GetimageMngAd()->Delete();
 
+	/*-----とりあえずノーマル-------*/
+	if (haveShield) {
+		Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - TANK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - TANK_W_HEIGHT / 2.0,
+			Enemy::GetcenterAd()->Getx() + TANK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + TANK_W_HEIGHT / 2.0, haveSTankStand1);
+	}
+	else {
+		Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - TANK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - TANK_W_HEIGHT / 2.0,
+			Enemy::GetcenterAd()->Getx() + TANK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + TANK_W_HEIGHT / 2.0, noSTankStand1);
+	}
+
 	/*-------状態セット系-------*/
 	if (Enemy::stateFlag == 3) {
 		//printfDx("ダメージ！\n");
@@ -178,7 +200,7 @@ int Tank::Updata(int count, Dot Pcenter,SquareMng walls) {
 	}
 
 	/*--------状態セット終わったら移動系-----------*/
-	if (search & Pcenter) {
+	if (search & Pcenter && stateFlag != 3) {
 		if (Pcenter.Getx() - center.Getx() <= 0) {
 			velocity.Set(-TANK_SPEED, TANK_SPEED);
 			isRight = false;
@@ -205,26 +227,38 @@ int Tank::Updata(int count, Dot Pcenter,SquareMng walls) {
 	Enemy::GetweakMngAd()->Add(Enemy::GetcenterAd()->Getx() - TANK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - TANK_W_HEIGHT / 2.0,
 		Enemy::GetcenterAd()->Getx() + TANK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + TANK_W_HEIGHT / 2.0);
 
-	if (haveShield) {
-		Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - TANK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - TANK_W_HEIGHT / 2.0,
-			Enemy::GetcenterAd()->Getx() + TANK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + TANK_W_HEIGHT / 2.0, haveSTankStand1);
-		printf("aa");
-	}
-	else {
-		Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - TANK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - TANK_W_HEIGHT / 2.0,
-			Enemy::GetcenterAd()->Getx() + TANK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + TANK_W_HEIGHT / 2.0, noSTankStand1);
-		printf("bb");
-	}
-
 	return *Enemy::GetattackMngAd() & Pcenter;
 }
-int Tank::SetDamage(int damage, int count) {
+int Tank::SetDamage(int damage, int count,Dot Pcenter) {
+	if (stateFlag == 3) return 0;
+	if (Pcenter.Getx() - center.Getx() <= 0) {
+		if (!isRight) return 0;
+	}
+	else {
+		if (isRight) return 0;
+	}
 	HP -= damage;
+	if (HP <= 0) {
+		Enemy::isExist = false;
+		//SetExposion(count);
+	}
 	Enemy::bodyClock = count;
 	Enemy::stateFlag = 3;
 	return 0;
 }
 int Tank::UpdataDamage(int count) {
+	if (count % 4 < 2) {
+		image.Setimage(0, 0);
+	}
+	else {
+		if (haveShield) {
+			image.Setimage(0, haveSTankStand1);
+		}
+		else {
+			image.Setimage(0, noSTankStand1);
+		}
+	}
+
 	if (count > 30) stateFlag = 0;
 	return 0;
 }
@@ -257,12 +291,20 @@ int Junk::Updata(int count, Dot Pcenter) {
 	return *Enemy::GetattackMngAd() & Pcenter;
 }
 int Junk::SetDamage(int damage, int count) {
-	HP -= damage;
+	//Enemy::HP -= damage;
 	Enemy::bodyClock = count;
 	Enemy::stateFlag = 3;
+	
 	return 0;
 }
 int Junk::UpdataDamage(int count) {
+	if (count % 4 < 2) {
+		image.Setimage(0, 0);
+	}
+	else {
+		image.Setimage(0, JunkStand1);
+	}
+
 	if (count > 30) stateFlag = 0;
 	return 0;
 }
@@ -338,14 +380,14 @@ int EnemyMngSet(int stageFlag) {
 	case 0://敵なし
 		break;
 	case 1://
-		drawn[0].Set(180, 300, 180, 300, 840, 420);
-		briWall[0].Set(1770, DISP_HEIGHT - 130, 0, 0, 0, 0);
+		drawn[0].Set(180, 300, 180, 300, 840, 420,30);
+		briWall[0].Set(1770, DISP_HEIGHT - 130, 0, 0, 0, 0,1);
 		break;
 	case 2://テレポチュートリアル
-		junk[0].Set(90, 570, 0, 0, 0, 0);
-		junk[1].Set(330, 990, 0, 0, 0, 0);
-		tank[0].Set(1200, 360, true, 420, 300, 1200, 480);
-		tank[1].Set(800, 660, false, 600, 600, 1600, 780);
+		junk[0].Set(90, 570, 0, 0, 0, 0,1);
+		junk[1].Set(330, 990, 0, 0, 0, 0,1);
+		tank[0].Set(1200, 360, true, 420, 300, 1200, 480,30);
+		tank[1].Set(800, 660, false, 600, 600, 1600, 780,30);
 		break;
 	case 3:
 		
@@ -385,7 +427,7 @@ int EnemyMngUpdata(int count, Dot Pcenter, SquareMng walls) {
 	return damage;
 }
 
-int EnemyMngDamage(intSquareMng pattack,int count) {
+int EnemyMngDamage(intSquareMng pattack,int count,Dot Pcenter) {
 	int edamage = 0;
 	bool ishit = false;
 	for (int i = 0; i < DRAWN_NUM; i++) {
@@ -393,6 +435,7 @@ int EnemyMngDamage(intSquareMng pattack,int count) {
 			edamage = pattack.isHitSquareMng(*drawn[i].Enemy::GetweakMngAd());
 			if (edamage) {
 				drawn[i].SetDamage(edamage,count);
+				//printfDx("DRAWN DAMAGE!!!!\n");
 				ishit = true;
 			}
 		}
@@ -419,7 +462,7 @@ int EnemyMngDamage(intSquareMng pattack,int count) {
 		if (tank[i].Enemy::GetisExist()) {
 			edamage = pattack.isHitSquareMng(*tank[i].Enemy::GetweakMngAd());
 			if (edamage) {
-				tank[i].SetDamage(edamage, count);
+				tank[i].SetDamage(edamage, count,Pcenter);
 				ishit = true;
 			}
 		}
@@ -431,7 +474,7 @@ int EnemyMngDraw() {
 	//DrawBox(180, 300, 840, 420, BLUE, 0);
 	for (int i = 0; i < DRAWN_NUM; i++) {
 		if (drawn[i].Enemy::GetisExist()) {
-			drawn[i].Enemy::Draw();
+			drawn[i].Draw();
 		}
 	}
 	for (int i = 0; i < JUNK_NUM; i++) {

@@ -8,7 +8,7 @@ public:
 	int Initialize();
 	bool GetisExist();
 	int Set(int x, int y);
-	int Set(int x, int y, double serchLUx, double serchLUy, double serchRDx, double serchRDy);
+	int Set(int x, int y, double serchLUx, double serchLUy, double serchRDx, double serchRDy,int HP);
 	int SetHP(int hp);
 	int JudgeWall(SquareMng walls,double speed);
 	int Draw();
@@ -25,7 +25,7 @@ protected:
 	Dot center;
 	Dot velocity;
 	SquareMng search;
-	imageSquareMng imageMng;
+	imageSquareMng image;
 	intSquareMng attackMng;
 	SquareMng weakMng;
 	int HP;
@@ -42,6 +42,7 @@ protected:
 class Drawn : public Enemy
 {
 public:
+	int Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy,int HP);
 	int Updata(int count, Dot Pcenter, SquareMng walls);
 	int SetDamage(int damage,int count);
 	int UpdataDamage(int count);
@@ -51,9 +52,9 @@ private:
 };
 class Tank : public Enemy {
 public:
-	int Set(int x, int y, bool haveShield, int serchLUx, int serchLUy, int serchRDx, int serchRDy);
+	int Set(int x, int y, bool haveShield, int serchLUx, int serchLUy, int serchRDx, int serchRDy,int HP);
 	int Updata(int count, Dot Pcenter,SquareMng walls);
-	int SetDamage(int damage, int count);
+	int SetDamage(int damage, int count,Dot Pcenter);
 	int UpdataDamage(int count);
 	//int Draw();
 private:
@@ -85,7 +86,7 @@ private:
 int EnemyMngInitialize();
 int EnemyMngSet(int stageFlag);
 int EnemyMngUpdata(int count, Dot Pcenter,SquareMng walls);
-int EnemyMngDamage(intSquareMng pattack,int count);
+int EnemyMngDamage(intSquareMng pattack,int count,Dot Pcenter);
 
 SquareMng GetBriWall();
 

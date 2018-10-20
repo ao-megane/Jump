@@ -390,6 +390,18 @@ int Player::SetDamage(int count) {
 	return 0;
 }
 int Player::UpdateDamage(int count) {
+	if (count % 4 < 2) {
+		image.Setimage(0, 0);
+	}
+	else {
+		image.Setimage(0, PStand[0]);
+	}
+	if (isRightFlag) {
+		velocity.Setx(-P_SPEED);
+	}
+	else {
+		velocity.Setx(P_SPEED);
+	}
 
 	if (count < 17) {//‘Ò‹@
 		acceptFlag = 0;
