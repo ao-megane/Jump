@@ -331,10 +331,12 @@ int Player::UpdateAttack_s(int count) {//40-1-5
 	}
 
 	if (count >= 28 && count <= 38) {
-		center.Move(6.4, 0);
+		if(isRightFlag) center.Move(6.4, 0);
+		else center.Move(-6.4, 0);
 	}
 	if (count >= 40 && count <= 46) {
-		center.Move(-10.67, 0);
+		if(isRightFlag) center.Move(-10.67, 0);
+		else center.Move(10.67, 0);
 	}
 
 	if (count == 41) {
@@ -591,12 +593,12 @@ int Player::Update2(SquareMng a,int count) {//•Ç‚Ü‚í‚è‚Ìˆ—
 				if (velocity.Gety() < 0) {
 					velocity.Sety(0);
 				}
-				center.Sety(a.GetUpLanding(weakAreaMng.GetSquare(0)) + P_WEAK_LU_Y);
+				center.Sety(a.GetUpLanding(weakAreaMng.GetSquare(0), P_SPEED) + P_WEAK_LU_Y);
 				//printfDx("U:%d\n", i);
 				break;
 			case 4://R
 				if (velocity.Getx() > 0) velocity.Setx(0);
-				center.Setx(a.GetRightLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_X);
+				center.Setx(a.GetRightLanding(weakAreaMng.GetSquare(0), P_SPEED) - P_WEAK_LU_X);
 				//printfDx("R:%d\n", i);
 				//printfDx("R!\n");
 				break;
@@ -607,7 +609,7 @@ int Player::Update2(SquareMng a,int count) {//•Ç‚Ü‚í‚è‚Ìˆ—
 				if (velocity.Gety() > 0) {
 					velocity.Sety(0);
 				}
-				center.Sety(a.GetLanding(weakAreaMng.GetSquare(0)) - P_WEAK_LU_Y);
+				center.Sety(a.GetLanding(weakAreaMng.GetSquare(0), 60) - P_WEAK_LU_Y);
 				if (stateFlag == 2) {//
 					SetStand(count);
 				}
@@ -617,7 +619,7 @@ int Player::Update2(SquareMng a,int count) {//•Ç‚Ü‚í‚è‚Ìˆ—
 				break;
 			case 8://L
 				if (velocity.Getx() < 0) velocity.Setx(0);
-				center.Setx(a.GetLeftLanding(weakAreaMng.GetSquare(0)) + P_WEAK_LU_X);
+				center.Setx(a.GetLeftLanding(weakAreaMng.GetSquare(0), P_SPEED) + P_WEAK_LU_X);
 				//printfDx("L:%d\n", i);
 				break;
 			default:

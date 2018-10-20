@@ -38,12 +38,22 @@ protected:
 class Drawn : public Enemy
 {
 public:
-	int Updata(int count,Dot Pcenter);
+	int Updata(int count, Dot Pcenter, SquareMng walls);
 	int SetDamage(int damage,int count);
 	int UpdataDamage(int count);
 	int Draw();
 private:
 
+};
+class Tank : public Enemy {
+public:
+	int Set(int x, int y, bool haveShield);
+	int Updata(int count, Dot Pcenter);
+	int SetDamage(int damage, int count);
+	int UpdataDamage(int count);
+	int Draw();
+private:
+	bool haveShield;
 };
 
 class Junk : public Enemy
@@ -66,9 +76,11 @@ public:
 private:
 
 };
+
+
 int EnemyMngInitialize();
 int EnemyMngSet(int stageFlag);
-int EnemyMngUpdata(int count, Dot Pcenter);
+int EnemyMngUpdata(int count, Dot Pcenter,SquareMng walls);
 int EnemyMngDamage(intSquareMng pattack,int count);
 
 SquareMng GetBriWall();

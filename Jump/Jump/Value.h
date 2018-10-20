@@ -65,6 +65,7 @@ const double P_JUMP_POWER = GRAVITY * 14.0;//ジャンプの高さ
 
 /*-----------------------*/
 const int DRAWN_NUM = 10;
+const double DRAWN_SPEED = P_SPEED - 10;
 const int DRAWN_W_WIDTH = 180;
 const int DRAWN_W_HEIGHT = 180;
 const int DRAWN_A_WIDTH = 120;
@@ -126,7 +127,7 @@ static int STAGE1_view[STAGE1_view_NUM * 3] = {//左上,四角の種類
 	1740,720,1,
 	1500,420,2,
 };
-const int STAGE1_judge_NUM = 17;
+const int STAGE1_judge_NUM = 16;
 static double STAGE1_judge[STAGE1_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防止),左上，W,H
 	0,0,60,DISP_HEIGHT,
 	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
@@ -140,10 +141,9 @@ static double STAGE1_judge[STAGE1_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防
 	900,720,120,60,
 	960,60,120,60,
 	1080,840,120,60,
-	1560,420,120,60,
 	1740,720,120,60,
 	1500,419,180,60,
-	1500,419,60,800,
+	1500,420,60,800,
 };
 const int STAGE1_COUNT = 30 * 60;//30fps
 

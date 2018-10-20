@@ -209,10 +209,10 @@ public:
 	int Add(Dot a, Dot b);
 	int Move(double x, double y);
 	Square GetSquare(int num);
-	double GetLanding(Square area);//プレイヤーが乗ってそうな四角のLU.Gety()を返す
-	double GetUpLanding(Square area);
-	double GetLeftLanding(Square area);
-	double GetRightLanding(Square area);
+	double GetLanding(Square area,int margin);//プレイヤーが乗ってそうな四角のLU.Gety()を返す
+	double GetUpLanding(Square area, int margin);
+	double GetLeftLanding(Square area, int margin);
+	double GetRightLanding(Square area, int margin);
 	//double GetLanding_tlp(Square area);//テレポ先をどうはじくか
 	//double GetUpLanding_tlp(Square area);
 	//double GetLeftLanding_tlp(Square area);

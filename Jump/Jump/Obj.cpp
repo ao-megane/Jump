@@ -604,7 +604,7 @@ double SquareMng::GetUP() {
 	}
 	return a;
 }
-double SquareMng::GetLanding(Square area) {//areaはSquareMngのどこに着地するか
+double SquareMng::GetLanding(Square area,int margin) {//areaはSquareMngのどこに着地するか
 	double a = DISP_HEIGHT*2.0;
 	int b = 0;
 	for (int i = 0; i < SQU_NUM; i++) {
@@ -612,11 +612,11 @@ double SquareMng::GetLanding(Square area) {//areaはSquareMngのどこに着地するか
 			//printfDx("%d",i);
 			if (!(square[i].GetLU().Getx() > area.GetRD().Getx()) && !(area.GetLU().Getx() > square[i].GetRD().Getx())) {	//横方向判定
 				//printfDx("2");
-				if (square[i].GetLU().Gety() + 60 >= area.GetRD().Gety()) {	//縦方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
+				if (square[i].GetLU().Gety() + margin >= area.GetRD().Gety()) {	//縦方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
 					//printfDx("3");
-					if (square[i].GetLU().Gety() + 60 - area.GetRD().Gety() < a) {//近いやつ
+					if (square[i].GetLU().Gety() + margin - area.GetRD().Gety() < a) {//近いやつ
 						//square[i].testDraw(RED);
-						a = square[i].GetLU().Gety() + 60 - area.GetRD().Gety();
+						a = square[i].GetLU().Gety() + margin - area.GetRD().Gety();
 						b = i;
 					}
 				}
@@ -625,15 +625,15 @@ double SquareMng::GetLanding(Square area) {//areaはSquareMngのどこに着地するか
 	}
 	return square[b].GetLU().Gety();
 }
-double SquareMng::GetUpLanding(Square area) {
+double SquareMng::GetUpLanding(Square area, int margin) {
 	double a = DISP_HEIGHT;
 	int b = 0;
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {	//四角が存在して
 			if (!(square[i].GetLU().Getx() > area.GetRD().Getx()) && !(area.GetLU().Getx() > square[i].GetRD().Getx())) {	//横方向判定
-				if (square[i].GetRD().Gety() - 30 <= area.GetLU().Gety()) {	//縦方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
-					if (area.GetLU().Gety() - square[i].GetRD().Gety() + 30 < a) {//近いやつ
-						a = area.GetLU().Gety() - square[i].GetRD().Gety() + 30;
+				if (square[i].GetRD().Gety() - margin <= area.GetLU().Gety()) {	//縦方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
+					if (area.GetLU().Gety() - square[i].GetRD().Gety() + margin < a) {//近いやつ
+						a = area.GetLU().Gety() - square[i].GetRD().Gety() + margin;
 						b = i;
 					}
 				}
@@ -642,15 +642,15 @@ double SquareMng::GetUpLanding(Square area) {
 	}
 	return square[b].GetRD().Gety();
 }
-double SquareMng::GetLeftLanding(Square area) {
+double SquareMng::GetLeftLanding(Square area, int margin) {
 	double a = DISP_WIDTH;
 	int b = 0;
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {	//四角が存在して
 			if (!(square[i].GetLU().Gety() > area.GetRD().Gety()) && !(area.GetLU().Gety() > square[i].GetRD().Gety())) {	//縦方向判定
-				if (square[i].GetRD().Getx() - P_SPEED - 30 <= area.GetLU().Getx()) {	//横方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
-					if (area.GetLU().Getx() - square[i].GetLU().Getx() + P_SPEED + 30 < a) {//近いやつ
-						a = area.GetLU().Getx() - square[i].GetLU().Getx() + P_SPEED + 30;
+				if (square[i].GetRD().Getx() - margin <= area.GetLU().Getx()) {	//横方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
+					if (area.GetLU().Getx() - square[i].GetLU().Getx() + margin < a) {//近いやつ
+						a = area.GetLU().Getx() - square[i].GetLU().Getx() + margin;
 						//square[i].testDraw(RED);
 						b = i;
 					}
@@ -660,17 +660,17 @@ double SquareMng::GetLeftLanding(Square area) {
 	}
 	return square[b].GetRD().Getx();
 }
-double SquareMng::GetRightLanding(Square area) {
+double SquareMng::GetRightLanding(Square area, int margin) {
 	double a = DISP_WIDTH;
 	int b = 0;
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (square[i].GetisExist()) {	//四角が存在して
 			if (!(square[i].GetLU().Gety() > area.GetRD().Gety()) && !(area.GetLU().Gety() > square[i].GetRD().Gety())) {	//縦方向判定
-				if (square[i].GetLU().Getx() + P_SPEED + 0 >= area.GetRD().Getx()) {	//横方向判定,RDはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
-					if (square[i].GetLU().Getx() + P_SPEED + 0 - area.GetRD().Getx() < a) {//近いやつ
-						a = square[i].GetLU().Getx() + P_SPEED  + 0 - area.GetRD().Getx();
+				if (square[i].GetLU().Getx() + margin >= area.GetRD().Getx()) {	//横方向判定,RDはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
+					if (square[i].GetLU().Getx() + margin - area.GetRD().Getx() < a) {//近いやつ
+						a = square[i].GetLU().Getx() + margin - area.GetRD().Getx();
 						//square[i].testDraw(RED);
-b = i;
+						b = i;
 					}
 				}
 			}
@@ -679,78 +679,6 @@ b = i;
 	return square[b].GetLU().Getx();
 }
 
-//double SquareMng::GetLanding_tlp(Square area) {//areaはSquareMngのどこに着地するか
-//	double a = DISP_HEIGHT * 2.0;
-//	int b = 0;
-//	for (int i = 0; i < SQU_NUM; i++) {
-//		if (square[i].GetisExist()) {	//四角が存在して
-//			if (!(square[i].GetLU().Getx() > area.GetRD().Getx()) && !(area.GetLU().Getx() > square[i].GetRD().Getx())) {	//横方向判定
-//				if (square[i].GetLU().Gety() + 60 >= area.GetRD().Gety()) {	//縦方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
-//					if (square[i].GetLU().Gety() + 60 - area.GetRD().Gety() < a) {//近いやつ
-//						a = square[i].GetLU().Gety() + 60 - area.GetRD().Gety();
-//						b = i;
-//					}
-//				}
-//			}
-//		}
-//	}
-//	return square[b].GetLU().Gety();
-//}
-//double SquareMng::GetUpLanding_tlp(Square area) {
-//	double a = DISP_HEIGHT;
-//	int b = 0;
-//	for (int i = 0; i < SQU_NUM; i++) {
-//		if (square[i].GetisExist()) {	//四角が存在して
-//			if (!(square[i].GetLU().Getx() > area.GetRD().Getx()) && !(area.GetLU().Getx() > square[i].GetRD().Getx())) {	//横方向判定
-//				if (square[i].GetRD().Gety() - 60 <= area.GetLU().Gety()) {	//縦方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
-//					if (area.GetLU().Gety() - square[i].GetRD().Gety() + 60 < a) {//近いやつ
-//						a = area.GetLU().Gety() - square[i].GetRD().Gety() + 60;
-//						b = i;
-//					}
-//				}
-//			}
-//		}
-//	}
-//	return square[b].GetRD().Gety();
-//}
-//double SquareMng::GetLeftLanding_tlp(Square area) {
-//	double a = DISP_WIDTH;
-//	int b = 0;
-//	for (int i = 0; i < SQU_NUM; i++) {
-//		if (square[i].GetisExist()) {	//四角が存在して
-//			if (!(square[i].GetLU().Gety() >= area.GetRD().Gety()) && !(area.GetLU().Gety() >= square[i].GetRD().Gety())) {	//縦方向判定
-//				if (square[i].GetRD().Getx() - 60 <= area.GetLU().Getx()) {	//横方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
-//					if (area.GetLU().Getx() - square[i].GetLU().Getx() + 60 < a) {//近いやつ
-//						a = area.GetLU().Getx() - square[i].GetLU().Getx() + 60;
-//						//square[i].testDraw(RED);
-//						b = i;
-//					}
-//				}
-//			}
-//		}
-//	}
-//	return square[b].GetRD().Getx();
-//}
-//double SquareMng::GetRightLanding_tlp(Square area) {//壁がテレポ先を読んでる
-//	double a = DISP_WIDTH;
-//	int b = 0;
-//	for (int i = 0; i < SQU_NUM; i++) {
-//		if (square[i].GetisExist()) {	//四角が存在して
-//			if (!(square[i].GetLU().Gety() >= area.GetRD().Gety()) && !(area.GetLU().Gety() >= square[i].GetRD().Gety())) {	//縦方向判定
-//				if (square[i].GetLU().Getx() + 60 >= area.GetRD().Getx()) {	//横方向判定,RDはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
-//					if (square[i].GetLU().Getx() + 60 - area.GetRD().Getx() < a) {//近いやつ
-//						a = square[i].GetLU().Getx() + 60 - area.GetRD().Getx();
-//						//square[i].testDraw(RED);
-//						b = i;
-//					}
-//				}
-//			}
-//		}
-//	}
-//	//printfDx("RIGHT!!!\n");
-//	return square[b].GetLU().Getx();
-//	//return 0;
-//}
 
 Dot SquareMng::SetTelepo(Dot center, Dot telepo,Square teleposqu) {
 	telepo.Move(3 * cos(CalcDir(center, telepo)), 3 * -sin(CalcDir(center, telepo)));//ちょっと戻す(故意にぶつけなおす)
