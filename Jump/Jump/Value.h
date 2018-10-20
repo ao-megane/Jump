@@ -70,6 +70,13 @@ const int DRAWN_W_WIDTH = 180;
 const int DRAWN_W_HEIGHT = 180;
 const int DRAWN_A_WIDTH = 120;
 const int DRAWN_A_HEIGHT = 120;
+/*-----------------------*/
+const int TANK_NUM = 10;
+const double TANK_SPEED = P_SPEED - 12;
+const int TANK_W_WIDTH = 180;
+const int TANK_W_HEIGHT = 180;
+const int TANK_A_WIDTH = 120;
+const int TANK_A_HEIGHT = 120;
 /*------------------------*/
 const int JUNK_NUM = 10;
 const int JUNK_W_WIDTH = 60;

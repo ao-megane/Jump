@@ -8,9 +8,10 @@ public:
 	int Initialize();
 	bool GetisExist();
 	int Set(int x, int y);
-	int Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy);
+	int Set(int x, int y, double serchLUx, double serchLUy, double serchRDx, double serchRDy);
 	int SetHP(int hp);
 	int JudgeWall(SquareMng walls,double speed);
+	int Draw();
 	intSquareMng* GetattackMngAd();
 	Dot* GetcenterAd();
 	imageSquareMng* GetimageMngAd();
@@ -23,6 +24,7 @@ protected:
 	int bodyClock;
 	Dot center;
 	Dot velocity;
+	SquareMng search;
 	imageSquareMng imageMng;
 	intSquareMng attackMng;
 	SquareMng weakMng;
@@ -43,17 +45,17 @@ public:
 	int Updata(int count, Dot Pcenter, SquareMng walls);
 	int SetDamage(int damage,int count);
 	int UpdataDamage(int count);
-	int Draw();
+	//int Draw();
 private:
 
 };
 class Tank : public Enemy {
 public:
-	int Set(int x, int y, bool haveShield);
-	int Updata(int count, Dot Pcenter);
+	int Set(int x, int y, bool haveShield, int serchLUx, int serchLUy, int serchRDx, int serchRDy);
+	int Updata(int count, Dot Pcenter,SquareMng walls);
 	int SetDamage(int damage, int count);
 	int UpdataDamage(int count);
-	int Draw();
+	//int Draw();
 private:
 	bool haveShield;
 };
