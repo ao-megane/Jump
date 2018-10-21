@@ -64,20 +64,20 @@ private:
 class Junk : public Enemy
 {
 public:
+	int Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy, int HP);
 	int Updata(int count, Dot Pcenter);
 	int SetDamage(int damage, int count);
 	int UpdataDamage(int count);
-	int Draw();
 private:
 
 };
 class BrittleWall : public Enemy
 {
 public:
+	int Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy, int HP);
 	int Updata(int count, Dot Pcenter);
 	int SetDamage(int damage, int count);
 	int UpdataDamage(int count);
-	int Draw();
 private:
 
 };

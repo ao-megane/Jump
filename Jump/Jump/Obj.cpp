@@ -225,7 +225,7 @@ int Square::isHitSquare_tlp(Square a, Dot telepo, Dot center,Dot velocity) {//“ñ
 }
 
 int Square::testDraw(int handle) {
-	//DrawBox(Square::GetLU().Getx(), Square::GetLU().Gety(), Square::GetRD().Getx(), Square::GetRD().Gety(), handle, false);
+	DrawBox(Square::GetLU().Getx(), Square::GetLU().Gety(), Square::GetRD().Getx(), Square::GetRD().Gety(), handle, false);
 	//DrawLine(LU.Getx(), LU.Gety(), RD.Getx(), RD.Gety(), handle, false);
 	return 0;
 }

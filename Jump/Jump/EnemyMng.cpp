@@ -165,14 +165,6 @@ int Drawn::UpdataDamage(int count) {
 	return 0;
 }
 
-//int Drawn::Draw() {
-//	Enemy::GetimageMngAd()->Draw();
-//	Enemy::GetweakMngAd()->testDraw(BLUE);
-//	Enemy::GetattackMngAd()->testDraw(RED);
-//
-//	return 0;
-//}
-
 int Tank::Set(int x, int y, bool haveS, int serchLUx, int serchLUy, int serchRDx, int serchRDy,int HP) {
 	Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy,HP);
 	haveShield = haveS;
@@ -262,16 +254,11 @@ int Tank::UpdataDamage(int count) {
 	if (count > 30) stateFlag = 0;
 	return 0;
 }
-//int Tank::Draw() {
-//
-//	Enemy::GetimageMngAd()->Draw(isRight);
-//	Enemy::GetweakMngAd()->testDraw(BLUE);
-//	Enemy::GetattackMngAd()->testDraw(RED);
-//	search.testDraw(BLUE);
-//
-//	return 0;
-//}
 
+int Junk::Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy, int HP) {
+	Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, HP);
+	return 0;
+}
 int Junk::Updata(int count, Dot Pcenter) {
 	Enemy::GetattackMngAd()->Delete();
 	Enemy::GetweakMngAd()->SquareMng::Delete();
@@ -308,15 +295,15 @@ int Junk::UpdataDamage(int count) {
 	if (count > 30) stateFlag = 0;
 	return 0;
 }
-int Junk::Draw() {
-	Enemy::GetimageMngAd()->Draw();
+
+int BrittleWall::Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy, int HP) {
+	Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, HP);
 	return 0;
 }
-
 int BrittleWall::Updata(int count, Dot Pcenter) {
 	Enemy::GetattackMngAd()->Delete();
-	Enemy::GetweakMngAd()->SquareMng::Delete();
-	Enemy::GetimageMngAd()->SquareMng::Delete();
+	Enemy::GetweakMngAd()->Delete();
+	Enemy::GetimageMngAd()->Delete();
 
 	if (Enemy::stateFlag == 3) {
 		//printfDx("ダメージ！\n");
@@ -342,10 +329,6 @@ int BrittleWall::SetDamage(int damage, int count) {
 }
 int BrittleWall::UpdataDamage(int count) {
 	if (count > 30) stateFlag = 0;
-	return 0;
-}
-int BrittleWall::Draw() {
-	Enemy::GetimageMngAd()->Draw();
 	return 0;
 }
 
@@ -381,7 +364,7 @@ int EnemyMngSet(int stageFlag) {
 		break;
 	case 1://
 		drawn[0].Set(180, 300, 180, 300, 840, 420,30);
-		briWall[0].Set(1770, DISP_HEIGHT - 130, 0, 0, 0, 0,1);
+		briWall[0].Set(1770, DISP_HEIGHT - 130, 0, 0, 0, 0,10);
 		break;
 	case 2://テレポチュートリアル
 		junk[0].Set(90, 570, 0, 0, 0, 0,1);
@@ -410,12 +393,12 @@ int EnemyMngUpdata(int count, Dot Pcenter, SquareMng walls) {
 	}
 	for (int i = 0; i < JUNK_NUM; i++) {
 		if (junk[i].Enemy::GetisExist()) {
-			//damage += junk[i].Updata(count, Pcenter, walls);
+			damage += junk[i].Updata(count, Pcenter);
 		}
 	}
 	for (int i = 0; i < BRI_WALL_NUM; i++) {
 		if (briWall[i].Enemy::GetisExist()) {
-			//damage += briWall[i].Updata(count, Pcenter, walls);;
+			damage += briWall[i].Updata(count, Pcenter);
 		}
 	}
 	for (int i = 0; i < TANK_NUM; i++) {
@@ -484,6 +467,7 @@ int EnemyMngDraw() {
 	}
 	for (int i = 0; i < BRI_WALL_NUM; i++) {
 		if (briWall[i].Enemy::GetisExist()) {
+			//printfDx("aaaaaaaaaaaaaa");
 			briWall[i].Draw();
 		}
 	}
