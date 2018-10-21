@@ -1,11 +1,14 @@
 #include"Chore.h"
 
-int Clear;
+int Result;
 int GameOver;
 int Loading;
 int Credit;
-int Result;
 int Tytle[3];
+int Selectbase;
+int Selectfact;
+imageSquare Baseicon;
+imageSquare Facticon;
 int Logo;
 int Pause;
 int Manual[2];
@@ -32,13 +35,19 @@ int Score;
 int lemagne;
 int slemagne;
 int SystemInitialize() {
-	Clear = LoadGraph("images/system/gameclear.png");
+	Result = LoadGraph("images/system/result.png");
 	GameOver = LoadGraph("images/system/gameover.png");
 	Pause = LoadGraph("images/system/pause.png");
 	Credit = LoadGraph("images/system/credit.png");
-	Tytle[0] = LoadGraph("images/system/title1.png");
+	Tytle[0] = LoadGraph("images/system/opening/tytle.png");
 	Tytle[1] = LoadGraph("images/system/title2.png");
 	Tytle[2] = LoadGraph("images/system/title3.png");
+	Selectbase = LoadGraph("images/system/select/baseback.png");
+	Selectfact = LoadGraph("images/system/select/factoryback.png");
+	Baseicon.Set(DISP_WIDTH / 4.0 - ICON_WIDTH / 2.0, DISP_HEIGHT / 2.0 - ICON_HEIGHT / 2.0, DISP_WIDTH / 4.0 + ICON_WIDTH / 2.0, DISP_HEIGHT / 2.0 + ICON_HEIGHT / 2.0);
+	Baseicon.Setimage(LoadGraph("images/system/select/baseicon.png"));
+	Facticon.Set(DISP_WIDTH / 4.0 * 2 - ICON_WIDTH / 2.0, DISP_HEIGHT / 2.0 - ICON_HEIGHT / 2.0, DISP_WIDTH / 4.0 * 2 + ICON_WIDTH / 2.0, DISP_HEIGHT / 2.0 + ICON_HEIGHT / 2.0);
+	Facticon.Setimage(LoadGraph("images/system/select/factoryicon.png"));
 	White = LoadGraph("images/system/white.png");
 	Manual[0] = LoadGraph("images/system/manual1.png");
 	Manual[1] = LoadGraph("images/system/manual2.png");
@@ -144,6 +153,29 @@ int DrawOP(int count) {
 	);
 
 	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Tytle[2], true);
+	return 0;
+}
+int DrawSelect(int local) {
+	switch (local+1)
+	{
+	case 1:
+		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Selectbase, true);
+		DrawBox(Baseicon.Square::GetLU().Getx(), Baseicon.Square::GetLU().Gety(), Baseicon.Square::GetRD().Getx(), Baseicon.Square::GetRD().Gety(), RED, 0);
+		break;
+	case 2:
+		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Selectfact, true);
+		DrawBox(Facticon.Square::GetLU().Getx(), Facticon.Square::GetLU().Gety(), Facticon.Square::GetRD().Getx(), Facticon.Square::GetRD().Gety(), RED, 0);
+		
+		break;
+	case 3:
+		DrawFormatString(500, 500, RED, "工場地下！！");
+		break;
+	default:
+		break;
+	}
+	Facticon.Draw();
+	Baseicon.Draw();
+
 	return 0;
 }
 int DrawTitleSentence(int flag) {
@@ -403,7 +435,7 @@ int LoserUpdata(int count) {
 int DrawClearBord(int count) {
 	if (count <= 180) {
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, (count - Keeper2) / 60.0 * 255.0);		//ブレンドモードを設定
-		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Clear, true);
+		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Result, true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);		//ブレンドモードをオフ
 	}
 	//DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Clear, true);

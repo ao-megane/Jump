@@ -702,7 +702,7 @@ int Player::Draw() {
 
 	image.Draw(isRightFlag);
 
-	DrawCircle(center.Getx(), center.Gety(), P_TLP_RANGE, RED, 0);
+	//DrawCircle(center.Getx(), center.Gety(), P_TLP_RANGE, RED, 0);
 
 	attackAreaMng.testDraw(RED);
 

@@ -39,6 +39,9 @@ const double GRAVITY = 0.1;
 
 const int SQU_NUM = 20*2;
 
+const int ICON_WIDTH = 240;
+const int ICON_HEIGHT = 240;
+
 const double TELEPO_DRAW_HEIGHT = 96.0;
 const double TELEPO_DRAW_WIDTH = 96.0;
 /*-----------------------------*/

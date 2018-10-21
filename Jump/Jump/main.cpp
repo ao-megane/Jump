@@ -28,6 +28,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	int flag = 0;
 	int selectFlag = 0;	//0:play,1:manual,2:credit
 	int stageFlag = 0;	//stage選択フラグ
+	int localFlag = 0;	//0 base 1 factory 2 boss
 	int count = 0;
 	int keepCount = 0;
 	Player player;
@@ -105,18 +106,29 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		case 1://ステージ選択画面
 			DrawFormatString(0, 0, WHITE, "selecting");
 			DrawFormatString(0, 40, WHITE, "STAGE%d",stageFlag+1);
+			DrawSelect(localFlag);
 			if (right == 1) {
 				PlayMove();
-				if (stageFlag == 4) stageFlag = 0;
-				else stageFlag++;
+				/*if (stageFlag == 4) stageFlag = 0;
+				else stageFlag++;*/
+				if (localFlag == 2) localFlag = 0;
+				else localFlag++;
 			}
 			if (left == 1) {
 				PlayMove();
-				if (stageFlag == 0) stageFlag = 4;
-				else stageFlag--;
+				/*if (stageFlag == 0) stageFlag = 4;
+				else stageFlag--;*/
+				if (localFlag == 0) localFlag = 2;
+				else localFlag--;
 			}
 			if (B == 1) {
 				flag = 2;
+				if (localFlag == 0) stageFlag = 0;
+				if (localFlag == 1) stageFlag = 3;
+				if (localFlag == 2) {
+					printfDx("地下はまだ！！");
+					flag = 1;
+				}
 			}
 			break;
 		case 2://loading
@@ -174,10 +186,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			EffectMngUpdate(count);
 
-			//DrawStage(stageFlag);
+			DrawStage(stageFlag);
 			EnemyMngDraw();
 			player.Draw();
-			//EffectMngDraw();
+			EffectMngDraw();
 			DrawUI(GetStageLimit() - sumdamage * 30 - count);
 			DrawFormatString(DISP_WIDTH - 100, 100, RED, "%2d", sumdamage);
 			break;

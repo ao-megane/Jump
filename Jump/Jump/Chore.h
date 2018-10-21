@@ -24,6 +24,8 @@ int* ScorePass();
 
 int DrawOP(int count);
 
+int DrawSelect(int local);
+
 int DrawTitleSentence(int flag);
 
 int PlayTitleBGM();

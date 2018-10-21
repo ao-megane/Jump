@@ -35,7 +35,7 @@ int StagesInitialize() {
 	Tutorial_wall_2 = LoadGraph("images/maps/base/wall/60_600.png");
 	Tutorial_wall_3 = LoadGraph("images/maps/base/wall/840_60.png");
 	Tutorial_wall_4 = LoadGraph("images/maps/base/wall/600_60.png");
-	Factory_back = LoadGraph("images/maps/factory/background.png");
+	Factory_back = LoadGraph("images/maps/factory/background/1.png");
 	Factory_wall_1 = LoadGraph("images/maps/factory/wall/120_60.png");
 	Factory_wall_2 = LoadGraph("images/maps/factory/wall/600_60.png");
 	Doorimage = LoadGraph("images/maps/base/door.png");
