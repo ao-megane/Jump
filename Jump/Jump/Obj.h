@@ -254,7 +254,7 @@ private:
 
 class imageSquareMng : public SquareMng {
 public:
-	int SetWalls(int a[], int num, int stageflag, int square1_image, int square2_image, int square3_image, int square4_image);
+	int SetWalls(int a[], int num, int stageflag, int square1_image, int square2_image, int square3_image, int square4_image, int square5_image);
 	SquareMng GetSquareMng();
 	int Add(double a,double b,double c,double d,int handle);
 	int Setimage(int num, int handle);

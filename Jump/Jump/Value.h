@@ -117,10 +117,8 @@ const int SQUARE3_WIDTH = 840;//14:1
 const int SQUARE3_HEIGHT = 60;
 const int SQUARE4_WIDTH = 600;//10:1
 const int SQUARE4_HEIGHT = 60;
-const int SQUARE5_WIDTH = 180;//ステージ1用の引っ掛かり防止
+const int SQUARE5_WIDTH = 480;//8:1
 const int SQUARE5_HEIGHT = 60;
-const int SQUARE6_WIDTH = 66;//ステージ3用の壁抜け防止
-const int SQUARE6_HEIGHT = 1000;
 /*------stage1(チュートリアル1)-----*/
 const int STAGE1_view_NUM = 13;
 static int STAGE1_view[STAGE1_view_NUM * 3] = {//左上,四角の種類
@@ -200,9 +198,10 @@ static double STAGE3_judge[STAGE3_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防
 const int STAGE3_COUNT = 30 * 60;//30fps
 
 /*------stage4(チュートリアル1)-----*/
-const int STAGE4_view_NUM = 3;
+const int STAGE4_view_NUM = 4;
 static int STAGE4_view[STAGE4_view_NUM * 3] = {//左上,四角の種類
-	420,480,3,
+	420,480,5,
+	800,480,5,
 	1300,240,1,
 	1360,660,1
 };

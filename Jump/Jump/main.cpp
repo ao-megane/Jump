@@ -7,8 +7,6 @@
 #include"Value.h"
 #include"Chore.h"
 #include"fps.h"
-//#include"Key.h"
-//#include"Color.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 
@@ -40,9 +38,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	StagesInitialize();
 	SystemInitialize();
 	SetRand();
-	
-	//EnemyMngInitialize();
-	//ColorMngInitialize();
+
 	//InputFile("kanuma2017.txt");
 
 	PlayTitleBGM();
@@ -105,19 +101,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			break;
 		case 1://ステージ選択画面
 			DrawFormatString(0, 0, WHITE, "selecting");
-			DrawFormatString(0, 40, WHITE, "STAGE%d",stageFlag+1);
 			DrawSelect(localFlag);
 			if (right == 1) {
 				PlayMove();
-				/*if (stageFlag == 4) stageFlag = 0;
-				else stageFlag++;*/
 				if (localFlag == 2) localFlag = 0;
 				else localFlag++;
 			}
 			if (left == 1) {
 				PlayMove();
-				/*if (stageFlag == 0) stageFlag = 4;
-				else stageFlag--;*/
 				if (localFlag == 0) localFlag = 2;
 				else localFlag--;
 			}
@@ -139,8 +130,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			player.Set(stageFlag);
 			EnemyMngSet(stageFlag);
 			EffectMngDelete();
-			//SetKeyPosi();
-			//EnemyMngSet();
 			flag = 3;
 			break;
 		case 3://beforeDescription
@@ -156,15 +145,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				keepCount = count;
 				flag = 6;
 			}
-			//if (stageFlag != 1) {
-				//player.Update2(GetStageWalls_judge(), count);
-			//}
-			//else if (stageFlag == 1) {
-				player.Update2(GetStageWalls_judge() + GetBriWall(), count);
-			//}
+
+			player.Update2(GetStageWalls_judge() + GetBriWall(), count);
+
 			damage = EnemyMngUpdata(count, player.GetCenter(), GetStageWalls_judge() + GetBriWall());
 			if (player.GetStateFlag() != 7 && damage) {//ダメージが返ってくる
-				//count += damage * 30.0;
 				sumdamage += damage;
 				player.SetDamage(count);
 				toUIDamage(damage, count);
@@ -208,6 +193,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				flag = 1;
 				PlayTitleBGM();
 			}
+			if (stageFlag != 2 && stageFlag != 4) {
+				stageFlag++;
+				flag = 2;
+			}
+			else {
+				flag = 1;
+			}
 			break;
 		case 7://マニュアル
 			DrawFormatString(0, 0, WHITE, "manual1");
@@ -237,17 +229,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				PlayTitleBGM();
 			}
 			break;
-		//case 9://ゲーム開始前のマニュアル
-		//	DrawFormatString(0, 0, WHITE, "manual2");
-		//	if (B == 1)
-		//		PlayChoice();
-		//	if (DrawManual(B)) {
-		//		flag = 2;
-		//		count = 0;
-		//		PlaynormalBGM();
-		//	}
-		//	break;
-
 		default:
 			break;
 		}

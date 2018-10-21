@@ -961,19 +961,17 @@ int intSquare::GetValue() {
 //}
 
 /*---------------------------------------------------*/
-int imageSquareMng::SetWalls(int a[], int num, int stageflag,int square1_image,int square2_image,int square3_image,int square4_image) {//壁をセットするためだけの関数，Jumpでしか使えないかも
-	switch (stageflag+1)
+int imageSquareMng::SetWalls(int a[], int num, int stageflag,int square1_image,int square2_image,int square3_image,int square4_image,int square5_image) {//壁をセットするためだけの関数，Jumpでしか使えないかも
+	/*switch (stageflag+1)
 	{
 	case 1:
 	case 2:
-	case 3:
+	case 3:*/
 		for (int i = 0; i < num; i++) {
 			switch (a[i*3+2])
 			{
 			case 1:
 				square[i].Square::SetLength(a[i * 3 + 0], a[i * 3 + 1], SQUARE1_WIDTH, SQUARE1_HEIGHT);
-				//DrawBox(a[i * 3 + 0], a[i * 3 + 1], a[i * 3 + 0] + SQUARE1_WIDTH, a[i * 3 + 1] + SQUARE1_HEIGHT, RED, true);
-				//printfDx("%3d,%3d,%3d,%3d\n", a[i * 3 + 0], a[i * 3 + 1], SQUARE1_WIDTH, SQUARE1_HEIGHT);
 				square[i].Setimage(square1_image);
 				break;
 			case 2:
@@ -990,9 +988,7 @@ int imageSquareMng::SetWalls(int a[], int num, int stageflag,int square1_image,i
 				break;
 			case 5:
 				square[i].SetLength(a[i * 3 + 0], a[i * 3 + 1], SQUARE5_WIDTH, SQUARE5_HEIGHT);
-				break;
-			case 6:
-				square[i].SetLength(a[i * 3 + 0], a[i * 3 + 1], SQUARE6_WIDTH, SQUARE6_HEIGHT);
+				square[i].Setimage(square5_image);
 				break;
 			default:
 				break;
@@ -1002,11 +998,11 @@ int imageSquareMng::SetWalls(int a[], int num, int stageflag,int square1_image,i
 		/*for (int i = 0; i < num+10; i++) {
 			if(square[i].Square::GetisExist())
 				printfDx("%3f,%3f\n", square[i].Square::GetLU().Getx(), square[i].Square::GetLU().Gety());
-		}*/
+		}*//*
 		break;
 	default:
 		break;
-	}
+	}*/
 	return 0;
 }
 int imageSquareMng::Add(double a, double b, double c, double d, int handle) {
