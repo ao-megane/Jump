@@ -45,7 +45,8 @@ public:/*
 	int PlayAttackair();
 	int PlayJump();
 	int PlayTelepo();
-	
+	int StopAll();
+
 	int GetStateFlag();
 	int GetIsRightFlag();
 	Dot GetCenter();

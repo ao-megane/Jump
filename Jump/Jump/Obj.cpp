@@ -1021,7 +1021,8 @@ int imageSquareMng::Setimage(int num, int handle) {
 	return 0;
 }
 int imageSquareMng::SetPosi(int num, double a, double b, double c, double d) {
-	square[num].Set(a,b,c,d);
+	//if(square[num].GetisExist())
+		square[num].Set(a,b,c,d);
 	return 0;
 }
 int imageSquareMng::Delete() {

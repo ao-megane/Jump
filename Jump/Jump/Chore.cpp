@@ -59,8 +59,8 @@ int SystemInitialize() {
 	Prologue[4] = LoadGraph("images/system/prologue/5.png");
 	Prologue[5] = LoadGraph("images/system/prologue/6.png");
 
-	Choice = LoadSoundMem("sounds/system/choice/2.wav");
-	Move = LoadSoundMem("sounds/system/choice/1.wav");
+	Choice = LoadSoundMem("sounds/system/decide.wav");
+	Move = LoadSoundMem("sounds/system/select.wav");
 	TitleBGM = LoadSoundMem("sounds/system/title.wav");
 	ChaseBGM = LoadSoundMem("sounds/system/chase.wav");
 	beLooked = LoadSoundMem("sounds/system/discovery.wav");

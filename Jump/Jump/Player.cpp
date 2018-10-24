@@ -130,6 +130,14 @@ int Player::PlayTelepo() {
 	PlaySoundMem(Telepo, DX_PLAYTYPE_BACK);
 	return 0;
 }
+int Player::StopAll() {
+	StopSoundMem(Attacks);
+	StopSoundMem(Attackw);
+	StopSoundMem(Attackair);
+	StopSoundMem(Telepo);
+	return 0;
+}
+
 int Player::GetIsRightFlag() {
 	return isRightFlag;
 }
@@ -324,6 +332,7 @@ int Player::SetAttack_s(int count) {
 	stateFlag = 3;
 	acceptFlag = false;
 	acceleration.Set(0, 0);
+	image.Setimage(1, 0);
 	velocity.Set(0, 0);
 	PlayAttacks();
 	//attack = 0;
@@ -357,10 +366,10 @@ int Player::UpdateAttack_s(int count) {//40-1-5
 
 	return 0;
 }
-
+int targcount;
 int Player::SetTelepo(int count) {
-	bodyClock = count;
-	stateFlag = 6;
+	targcount = count;
+	isTelepo = true;
 	acceptFlag = false;
 	//acceleration.Set(0, 0);
 	//velocity.Set(0, 0);
@@ -369,7 +378,7 @@ int Player::SetTelepo(int count) {
 }
 int Player::UpdateTelepo(int count) {//
 	for (int i = 0; i < 4; i++) {
-		if (count < i) {
+		if (count - targcount < i) {
 			if(telepoGauge < 100)
 				image.Setimage(2, PTlp_targ1[i]);
 			else
@@ -379,10 +388,12 @@ int Player::UpdateTelepo(int count) {//
 		}
 	}
 
-	UpdateStand(count);
+	if (stateFlag == 2 || stateFlag == 0) {
+		UpdateStand(count);
+	}
 
-	if (count >= 4) {
-		bodyClock += 4;
+	if (count - targcount >= 4) {
+		targcount += 4;
 	}
 
 	return 0;
@@ -394,6 +405,7 @@ int Player::SetDamage(int count) {
 	acceptFlag = 0;
 	acceleration.Set(0, 0);//要検討
 	velocity.Set(0, 0);
+	StopAll();
 	//attack = 0;
 	return 0;
 }
@@ -449,17 +461,17 @@ int Player::Update1(int count,int key[]) {//状態回り
 	weakAreaMng.Delete();
 	attackAreaMng.Delete();
 
-	if (count % 30 == 0) {
+	if (count % 10 == 0) {
 		telepoGauge += 1;
 	}
 	if (LEFT == 1 && telepoGauge >= 100) {
 		SetTelepo(count);
+		isTelepo = true;
 	}
 	if (LEFT > 0 && telepoGauge >= 100) {
 		telepo.Set(center.Getx() + P_TLP_RANGE * cos(CalcDir(THUMB_X, THUMB_Y)), center.Gety() + P_TLP_RANGE * -sin(CalcDir(THUMB_X, THUMB_Y)));
-		isTelepo = true;
 	}
-	if (isTelepo && !LEFT && telepoGauge >= 100) {//テレポ！！
+	if (isTelepo && LEFT == 0 && telepoGauge >= 100) {//テレポ！！
 		Tlp_appearMngBorn(count, center);
 		center = telepo;
 		telepoGauge -= 100;
@@ -470,7 +482,7 @@ int Player::Update1(int count,int key[]) {//状態回り
 		}
 		isAir = true;
 		isTelepo = false;
-		acceptFlag = true;
+		//acceptFlag = true;
 		//stateFlag = 2;
 		image.Setimage(2, 0);
 		Tlp_disappearMngBorn(count, center);
@@ -483,11 +495,13 @@ int Player::Update1(int count,int key[]) {//状態回り
 			//printfDx("isAir\n");
 			if (THUMB_X > 0) {
 				velocity.Setx(P_SPEED / 1.5 /** THUMB_X / 100.0*/);
-				isRightFlag = true;
+				if(!isTelepo)
+					isRightFlag = true;
 			}
 			else if (THUMB_X < 0) {
 				velocity.Setx(-P_SPEED / 1.5 /** THUMB_X / 100.0*/);
-				isRightFlag = false;
+				if (!isTelepo)
+					isRightFlag = false;
 			}
 			else {
 				velocity.Setx(0);
@@ -504,14 +518,16 @@ int Player::Update1(int count,int key[]) {//状態回り
 					SetDash(count);
 				}
 				velocity.Setx(P_SPEED);
-				isRightFlag = true;
+				if (!isTelepo)
+					isRightFlag = true;
 			}
 			else if (THUMB_X < 0) {
 				if (stateFlag != 1) {
 					SetDash(count);
 				}
 				velocity.Setx(-P_SPEED);
-				isRightFlag = false;
+				if (!isTelepo)
+					isRightFlag = false;
 			}
 			else {
 				if (stateFlag != 0) {
@@ -544,12 +560,15 @@ int Player::Update1(int count,int key[]) {//状態回り
 	{
 	case 0:
 		UpdateStand(count - bodyClock);
+		acceptFlag = true;
 		break;
 	case 1:
 		UpdateDash(count - bodyClock);
+		acceptFlag = true;
 		break;
 	case 2:
 		UpdateJump(count - bodyClock);
+		acceptFlag = true;
 		break;
 	case 3:
 		UpdateAttack_s(count - bodyClock);
@@ -560,14 +579,15 @@ int Player::Update1(int count,int key[]) {//状態回り
 	case 5:
 		UpdateAttack_air(count - bodyClock);
 		break;
-	case 6:
-		UpdateTelepo(count - bodyClock);
-		break;
 	case 7:
 		UpdateDamage(count - bodyClock);
 		break;
 	default:
+		acceptFlag = true;
 		break;
+	}
+	if (isTelepo) {
+		UpdateTelepo(count);
 	}
 
 	if (stateFlag != 5) {//空中攻撃中は移動しない
@@ -663,7 +683,7 @@ int Player::Update2(SquareMng a,int count) {//壁まわりの処理
 
 	if (velocity.Gety() > 50) velocity.Sety(50);
 
-	if (center.Gety() > DISP_HEIGHT) {
+	if (center.Gety() > DISP_HEIGHT) {//エラー処理
 		center.Sety(DISP_HEIGHT - 60 - P_WEAK_LU_Y);
 		velocity.Sety(0);
 		acceleration.Sety(0);

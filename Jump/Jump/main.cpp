@@ -114,6 +114,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			if (B == 1) {
 				flag = 2;
+				PlayChoice();
 				if (localFlag == 0) stageFlag = 0;
 				if (localFlag == 1) stageFlag = 3;
 				if (localFlag == 2) {
@@ -179,15 +180,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			DrawFormatString(DISP_WIDTH - 100, 100, RED, "%2d", sumdamage);
 			break;
 		case 5://gameover
-			DrawFormatString(100, 100, WHITE, "gameover");
+			//DrawFormatString(100, 100, WHITE, "gameover");
 			DrawGameOverBord(count - keepCount);
+			if (count - keepCount > 30 && B == 1) {
+				flag = 1;
+				PlayTitleBGM();
+			}
 			if (count - keepCount > 180) {
 				flag = 0;
 				PlayTitleBGM();
 			}
 			break;
 		case 6://result
-			DrawFormatString(100, 100, WHITE, "gameclear");
+			//DrawFormatString(100, 100, WHITE, "gameclear");
 			DrawClearBord(count - keepCount);
 			if (B == 1) {
 				flag = 1;
