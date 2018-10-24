@@ -33,14 +33,14 @@ protected:
 	int stateFlag;
 	/*
 	0 stand
-	1 serch
+	1 turn
 	2 attack(?)
 	3 damage
+
 	*/
 };
 
-class Drawn : public Enemy
-{
+class Drawn : public Enemy{
 public:
 	int Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy,int HP);
 	int Updata(int count, Dot Pcenter, SquareMng walls);
@@ -53,9 +53,12 @@ private:
 class Tank : public Enemy {
 public:
 	int Set(int x, int y, bool haveShield, int serchLUx, int serchLUy, int serchRDx, int serchRDy,int HP);
+	int SetTurn(int count);
+	
 	int Updata(int count, Dot Pcenter,SquareMng walls);
 	int SetDamage(int damage, int count,Dot Pcenter);
 	int UpdataDamage(int count);
+	int UpdataTurn(int count);
 	//int Draw();
 private:
 	bool haveShield;

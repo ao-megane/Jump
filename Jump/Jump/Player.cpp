@@ -17,10 +17,12 @@ int PAttackair[8];
 int PTlp_targ1[4];
 int PTlp_targ2[4];
 
-int Attack_w;
-int Attack_s;
+int Attackw;
+int Attacks;
+int Attackair;
+int Telepo;
 int PJump;
-int PGet;
+
 
 int Player::Initialize() {
 	for (int i = 0; i < 3; i++) {
@@ -84,12 +86,12 @@ int Player::Initialize() {
 		PTlp_targ2[i] = LoadGraph(a.c_str());
 	}
 
-	/*
-	Attack_s = LoadSoundMem("music/knife2.wav");
-	Attack_l = LoadSoundMem("music/knife.wav");
-	Attack_w = LoadSoundMem("music/knife3.wav");
-	PJump = LoadSoundMem("music/jump1.wav");
-	PGet = LoadSoundMem("music/choice1.wav");*/
+	
+	Attacks = LoadSoundMem("sounds/player/attacks.wav");
+	Attackair = LoadSoundMem("sounds/player/attackair.wav");
+	Attackw = LoadSoundMem("sounds/player/attackw.wav");
+	PJump = LoadSoundMem("sounds/player/attack.wav");
+	Telepo = LoadSoundMem("sounds/player/telepo.wav");
 
 	//weakArea.Set(center, P_W_WIDTH, P_W_HEIGHT);
 	center.Set(50, GROUND_HEIGHT);
@@ -108,20 +110,24 @@ int Player::Initialize() {
 	return 0;
 }
 
-int Player::PlayAttack_s() {
-	PlaySoundMem(Attack_s, DX_PLAYTYPE_BACK);
+int Player::PlayAttacks() {
+	PlaySoundMem(Attacks, DX_PLAYTYPE_BACK);
+	return 0;
+}
+int Player::PlayAttackair() {
+	PlaySoundMem(Attackair, DX_PLAYTYPE_BACK);
 	return 0;
 }
 int Player::PlayJump() {
 	PlaySoundMem(PJump, DX_PLAYTYPE_BACK);
 	return 0;
 }
-int Player::PlayAttack_w() {
-	PlaySoundMem(Attack_w, DX_PLAYTYPE_BACK);
+int Player::PlayAttackw() {
+	PlaySoundMem(Attackw, DX_PLAYTYPE_BACK);
 	return 0;
 }
-int Player::PlayGet() {
-	PlaySoundMem(PGet, DX_PLAYTYPE_BACK);
+int Player::PlayTelepo() {
+	PlaySoundMem(Telepo, DX_PLAYTYPE_BACK);
 	return 0;
 }
 int Player::GetIsRightFlag() {
@@ -275,8 +281,8 @@ int Player::UpdateAttack_w(int count) {
 		acceptFlag = true;
 		SetStand(0);
 	}
-	if (count == 5)
-		PlayAttack_w();
+	if (count == 3)
+		PlayAttackw();
 	return 0;
 }
 
@@ -309,8 +315,8 @@ int Player::UpdateAttack_air(int count) {
 		image.Setimage(0, PisAir[3]);
 		isFirstJump = false;
 	}
-	if (count == 5)
-		PlayAttack_w();
+	if (count == 3)
+		PlayAttackair();
 	return 0;
 }
 int Player::SetAttack_s(int count) {
@@ -319,6 +325,7 @@ int Player::SetAttack_s(int count) {
 	acceptFlag = false;
 	acceleration.Set(0, 0);
 	velocity.Set(0, 0);
+	PlayAttacks();
 	//attack = 0;
 	return 0;
 }
@@ -371,6 +378,7 @@ int Player::UpdateTelepo(int count) {//
 			break;
 		}
 	}
+
 	UpdateStand(count);
 
 	if (count >= 4) {
@@ -427,8 +435,8 @@ int Player::UpdateDamage(int count) {
 	/*if (count == 0) image = PAttacks1;
 	if (count == 17) image = PAttacks2;
 	if (count == 19) image = PAttacks3;*/
-	if (count == 17)
-		PlayAttack_s();
+	/*if (count == 17)
+		PlayAttacks();*/
 	if (count == 10) {
 		acceptFlag = true;
 		stateFlag = 0;
@@ -451,10 +459,11 @@ int Player::Update1(int count,int key[]) {//状態回り
 		telepo.Set(center.Getx() + P_TLP_RANGE * cos(CalcDir(THUMB_X, THUMB_Y)), center.Gety() + P_TLP_RANGE * -sin(CalcDir(THUMB_X, THUMB_Y)));
 		isTelepo = true;
 	}
-	if (isTelepo && !LEFT) {//テレポ！！
+	if (isTelepo && !LEFT && telepoGauge >= 100) {//テレポ！！
 		Tlp_appearMngBorn(count, center);
 		center = telepo;
 		telepoGauge -= 100;
+		PlayTelepo();
 		if (acceleration.Gety() >= 0) {
 			acceleration.Sety(-P_JUMP_POWER/4.0);
 			if(velocity.Gety() >= 0) velocity.Sety(0);
@@ -487,40 +496,40 @@ int Player::Update1(int count,int key[]) {//状態回り
 			if (B == 1) {
 				SetAttack_air(count);
 			}
+			
 		}
 		else {//地上なら
-			if (stateFlag != 6) {//テレポ中横移動はしない
-				if (THUMB_X > 0) {
-					if (stateFlag != 1) {
-						SetDash(count);
-					}
-					velocity.Setx(P_SPEED);
-					isRightFlag = true;
+			if (THUMB_X > 0) {
+				if (stateFlag != 1) {
+					SetDash(count);
 				}
-				else if (THUMB_X < 0) {
-					if (stateFlag != 1) {
-						SetDash(count);
-					}
-					velocity.Setx(-P_SPEED);
-					isRightFlag = false;
+				velocity.Setx(P_SPEED);
+				isRightFlag = true;
+			}
+			else if (THUMB_X < 0) {
+				if (stateFlag != 1) {
+					SetDash(count);
 				}
-				else {
-					if (stateFlag != 0) SetStand(count);
-					velocity.Setx(0);
-				}
+				velocity.Setx(-P_SPEED);
+				isRightFlag = false;
 			}
 			else {
-				velocity.Set(0, 0);
+				if (stateFlag != 0) {
+					SetStand(count);
+				}
+				velocity.Setx(0);
 			}
 			if (B == 1) {
 				SetAttack_w(count);
 			}
-			if (A == 1) {
-				SetAttack_s(count);
-			}
-			if (Y > 0) {
+
+			if (Y > 1) {
 				SetJump(count);
 			}
+		}
+		
+		if (A == 1) {
+			SetAttack_s(count);
 		}
 	}
 	//入力受付に関係しない
@@ -528,7 +537,7 @@ int Player::Update1(int count,int key[]) {//状態回り
 
 	}
 	else {//テレポ中なら(品定め中なら)
-		velocity.Setx(0);
+		velocity.Set(0,0);
 	}
 
 	switch (stateFlag)
@@ -592,6 +601,7 @@ int Player::Update2(SquareMng a,int count) {//壁まわりの処理
 	
 	//プレイヤーの位置について，壁判定
 	isAir = true;//足に何かが触れなければ空中にいる
+	double decoi;
 	for (int i = 0; i < SQU_NUM; i++) {
 		if (a.GetSquare(i).GetisExist()) {//四角ごとに判定
 			switch (weakAreaMng.GetSquare(0).isHitSquare(a.GetSquare(i),velocity))//ここできちんとめり込みまで判定できれば問題ない
@@ -605,12 +615,16 @@ int Player::Update2(SquareMng a,int count) {//壁まわりの処理
 				if (velocity.Gety() < 0) {
 					velocity.Sety(0);
 				}
-				center.Sety(a.GetUpLanding(weakAreaMng.GetSquare(0), P_SPEED) + P_WEAK_LU_Y);
+				decoi = a.GetUpLanding(weakAreaMng.GetSquare(0), P_SPEED) + P_WEAK_LU_Y;
+				if(fabs(decoi - center.Gety()) < P_SPEED*2)
+					center.Sety(decoi);
 				//printfDx("U:%d\n", i);
 				break;
 			case 4://R
 				if (velocity.Getx() > 0) velocity.Setx(0);
-				center.Setx(a.GetRightLanding(weakAreaMng.GetSquare(0), P_SPEED) - P_WEAK_LU_X);
+				decoi = a.GetRightLanding(weakAreaMng.GetSquare(0), P_SPEED) - P_WEAK_LU_X;
+				if(fabs(decoi - center.Getx()) < P_SPEED*2)
+					center.Setx(decoi);
 				//printfDx("R:%d\n", i);
 				//printfDx("R!\n");
 				break;
@@ -621,7 +635,9 @@ int Player::Update2(SquareMng a,int count) {//壁まわりの処理
 				if (velocity.Gety() > 0) {
 					velocity.Sety(0);
 				}
-				center.Sety(a.GetLanding(weakAreaMng.GetSquare(0), 60) - P_WEAK_LU_Y);
+				decoi = a.GetLanding(weakAreaMng.GetSquare(0), 60) - P_WEAK_LU_Y;
+				if (fabs(decoi - center.Gety()) < P_SPEED * 4)
+					center.Sety(decoi);
 				if (stateFlag == 2) {//
 					SetStand(count);
 				}
@@ -631,7 +647,9 @@ int Player::Update2(SquareMng a,int count) {//壁まわりの処理
 				break;
 			case 8://L
 				if (velocity.Getx() < 0) velocity.Setx(0);
-				center.Setx(a.GetLeftLanding(weakAreaMng.GetSquare(0), P_SPEED) + P_WEAK_LU_X);
+				decoi = a.GetLeftLanding(weakAreaMng.GetSquare(0), P_SPEED) + P_WEAK_LU_X;
+				if (fabs(decoi - center.Getx()) < P_SPEED * 2)
+					center.Setx(decoi);
 				//printfDx("L:%d\n", i);
 				break;
 			default:

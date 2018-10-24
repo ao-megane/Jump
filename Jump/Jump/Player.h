@@ -40,10 +40,11 @@ public:/*
 
 	int Addtelepo();
 
-	int PlayAttack_s();	//効果音
-	int PlayAttack_w();
-	int PlayGet();
+	int PlayAttacks();	//効果音
+	int PlayAttackw();
+	int PlayAttackair();
 	int PlayJump();
+	int PlayTelepo();
 	
 	int GetStateFlag();
 	int GetIsRightFlag();
@@ -66,14 +67,14 @@ private:
 	intSquareMng attackAreaMng;	//与ダメ範囲
 	imageSquareMng image;
 
-	//int attack;			//現在の攻撃力
+	//int attack;		//現在の攻撃力
 	int bodyClock;		//アニメーション用体内時計
 	int telepoGauge;	//テレポゲージ，100で一回テレポできる．最大290，一秒で１回復
 	bool isRightFlag;	//向いてる方向フラグ（0で左 1で右）
 	bool acceptFlag;	//入力受付フラグ（1で受付）
 	bool isAir;			//空中か否かのフラグ
 	bool isTelepo;		//テレポ中か否かのフラグ
-	//bool onSquare;		//四角の上にいるか否かのフラグ
+	//bool onSquare;	//四角の上にいるか否かのフラグ
 	
 	int stateFlag;		//現状態フラグ
 	/*

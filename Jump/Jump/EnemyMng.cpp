@@ -17,7 +17,10 @@ int BriStand1;
 int Enemy::Initialize() {
 	isExist = false;
 	isRight = false;
+	bodyClock = -1000;
 	image.SquareMng::Initialize();
+	velocity.Set(0, 0);
+	HP = 0;
 	attackMng.Initialize();
 	weakMng.Initialize();
 	search.Initialize();
@@ -170,6 +173,18 @@ int Tank::Set(int x, int y, bool haveS, int serchLUx, int serchLUy, int serchRDx
 	haveShield = haveS;
 	return 0;
 }
+int Tank::SetTurn(int count) {
+	Enemy::bodyClock = count;
+	Enemy::stateFlag = 1;
+	return 0;
+}
+int Tank::UpdataTurn(int count) {
+	if (count > 30) {
+		isRight =! isRight;
+		stateFlag = 0;
+	}
+	return 0;
+}
 int Tank::Updata(int count, Dot Pcenter,SquareMng walls) {
 	Enemy::GetattackMngAd()->Delete();
 	Enemy::GetweakMngAd()->Delete();
@@ -186,26 +201,49 @@ int Tank::Updata(int count, Dot Pcenter,SquareMng walls) {
 	}
 
 	/*-------状態セット系-------*/
+	
+	if (Enemy::stateFlag == 0) {//平和な状態
+		if (search & Pcenter && Pcenter.Getx() - center.Getx() <= 0) {
+			if (!isRight) {//正面に立ってる
+			}
+			else {
+				SetTurn(count);
+			}
+		}
+		else {
+			if (isRight) {//正面に立ってる
+			}
+			else {
+				SetTurn(count);
+			}
+		}
+	}
+
+	/*-----------状態アップデート系-------------*/
 	if (Enemy::stateFlag == 3) {
 		//printfDx("ダメージ！\n");
 		UpdataDamage(count - Enemy::bodyClock);
 	}
-
-	/*--------状態セット終わったら移動系-----------*/
-	if (search & Pcenter && stateFlag != 3) {
+	if (Enemy::stateFlag == 1) {
+		UpdataTurn(count - Enemy::bodyClock);
+	}
+	if (search & Pcenter && stateFlag == 0) {//普通
 		if (Pcenter.Getx() - center.Getx() <= 0) {
-			velocity.Set(-TANK_SPEED, TANK_SPEED);
-			isRight = false;
+			if(!isRight)
+				velocity.Set(-TANK_SPEED, TANK_SPEED);
+			//isRight = false;
 		}
 		else {
-			velocity.Set(TANK_SPEED, TANK_SPEED);
-			isRight = true;
+			if(isRight)
+				velocity.Set(TANK_SPEED, TANK_SPEED);
+			//isRight = true;
 		}
 	}
 	else {
 		velocity.Set(0, TANK_SPEED);
 	}
 
+	/*------------座標更新-----------*/
 	Enemy::GetcenterAd()->Move(velocity.Getx(), velocity.Gety());
 	Enemy::GetweakMngAd()->Add(Enemy::GetcenterAd()->Getx() - TANK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - TANK_W_HEIGHT / 2.0,
 		Enemy::GetcenterAd()->Getx() + TANK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + TANK_W_HEIGHT / 2.0);
@@ -223,11 +261,13 @@ int Tank::Updata(int count, Dot Pcenter,SquareMng walls) {
 }
 int Tank::SetDamage(int damage, int count,Dot Pcenter) {
 	if (stateFlag == 3) return 0;
-	if (Pcenter.Getx() - center.Getx() <= 0) {
-		if (!isRight) return 0;
-	}
-	else {
-		if (isRight) return 0;
+	if (haveShield) {
+		if (Pcenter.Getx() - center.Getx() <= 0) {
+			if (!isRight) return 0;
+		}
+		else {
+			if (isRight) return 0;
+		}
 	}
 	HP -= damage;
 	if (HP <= 0) {
