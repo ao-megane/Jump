@@ -13,7 +13,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetGraphMode(DISP_WIDTH, DISP_HEIGHT, 32);
 	{
 		SetWindowSizeChangeEnableFlag(TRUE);
-		SetWindowSizeExtendRate(0.8);
+		SetWindowSizeExtendRate(0.6);
 		ChangeWindowMode(TRUE);
 		SetBackgroundColor(0, 0, 0);
 	}
