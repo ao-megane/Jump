@@ -37,10 +37,19 @@ private:
 	//const int height = P_DRAW_HEIGHT;
 };
 
+class Drawn_disappear : public Effect {
+public:
+	int Update(int count);
+private:
+	Dot velocity;
+	Dot acceleration;
+};
+
 int EffectMngInitialize();
 
 int Tlp_appearMngBorn(int count, Dot center);
 int Tlp_disappearMngBorn(int count, Dot center);
+int Drawn_disappearMngBorn(int count, Dot a);
 
 int EffectMngUpdate(int count);
 int EffectMngDelete();

@@ -2,13 +2,16 @@
 #include"Value.h"
 #include"Chore.h"
 
-//intSquareMng AttackArea;
+int DrawnStand[3];
+int DrawnTurn[2];//中身ないかも
 
-int DrawnStand1;
+int haveSTankStand[4];
+int haveSTankTurn[2];
+int haveSTankBroken[4];
 
-int haveSTankStand1;
-
-int noSTankStand1;
+int noSTankStand[4];
+int noSTankTurn[2];
+int noSTankBroken[4];
 
 int JunkStand1;
 
@@ -17,10 +20,12 @@ int BriStand1;
 int Enemy::Initialize() {
 	isExist = false;
 	isRight = false;
-	bodyClock = -1000;
+	bodyClock = 0;
 	image.SquareMng::Initialize();
 	velocity.Set(0, 0);
+	acceleration.Set(0, 0);
 	HP = 0;
+	stateFlag = 0;
 	attackMng.Initialize();
 	weakMng.Initialize();
 	search.Initialize();
@@ -45,13 +50,19 @@ SquareMng* Enemy::GetweakMngAd() {
 int Enemy::Set(int x, int y, double serchLUx, double serchLUy, double serchRDx, double serchRDy,int hp) {
 	isExist = true;
 	center.Set(x, y);
+	velocity.Set(0, 0);
+	acceleration.Set(0, 0);
 	search.Add(serchLUx, serchLUy, serchRDx, serchRDy);
 	HP = hp;
+	stateFlag = 0;
 	return 0;
 }
 int Enemy::Set(int x, int y) {
 	isExist = true;
 	center.Set(x, y);
+	velocity.Set(0, 0);
+	acceleration.Set(0, 0);
+	stateFlag = 0;
 	return 0;
 }
 int Enemy::SetHP(int a) {
@@ -98,6 +109,7 @@ int Enemy::Draw() {
 
 int Drawn::Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy, int HP) {
 	Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, HP);
+	stateFlag = 0;
 	return 0;
 }
 int Drawn::Updata(int count, Dot Pcenter,SquareMng walls) {
@@ -105,52 +117,139 @@ int Drawn::Updata(int count, Dot Pcenter,SquareMng walls) {
 	Enemy::GetweakMngAd()->Delete();
 	Enemy::GetimageMngAd()->Delete();
 
-	/*---とりあえずノーマルの画像を入れる---*/
+	/*---imageに大きさを渡す---*/
 	Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DRAWN_W_HEIGHT / 2.0,
-		Enemy::GetcenterAd()->Getx() + DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_W_HEIGHT / 2.0, DrawnStand1);
+		Enemy::GetcenterAd()->Getx() + DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_W_HEIGHT / 2.0, 0);
 
 	/*-------状態セット系-------*/
-	if (Enemy::stateFlag == 3) {
+	if (Enemy::stateFlag == 3 || stateFlag == 4) {//被ダメ中(他を受け付けない)
 		//printfDx("ダメージ！\n");
-		UpdataDamage(count - Enemy::bodyClock);
+	}else if ((search & Pcenter)) {//見つかって
+		if ((center.Getx() - Pcenter.Getx()) < 0) {//右にいる
+			if (isRight) {//右向いてれば
+				if (stateFlag != 0) {//立ち状態でなければ
+					SetStand(count);
+				}
+			}
+			else {//左向いてれば
+				if (stateFlag != 1) {//振り向き中でなければ
+					SetTurn(count);
+				}
+			}
+		}
+		if ((center.Getx() - Pcenter.Getx()) > 0) {//左にいる
+			if (!isRight) {//左向いてれば
+				if (stateFlag != 0) {//立ち状態でなければ
+					SetStand(count);
+				}
+			}
+			else {//右向いてれば
+				if (stateFlag != 1) {//振り向き中でなければ
+					SetTurn(count);
+				}
+			}
+		}
+	}else {//みつからない
+		if (stateFlag != 0) {//立ち状態でなければ
+			SetStand(count);
+		}
+		//printfDx("mitukaranai");
 	}
 
-	/*--------状態セット終わったら移動系-----------*/
-	if ((search & Pcenter) && stateFlag != 3) {
-		velocity.Set(DRAWN_SPEED * cos(CalcDir(center, Pcenter)), DRAWN_SPEED * -sin(CalcDir(center, Pcenter)));
-		if (Pcenter.Getx() - center.Getx() <= 0) {
-			isRight = false;
-		}
-		else {
-			isRight = true;
-		}
+	/*------状態アップデート系-----------*/
+	switch (stateFlag)
+	{
+	case 0:
+		UpdataStand(count - bodyClock,Pcenter);
+		break;
+	case 1:
+		UpdataTurn(count - bodyClock);
+		break;
+	case 2:
+		//なし
+		break;
+	case 3:
+		UpdataDamage(count - Enemy::bodyClock);
+		break;
+	default:
+		printfDx("DRAWN_STATE_ERROR");
+		break;
 	}
-	else {
-		velocity.Set(0, 0);
-	}
-	Enemy::GetcenterAd()->Move(velocity.Getx(), velocity.Gety());
+	/*--------状態アップデート終わったら移動系-----------*/
+	
+	velocity.Move(acceleration.Getx(),acceleration.Gety());
+	if (velocity.Gety() > DRAWN_SPEED) velocity.Sety(DRAWN_SPEED);
+	center.Move(velocity.Getx(), velocity.Gety());
 	Enemy::GetweakMngAd()->Add(Enemy::GetcenterAd()->Getx() - DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DRAWN_W_HEIGHT / 2.0,
 		Enemy::GetcenterAd()->Getx() + DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_W_HEIGHT / 2.0);
 
 	JudgeWall(walls, DRAWN_SPEED);//center更新
-
 	Enemy::GetweakMngAd()->SquareMng::Delete();
 
-	Enemy::GetattackMngAd()->Add(Enemy::GetcenterAd()->Getx() - DRAWN_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DRAWN_A_HEIGHT / 2.0,
-		Enemy::GetcenterAd()->Getx() + DRAWN_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_A_HEIGHT / 2.0, 10);
+	if (stateFlag != 4) {
+		Enemy::GetattackMngAd()->Add(Enemy::GetcenterAd()->Getx() - DRAWN_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DRAWN_A_HEIGHT / 2.0,
+			Enemy::GetcenterAd()->Getx() + DRAWN_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_A_HEIGHT / 2.0, 10);
+	}
 	Enemy::GetweakMngAd()->Add(Enemy::GetcenterAd()->Getx() - DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DRAWN_W_HEIGHT / 2.0,
 		Enemy::GetcenterAd()->Getx() + DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_W_HEIGHT / 2.0);
 	
 	
 	return *Enemy::GetattackMngAd() & Pcenter;
 }
-int Drawn::SetDamage(int damage, int count) {
-	if (stateFlag == 3) return 0;
+int Drawn::SetStand(int count) {
+	bodyClock = count;
+	stateFlag = 0;
+	return 0;
+}
+int Drawn::UpdataStand(int count, Dot Pcenter) {
+	image.Setimage(0, DrawnStand[0]);
+	for (int i = 0; i < 3; i++) {
+		//printfDx("%d", i);
+		if (count < i) {
+			image.Setimage(0, DrawnStand[i]);
+		}
+	}
+	if (count >= 3) {
+		bodyClock += 3;
+	}
 
+	if (search & Pcenter) {//見つかれば
+		velocity.Set(DRAWN_SPEED * cos(CalcDir(center, Pcenter)), DRAWN_SPEED * -sin(CalcDir(center, Pcenter)));//移動
+	}
+	else {
+		velocity.Set(0, 0);
+		//printfDx("見つからない");
+	}
+
+	return 0;
+}
+int Drawn::SetTurn(int count) {
+	bodyClock = count;
+	stateFlag = 1;
+	return 0;
+}
+int Drawn::UpdataTurn(int count) {
+	image.Setimage(0, 0);
+	for (int i = 0; i < 2; i++) {
+		if (count < 5*(i+1)) {
+			image.Setimage(0, DrawnTurn[i]);
+		}
+	}
+	if (count > 10) {
+		isRight = !isRight;
+		stateFlag = 0;
+	}
+
+	return 0;
+}
+
+int Drawn::SetDamage(int damage, int count) {
 	HP -= damage;
 	if (HP <= 0) {
 		Enemy::isExist = false;
 		//SetExposion(count);
+		Drawn_disappearMngBorn(count, center);
+		return 0;
 	}
 	Enemy::bodyClock = count;
 	Enemy::stateFlag = 3;
@@ -161,7 +260,7 @@ int Drawn::UpdataDamage(int count) {
 		image.Setimage(0, 0);
 	}
 	else {
-		image.Setimage(0, DrawnStand1);
+		image.Setimage(0, DrawnStand[1]);
 	}
 
 	if (count > 30) stateFlag = 0;
@@ -179,6 +278,15 @@ int Tank::SetTurn(int count) {
 	return 0;
 }
 int Tank::UpdataTurn(int count) {
+	image.Setimage(0, 0);
+	for (int i = 0; i < 2; i++) {
+		if (count < 15 * (i + 1)) {
+			if(haveShield)
+				image.Setimage(0, haveSTankTurn[i]);
+			else
+				image.Setimage(0, noSTankTurn[i]);
+		}
+	}
 	if (count > 30) {
 		isRight =! isRight;
 		stateFlag = 0;
@@ -190,74 +298,122 @@ int Tank::Updata(int count, Dot Pcenter,SquareMng walls) {
 	Enemy::GetweakMngAd()->Delete();
 	Enemy::GetimageMngAd()->Delete();
 
-	/*-----とりあえずノーマル-------*/
-	if (haveShield) {
-		Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - TANK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - TANK_W_HEIGHT / 2.0,
-			Enemy::GetcenterAd()->Getx() + TANK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + TANK_W_HEIGHT / 2.0, haveSTankStand1);
-	}
-	else {
-		Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - TANK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - TANK_W_HEIGHT / 2.0,
-			Enemy::GetcenterAd()->Getx() + TANK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + TANK_W_HEIGHT / 2.0, noSTankStand1);
-	}
+	/*---imageに大きさを渡す---*/
+	Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DRAWN_W_HEIGHT / 2.0,
+		Enemy::GetcenterAd()->Getx() + DRAWN_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_W_HEIGHT / 2.0, 0);
 
 	/*-------状態セット系-------*/
-	
-	if (Enemy::stateFlag == 0) {//平和な状態
-		if (search & Pcenter && Pcenter.Getx() - center.Getx() <= 0) {
-			if (!isRight) {//正面に立ってる
+	if (Enemy::stateFlag == 3 || stateFlag == 4) {//被ダメ中(他を受け付けない)
+												  //printfDx("ダメージ！\n");
+	}
+	else if ((search & Pcenter)) {//見つかって
+		if ((center.Getx() - Pcenter.Getx()) < 0) {//右にいる
+			if (isRight) {//右向いてれば
+				if (stateFlag != 0) {//立ち状態でなければ
+					SetStand(count);
+				}
 			}
-			else {
-				SetTurn(count);
+			else {//左向いてれば
+				if (stateFlag != 1) {//振り向き中でなければ
+					SetTurn(count);
+				}
 			}
 		}
-		else {
-			if (isRight) {//正面に立ってる
+		if ((center.Getx() - Pcenter.Getx()) > 0) {//左にいる
+			if (!isRight) {//左向いてれば
+				if (stateFlag != 0) {//立ち状態でなければ
+					SetStand(count);
+				}
 			}
-			else {
-				SetTurn(count);
+			else {//右向いてれば
+				if (stateFlag != 1) {//振り向き中でなければ
+					SetTurn(count);
+				}
 			}
 		}
 	}
+	else {//みつからない
+		if (stateFlag != 0) {//立ち状態でなければ
+			SetStand(count);
+		}
+		//printfDx("mitukaranai");
+	}
 
-	/*-----------状態アップデート系-------------*/
-	if (Enemy::stateFlag == 3) {
-		//printfDx("ダメージ！\n");
+	/*------状態アップデート系-----------*/
+	switch (stateFlag)
+	{
+	case 0:
+		UpdataStand(count - bodyClock, Pcenter);
+		break;
+	case 1:
+		UpdataTurn(count - bodyClock);
+		break;
+	case 2:
+		//なし
+		break;
+	case 3:
 		UpdataDamage(count - Enemy::bodyClock);
+		break;
+	default:
+		printfDx("DRAWN_STATE_ERROR");
+		break;
 	}
-	if (Enemy::stateFlag == 1) {
-		UpdataTurn(count - Enemy::bodyClock);
-	}
-	if (search & Pcenter && stateFlag == 0) {//普通
-		if (Pcenter.Getx() - center.Getx() <= 0) {
-			if(!isRight)
-				velocity.Set(-TANK_SPEED, TANK_SPEED);
-			//isRight = false;
-		}
-		else {
-			if(isRight)
-				velocity.Set(TANK_SPEED, TANK_SPEED);
-			//isRight = true;
-		}
-	}
-	else {
-		velocity.Set(0, TANK_SPEED);
-	}
+	/*--------状態アップデート終わったら移動系-----------*/
 
-	/*------------座標更新-----------*/
-	Enemy::GetcenterAd()->Move(velocity.Getx(), velocity.Gety());
+	velocity.Move(acceleration.Getx(), acceleration.Gety());
+	if (velocity.Gety() > TANK_SPEED) velocity.Sety(DRAWN_SPEED);
+	center.Move(velocity.Getx(), velocity.Gety());
 	Enemy::GetweakMngAd()->Add(Enemy::GetcenterAd()->Getx() - TANK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - TANK_W_HEIGHT / 2.0,
 		Enemy::GetcenterAd()->Getx() + TANK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + TANK_W_HEIGHT / 2.0);
 
 	JudgeWall(walls, TANK_SPEED);//center更新
-
 	Enemy::GetweakMngAd()->SquareMng::Delete();
 
-	Enemy::GetattackMngAd()->Add(Enemy::GetcenterAd()->Getx() - TANK_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - TANK_A_HEIGHT / 2.0,
-		Enemy::GetcenterAd()->Getx() + TANK_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + TANK_A_HEIGHT / 2.0, 10);
+	if (stateFlag != 4) {
+		Enemy::GetattackMngAd()->Add(Enemy::GetcenterAd()->Getx() - TANK_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - TANK_A_HEIGHT / 2.0,
+			Enemy::GetcenterAd()->Getx() + TANK_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + TANK_A_HEIGHT / 2.0, 10);
+	}
 	Enemy::GetweakMngAd()->Add(Enemy::GetcenterAd()->Getx() - TANK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - TANK_W_HEIGHT / 2.0,
 		Enemy::GetcenterAd()->Getx() + TANK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + TANK_W_HEIGHT / 2.0);
 
+
 	return *Enemy::GetattackMngAd() & Pcenter;
+}
+int Tank::SetStand(int count) {
+	bodyClock = count;
+	stateFlag = 0;
+	return 0;
+}
+int Tank::UpdataStand(int count, Dot Pcenter) {
+	if(haveShield)
+		image.Setimage(0, haveSTankStand[0]);
+	else
+		image.Setimage(0, noSTankStand[0]);
+	for (int i = 0; i < 4; i++) {
+		//printfDx("%d", i);
+		if (count < i) {
+			if(haveShield)
+				image.Setimage(0, haveSTankStand[i]);
+			else
+				image.Setimage(0, noSTankStand[i]);
+		}
+	}
+	if (count >= 4) {
+		bodyClock += 4;
+	}
+
+	if (search & Pcenter) {//見つかれば
+		if((Pcenter.Getx() - center.Getx()) <= 0)
+			velocity.Set(-TANK_SPEED,0);//移動
+		else
+			velocity.Set(TANK_SPEED, 0);//移動
+	}
+	else {
+		velocity.Set(0, 0);
+		//printfDx("見つからない");
+	}
+
+	return 0;
 }
 int Tank::SetDamage(int damage, int count,Dot Pcenter) {
 	if (stateFlag == 3) return 0;
@@ -284,10 +440,10 @@ int Tank::UpdataDamage(int count) {
 	}
 	else {
 		if (haveShield) {
-			image.Setimage(0, haveSTankStand1);
+			image.Setimage(0, haveSTankStand[1]);
 		}
 		else {
-			image.Setimage(0, noSTankStand1);
+			image.Setimage(0, noSTankStand[1]);
 		}
 	}
 
@@ -377,11 +533,58 @@ Junk junk[JUNK_NUM];
 Tank tank[TANK_NUM];
 BrittleWall briWall[BRI_WALL_NUM];
 int EnemyMngInitialize() {
-	DrawnStand1 = LoadGraph("images/enemies/drawn/stand/1.png");
-	haveSTankStand1 = LoadGraph("images/enemies/tank/shield/stand/1.png");
-	noSTankStand1 = LoadGraph("images/enemies/tank/noshield/stand/1.png");
+	for (int i = 0; i < 3; i++) {
+		std::string a = "images/enemies/drawn/stand/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		DrawnStand[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 2; i++) {
+		std::string a = "images/enemies/drawn/turn/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		DrawnTurn[i] = LoadGraph(a.c_str());
+	}
+
+	for (int i = 0; i < 4; i++) {
+		std::string a = "images/enemies/tank/shield/stand/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		haveSTankStand[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 2; i++) {
+		std::string a = "images/enemies/tank/shield/turn/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		haveSTankTurn[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 4; i++) {
+		std::string a = "images/enemies/tank/shield/broken/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		haveSTankBroken[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 4; i++) {
+		std::string a = "images/enemies/tank/noshield/stand/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		noSTankStand[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 2; i++) {
+		std::string a = "images/enemies/tank/noshield/turn/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		noSTankTurn[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 4; i++) {
+		std::string a = "images/enemies/tank/noshield/broken/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		noSTankBroken[i] = LoadGraph(a.c_str());
+	}
+
 	JunkStand1 = LoadGraph("images/enemies/junk/1.png");
-	BriStand1 = LoadGraph("images/enemies/wall/1.png");
+	BriStand1 = LoadGraph("images/enemies/briwall/1.png");
 	return 0;
 }
 
@@ -494,10 +697,12 @@ int EnemyMngDamage(intSquareMng pattack,int count,Dot Pcenter) {
 }
 
 int EnemyMngDraw() {
+	//DrawGraph(100, 100, DrawnStand[0], true);
 	//DrawBox(180, 300, 840, 420, BLUE, 0);
 	for (int i = 0; i < DRAWN_NUM; i++) {
 		if (drawn[i].Enemy::GetisExist()) {
 			drawn[i].Draw();
+			//printfDx("bbbbbb");
 		}
 	}
 	for (int i = 0; i < JUNK_NUM; i++) {

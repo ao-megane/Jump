@@ -2,6 +2,7 @@
 
 int tlp_appear[4];
 int tlp_disappear[4];
+int drawn_disappear[4];
 
 int Effect::Set(int count, Dot a) {
 	image.Delete();
@@ -27,7 +28,6 @@ Effect::Effect() {
 	isExist = false;
 	bodyClock = 0;
 }
-
 Effect::~Effect(){
 }
 
@@ -55,7 +55,24 @@ int Tlp_disappear::Update(int count) {
 	if (count - bodyClock >= 4) isExist = false;
 	return 0;
 }
+int Drawn_disappear::Update(int count) {
+	for (int i = 0; i < 4; i++) {
+		if (count - bodyClock < i) {
+			image.Setimage(0, drawn_disappear[i]);
+			break;
+		}
+	}
+	if (count - bodyClock >= 300) isExist = false;
+	
+	acceleration.Set(0, GRAVITY);
+	velocity.Move(acceleration.Getx(), acceleration.Gety());
+	if (velocity.Gety() > DRAWN_SPEED) velocity.Sety(DRAWN_SPEED);
+	center.Move(velocity.Getx(), velocity.Gety());
 
+	image.SetPosi(0,center.Getx() - DRAWN_W_WIDTH / 2.0, center.Gety() - DRAWN_W_HEIGHT / 2.0,
+		center.Getx() + DRAWN_W_WIDTH / 2.0, center.Gety() + DRAWN_W_HEIGHT / 2.0);
+	return 0;
+}
 
 int EffectMngInitialize() {
 	for (int i = 0; i < 4; i++) {
@@ -69,6 +86,12 @@ int EffectMngInitialize() {
 		a += std::to_string(i + 1);
 		a += ".png";
 		tlp_disappear[3-i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 4; i++) {
+		std::string a = "images/enemies/drawn/broken/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		drawn_disappear[i] = LoadGraph(a.c_str());
 	}
 	return 0;
 }
@@ -92,6 +115,15 @@ int Tlp_disappearMngBorn(int count, Dot a) {
 	}
 	return 0;
 }
+Drawn_disappear drawn_disappe[4];
+int Drawn_disappearMngBorn(int count, Dot a) {
+	for (int i = 0; i < 4; i++) {
+		if (!drawn_disappe[i].GetisExist()) {
+			drawn_disappe[i].Set(count, a);
+		}
+	}
+	return 0;
+}
 
 int EffectMngUpdate(int count) {
 	for (int i = 0; i < 4; i++) {
@@ -100,6 +132,9 @@ int EffectMngUpdate(int count) {
 		}
 		if (tlp_disappe[i].GetisExist()) {
 			tlp_disappe[i].Update(count);
+		}
+		if (drawn_disappe[i].GetisExist()) {
+			drawn_disappe[i].Update(count);
 		}
 	}
 	return 0;
@@ -113,6 +148,9 @@ int EffectMngDelete() {
 		if (tlp_disappe[i].GetisExist()) {
 			tlp_disappe[i].Effect::Delete();
 		}
+		if (drawn_disappe[i].GetisExist()) {
+			drawn_disappe[i].Effect::Delete();
+		}
 	}
 	return 0;
 }
@@ -124,6 +162,9 @@ int EffectMngDraw() {
 		}
 		if (tlp_disappe[i].GetisExist()) {
 			tlp_disappe[i].Draw();
+		}
+		if (drawn_disappe[i].GetisExist()) {
+			drawn_disappe[i].Draw();
 		}
 	}
 	return 0;
