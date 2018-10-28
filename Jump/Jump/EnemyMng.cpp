@@ -304,7 +304,7 @@ int Tank::Updata(int count, Dot Pcenter,SquareMng walls) {
 
 	/*-------状態セット系-------*/
 	if (Enemy::stateFlag == 3 || stateFlag == 4) {//被ダメ中(他を受け付けない)
-												  //printfDx("ダメージ！\n");
+		//printfDx("ダメージ！\n");
 	}
 	else if ((search & Pcenter)) {//見つかって
 		if ((center.Getx() - Pcenter.Getx()) < 0) {//右にいる
@@ -416,7 +416,6 @@ int Tank::UpdataStand(int count, Dot Pcenter) {
 	return 0;
 }
 int Tank::SetDamage(int damage, int count,Dot Pcenter) {
-	if (stateFlag == 3) return 0;
 	if (haveShield) {
 		if (Pcenter.Getx() - center.Getx() <= 0) {
 			if (!isRight) return 0;
@@ -429,6 +428,8 @@ int Tank::SetDamage(int damage, int count,Dot Pcenter) {
 	if (HP <= 0) {
 		Enemy::isExist = false;
 		//SetExposion(count);
+		Tank_disappearMngBorn(count, center);
+		return 0;
 	}
 	Enemy::bodyClock = count;
 	Enemy::stateFlag = 3;
