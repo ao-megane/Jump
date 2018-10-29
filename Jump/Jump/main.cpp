@@ -116,7 +116,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				flag = 2;
 				PlayChoice();
 				if (localFlag == 0) stageFlag = 0;
-				if (localFlag == 1) stageFlag = 3;
+				if (localFlag == 1) stageFlag = 5;
 				if (localFlag == 2) {
 					printfDx("ínâ∫ÇÕÇ‹ÇæÅIÅI");
 					flag = 1;
@@ -198,7 +198,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				flag = 1;
 				PlayTitleBGM();
 			}
-			if (stageFlag != 2 && stageFlag != 4) {
+			if (stageFlag != 4 && stageFlag != 7) {
 				stageFlag++;
 				flag = 2;
 			}

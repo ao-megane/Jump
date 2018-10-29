@@ -169,7 +169,7 @@ int Drawn::Updata(int count, Dot Pcenter,SquareMng walls) {
 		//なし
 		break;
 	case 3:
-		UpdataDamage(count - Enemy::bodyClock);
+		UpdataDamage(count - bodyClock);
 		break;
 	default:
 		printfDx("DRAWN_STATE_ERROR");
@@ -186,7 +186,7 @@ int Drawn::Updata(int count, Dot Pcenter,SquareMng walls) {
 	JudgeWall(walls, DRAWN_SPEED);//center更新
 	Enemy::GetweakMngAd()->SquareMng::Delete();
 
-	if (stateFlag != 4) {
+	if (stateFlag != 4) {//壊れたら攻撃判定をなくす
 		Enemy::GetattackMngAd()->Add(Enemy::GetcenterAd()->Getx() - DRAWN_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DRAWN_A_HEIGHT / 2.0,
 			Enemy::GetcenterAd()->Getx() + DRAWN_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DRAWN_A_HEIGHT / 2.0, 10);
 	}
@@ -243,6 +243,8 @@ int Drawn::UpdataTurn(int count) {
 	return 0;
 }
 int Drawn::SetDamage(int damage, int count) {
+	acceleration.Set(0, 0);
+	velocity.Set(0, 0);
 	HP -= damage;
 	if (HP <= 0) {
 		Enemy::isExist = false;
@@ -419,6 +421,8 @@ int Tank::UpdataStand(int count, Dot Pcenter) {
 	return 0;
 }
 int Tank::SetDamage(int damage, int count,Dot Pcenter) {
+	acceleration.Set(0, 0);
+	velocity.Set(0, 0);
 	if (haveShield) {
 		if (Pcenter.Getx() - center.Getx() <= 0) {
 			if (!isRight) return 0;
@@ -610,19 +614,23 @@ int EnemyMngSet(int stageFlag) {
 	case 0://敵なし
 		break;
 	case 1://
-		drawn[0].Set(180, 300, 180, 300, 840, 420,30);
-		briWall[0].Set(1770, DISP_HEIGHT - 130, 0, 0, 0, 0,10);
+		tank[0].Set(1350, 690, false, 480, 540, 1440, 780, 90);
 		break;
-	case 2://テレポチュートリアル
-		junk[0].Set(90, 570, 0, 0, 0, 0,1);
-		junk[1].Set(330, 990, 0, 0, 0, 0,1);
-		tank[0].Set(1200, 360, true, 420, 300, 1200, 480,30);
-		tank[1].Set(800, 660, false, 600, 600, 1600, 780,30);
+	case 2:
+		drawn[0].Set(1470, 330, 60, 0, 1860, 660, 90);
+		briWall[0].Set(1710, 930, 0, 0, 0, 0, 10);
 		break;
 	case 3:
-		
+		junk[0].Set(270, 990, 0, 0, 0, 0, 10);
+		junk[1].Set(570, 990, 0, 0, 0, 0, 10);
+		junk[0].Set(690, 990, 0, 0, 0, 0, 10);
+		junk[0].Set(930, 270, 0, 0, 0, 0, 10);
+
 		break;
 	case 4:
+		tank[0].Set(1350, 270, true, 600, 0, 1440, 360, 90);
+		tank[1].Set(690, 630, false, 600, 420, 1440, 720, 90);
+		tank[2].Set(1530, 930, true, 600, 780, 1620, 1020, 90);
 		break;
 	default:
 		break;
