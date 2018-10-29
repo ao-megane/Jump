@@ -90,7 +90,7 @@ int Tank_disappear::Update(int count) {
 		}
 	}
 
-	if (count - bodyClock >= 300) isExist = false;
+	if (count - bodyClock >= 30000) isExist = false;
 
 	//acceleration.Set(0, GRAVITY);
 	//velocity.Move(acceleration.Getx(), acceleration.Gety());

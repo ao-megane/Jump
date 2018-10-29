@@ -58,7 +58,7 @@ const double P_HEIGHT = 64.0;
 const double P_WIDTH = 64.0;
 //const int P_REBORN_X = 145;
 //const int P_REBORN_Y = 1450;
-const int TLP_MAX = 290;
+const int TLP_MAX = 300;
 const double P_SPEED = 15;
 const int P_DASH_CLOCK = 40;//P_CLOCK/2 ƒtƒŒ[ƒ€‚Éˆê‰ñ‘«‰¹
 

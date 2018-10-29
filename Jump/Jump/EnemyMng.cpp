@@ -434,7 +434,11 @@ int Tank::SetDamage(int damage, int count,Dot Pcenter) {
 	HP -= damage;
 	if (HP <= 0) {
 		Enemy::isExist = false;
-		//SetExposion(count);
+		ExprosionMngBorn(count, center);
+		DebriMngBorn(count, center);
+		DebriMngBorn(count, center);
+		RedDebriMngBorn(count, center);
+		RedDebriMngBorn(count, center);
 		Tank_disappearMngBorn(count, center);
 		return 0;
 	}
