@@ -98,7 +98,7 @@ int Player::Initialize() {
 	acceleration.Set(0, 0);
 	velocity.Set(0, 0);
 	//attack = 0;
-	telepoGauge = TLP_MAX;
+	telepoGauge = TLP_MAX - 20;
 	//image = PStand1;
 	image.Add(center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() - P_DRAW_HEIGHT / 2.0, center.Getx() + P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0, PStand[0]);
 	acceptFlag = 1;
@@ -153,7 +153,7 @@ int Player::Set(int stageflag) {
 	//center.Set(100, GROUND_HEIGHT - P_HEIGHT / 2);
 	//weakArea.Set(center, P_W_WIDTH, P_W_HEIGHT);
 	//attack = 0;
-	telepoGauge = TLP_MAX;
+	telepoGauge = TLP_MAX - 20;
 	//image = PStand1;
 	acceptFlag = 1;
 	bodyClock = 0;
@@ -180,6 +180,7 @@ int Player::SetStand(int count) {
 	//velocity.Set(0, 0);	//0,0‚¾‚©‚çstand‚É“ü‚Á‚½
 	image.Setimage(0, PStand[0]);
 	image.Setimage(1, 0);
+	image.Setimage(2, 0);
 	return 0;
 }
 
@@ -187,6 +188,8 @@ int Player::UpdateStand(int count) {
 	for (int i = 0; i < 3; i++) {
 		if (count < 2 * (i + 1)) {
 			image.Setimage(0, PStand[i]);
+			image.Setimage(1, 0);
+			image.Setimage(2, 0);
 			break;
 		}
 	}
@@ -333,6 +336,8 @@ int Player::SetAttack_s(int count) {
 	acceptFlag = false;
 	acceleration.Set(0, 0);
 	image.Setimage(1, 0);
+	image.Setimage(2, 0);
+	image.Setimage(3, 0);
 	velocity.Set(0, 0);
 	PlayAttacks();
 	//attack = 0;
@@ -347,12 +352,12 @@ int Player::UpdateAttack_s(int count) {//40-1-5
 	}
 
 	if (count >= 28 && count <= 38) {
-		if(isRightFlag) center.Move(6.4, 0);
-		else center.Move(-6.4, 0);
+		if(isRightFlag) center.Move(6.4 / 2, 0);
+		else center.Move(-6.4 / 2, 0);
 	}
 	if (count >= 40 && count <= 46) {
-		if(isRightFlag) center.Move(-10.67, 0);
-		else center.Move(10.67, 0);
+		if(isRightFlag) center.Move(-10.67 / 2, 0);
+		else center.Move(10.67 / 2, 0);
 	}
 
 	if (count == 41) {
@@ -461,9 +466,9 @@ int Player::Update1(int count,int key[]) {//ó‘Ô‰ñ‚è
 	weakAreaMng.Delete();
 	attackAreaMng.Delete();
 
-	if (count % 10 == 0) {
+	/*if (count % 10 == 0) {
 		telepoGauge += 1;
-	}
+	}*/
 	if (LEFT == 1 && telepoGauge >= 100) {
 		SetTelepo(count);
 		isTelepo = true;
@@ -484,6 +489,7 @@ int Player::Update1(int count,int key[]) {//ó‘Ô‰ñ‚è
 		isTelepo = false;
 		//acceptFlag = true;
 		//stateFlag = 2;
+		image.Setimage(1, 0);
 		image.Setimage(2, 0);
 		Tlp_disappearMngBorn(count, center);
 	}
@@ -715,9 +721,10 @@ int Player::Addtelepo() {
 				a = attackAreaMng.GetintSquare(i).GetValue();
 		}
 	}
-	a += 20;
+	//a += 20;
 	if (a > 100) a = 100;
 	telepoGauge += a;
+	if (telepoGauge > TLP_MAX) telepoGauge = TLP_MAX;
 
 	return 0;
 }
@@ -739,8 +746,10 @@ int Player::GetAttack() {
 int Player::Draw() {
 
 	image.Draw(isRightFlag);
-
-	//DrawCircle(center.Getx(), center.Gety(), P_TLP_RANGE, RED, 0);
+	if(telepoGauge < 100)
+		DrawCircle(center.Getx(), center.Gety(), P_TLP_RANGE, RED, 0);
+	if(telepoGauge == 300)
+		DrawCircle(center.Getx(), center.Gety(), P_TLP_RANGE, BLUE, 0);
 
 	attackAreaMng.testDraw(RED);
 
