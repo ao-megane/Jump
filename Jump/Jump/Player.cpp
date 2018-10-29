@@ -180,6 +180,7 @@ int Player::SetStand(int count) {
 	//velocity.Set(0, 0);	//0,0‚¾‚©‚çstand‚É“ü‚Á‚½
 	image.Setimage(0, PStand[0]);
 	image.Setimage(1, 0);
+	image.Setimage(2, 0);
 	return 0;
 }
 
@@ -187,6 +188,8 @@ int Player::UpdateStand(int count) {
 	for (int i = 0; i < 3; i++) {
 		if (count < 2 * (i + 1)) {
 			image.Setimage(0, PStand[i]);
+			image.Setimage(1, 0);
+			image.Setimage(2, 0);
 			break;
 		}
 	}
@@ -333,6 +336,8 @@ int Player::SetAttack_s(int count) {
 	acceptFlag = false;
 	acceleration.Set(0, 0);
 	image.Setimage(1, 0);
+	image.Setimage(2, 0);
+	image.Setimage(3, 0);
 	velocity.Set(0, 0);
 	PlayAttacks();
 	//attack = 0;

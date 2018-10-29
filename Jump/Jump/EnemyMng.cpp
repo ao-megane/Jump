@@ -627,8 +627,8 @@ int EnemyMngSet(int stageFlag) {
 	case 3:
 		junk[0].Set(270, 990, 0, 0, 0, 0, 10);
 		junk[1].Set(570, 990, 0, 0, 0, 0, 10);
-		junk[0].Set(690, 990, 0, 0, 0, 0, 10);
-		junk[0].Set(930, 270, 0, 0, 0, 0, 10);
+		junk[2].Set(690, 990, 0, 0, 0, 0, 10);
+		junk[3].Set(930, 270, 0, 0, 0, 0, 10);
 
 		break;
 	case 4:
