@@ -128,7 +128,10 @@ int Debri::Update(int count) {
 	for (int i = 0; i < 4; i++) {
 		if (count - bodyClock == 0) {//‰‰ñ‚È‚ç
 			double thita = GetRand() % 360;
-			acceleration.Set(P_JUMP_POWER * cos(thita * PI / 180.0), P_JUMP_POWER * -sin(thita * PI / 180.0));
+			if(sin(thita * PI / 180.0) > 0)
+				acceleration.Set(P_JUMP_POWER * cos(thita * PI / 180.0), P_JUMP_POWER * -sin(thita * PI / 180.0));
+			else
+				acceleration.Set(P_JUMP_POWER * cos(thita * PI / 180.0), P_JUMP_POWER * -sin(thita * PI / 180.0));
 			//printfDx("aaaaaaaaaa");
 		}
 		if ((count - bodyClock) % 4 < i) {
@@ -153,7 +156,10 @@ int RedDebri::Update(int count) {
 	for (int i = 0; i < 5; i++) {
 		if (count - bodyClock == 0) {//‰‰ñ‚È‚ç
 			double thita = GetRand() % 360;
-			acceleration.Set(P_JUMP_POWER * cos(thita * PI / 180.0), P_JUMP_POWER * -sin(thita * PI / 180.0));
+			if (sin(thita * PI / 180.0) > 0)
+				acceleration.Set(P_JUMP_POWER * cos(thita * PI / 180.0), P_JUMP_POWER * -sin(thita * PI / 180.0));
+			else
+				acceleration.Set(P_JUMP_POWER * cos(thita * PI / 180.0), P_JUMP_POWER * -sin(thita * PI / 180.0));
 			//printfDx("aaaaaaaaaa");
 		}
 		if ((count - bodyClock) % 5 < i) {
