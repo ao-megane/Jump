@@ -242,12 +242,15 @@ int Drawn::UpdataTurn(int count) {
 
 	return 0;
 }
-
 int Drawn::SetDamage(int damage, int count) {
 	HP -= damage;
 	if (HP <= 0) {
 		Enemy::isExist = false;
-		//SetExposion(count);
+		ExprosionMngBorn(count, center);
+		DebriMngBorn(count, center);
+		DebriMngBorn(count, center);
+		RedDebriMngBorn(count, center);
+		RedDebriMngBorn(count, center);
 		Drawn_disappearMngBorn(count, center);
 		return 0;
 	}

@@ -61,7 +61,7 @@ int SystemInitialize() {
 
 	Choice = LoadSoundMem("sounds/system/decide.wav");
 	Move = LoadSoundMem("sounds/system/select.wav");
-	TitleBGM = LoadSoundMem("sounds/system/title.wav");
+	TitleBGM = LoadSoundMem("sounds/system/bgm.wav");
 	ChaseBGM = LoadSoundMem("sounds/system/chase.wav");
 	beLooked = LoadSoundMem("sounds/system/discovery.wav");
 	normalBGM = LoadSoundMem("sounds/system/normal.wav");

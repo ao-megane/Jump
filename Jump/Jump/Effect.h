@@ -57,6 +57,19 @@ class Exprosion : public Effect {
 public :
 	int Update(int count);
 private:
+};
+
+class Debri : public Effect {
+public:
+	int Update(int count);
+private:
+	Dot velocity;
+	Dot acceleration;
+};
+class RedDebri : public Effect {
+public:
+	int Update(int count);
+private:
 	Dot velocity;
 	Dot acceleration;
 };
@@ -67,6 +80,9 @@ int Tlp_appearMngBorn(int count, Dot center);
 int Tlp_disappearMngBorn(int count, Dot center);
 int Drawn_disappearMngBorn(int count, Dot a);
 int Tank_disappearMngBorn(int count, Dot a);
+int ExprosionMngBorn(int count, Dot a);
+int DebriMngBorn(int count, Dot a);
+int RedDebriMngBorn(int count, Dot a);
 
 int EffectMngUpdate(int count);
 int EffectMngDelete();
