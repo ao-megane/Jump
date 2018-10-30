@@ -150,6 +150,7 @@ int StageLoad(int stagenum) {
 		Limit = STAGE5_COUNT;
 		break;
 	case 10:
+		//printfDx("stageLoad!!\n");
 		BackGround = Factory_back;
 		Walls_judge.Add(STAGE11_judge, STAGE11_judge_NUM);
 		Walls_view.SetWalls(STAGE11_view, STAGE11_view_NUM, stagenum, Factory_wall_1, Factory_wall_2, Factory_wall_3, Factory_wall_4, Factory_wall_5, Factory_wall_6);

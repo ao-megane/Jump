@@ -547,24 +547,30 @@ int DamageWall::Set(int x, int y, int count, int HP) {
 	Enemy::HP = HP;
 	clock = count;
 	bodyClock = 0;
+	randam = GetRand() % 30;
 	return 0;
 }
 int DamageWall::Updata(int count, Dot Pcenter) {
 	Enemy::GetattackMngAd()->Delete();
 	Enemy::GetweakMngAd()->Delete();
 	Enemy::GetimageMngAd()->Delete();
+	count += randam;
 
-	if (Enemy::stateFlag == 3) {
-		//printfDx("ダメージ！\n");
-		UpdataDamage(count - Enemy::bodyClock);
+	//if (Enemy::stateFlag == 3) {
+	//	//printfDx("ダメージ！\n");
+	//	UpdataDamage(count - Enemy::bodyClock);
+	//}
+	if (clock == 0) {
+		state = 3;
 	}
-	if ((count - Enemy::bodyClock) == clock) {
+	else if ((count - Enemy::bodyClock) % clock == 0) {
 		if (state != 3)
 			state++;
 		else
 			state = 0;
 		Enemy::bodyClock += clock;
 	}
+	
 	switch (state)
 	{
 	case 0:
@@ -731,15 +737,25 @@ int EnemyMngSet(int stageFlag) {
 	case 6:
 		damageWall[0].Set(390, 1051, 30, 10);
 		damageWall[1].Set(990, 750, 30, 10);
-		damageWall[2].Set(1470, 390, 10, 10);
+		damageWall[2].Set(1470, 390, 6, 10);
 		break;
 	case 7:
 		drawn[0].Set(810, 450, 780, 300, 1680,1080, 90);
+		briWall[0].Set(690, 930, 0, 0, 0, 0, 10);
+		briWall[1].Set(1710, 930, 0, 0, 0, 0, 10);
+		junk[0].Set(1350, 990, 0, 0, 0, 0, 10);
+		damageWall[0].Set(570, 1050, 40, 10);
+		damageWall[1].Set(1590, 1050, 10, 10);
 		break;
 	case 8:
 		drawn[0].Set(390, 330, 60, 240, 900, 1020, 90);
 		drawn[1].Set(990, 330, 600, 240, 1500, 1020, 90);
 		drawn[2].Set(1710, 330, 900, 240, 1820, 1020, 90);
+		damageWall[0].Set(450, 1050, 10, 10);
+		damageWall[1].Set(1050, 1050, 10, 10);
+		damageWall[2].Set(1530, 1050, 10, 10);
+		damageWall[3].Set(750, 750, 10, 10);
+		damageWall[4].Set(1350, 750, 10, 10);
 		break;
 	case 9:
 		drawn[0].Set(870, 210, 600, 0, 1560, 1020, 90);
@@ -749,11 +765,21 @@ int EnemyMngSet(int stageFlag) {
 		junk[1].Set(630, 390, 0, 0, 0, 0, 10);
 		junk[2].Set(1470, 930, 0, 0, 0, 0, 10);
 		junk[3].Set(1530, 450, 0, 0, 0, 0, 10);
+		damageWall[0].Set(390, 1050, 0, 10);
+		damageWall[1].Set(690, 1050, 0, 10);
+		damageWall[2].Set(990, 1050, 0, 10);
+		damageWall[3].Set(1290, 1050, 0, 10);
+		damageWall[4].Set(1590, 1050, 0, 10);
 		break;
 	case 10:
 		drawn[0].Set(390, 330, 60, 240, 900, 1020, 90);
 		drawn[1].Set(990, 330, 600, 240, 1500, 1020, 90);
 		drawn[2].Set(1710, 330, 900, 240, 1820, 1020, 90);
+		damageWall[0].Set(450, 1050, 10, 10);
+		damageWall[1].Set(1050, 1050, 10, 10);
+		damageWall[2].Set(1530, 1050, 10, 10);
+		damageWall[3].Set(750, 750, 10, 10);
+		damageWall[4].Set(1350, 750, 10, 10);
 		tank[0].Set(810, 930, true, 180, 780, 1860, 1020, 90);
 		tank[1].Set(1650, 930, true, 180, 780, 1860, 1020, 90);
 		break;
@@ -763,6 +789,14 @@ int EnemyMngSet(int stageFlag) {
 		drawn[2].Set(990, 90, 0, 0, 1500, 420, 90);
 		drawn[3].Set(1770, 270, 1320, 0, 1860, 1080, 90);
 		tank[0].Set(990, 910, false, 900, 780, 1860, 1080, 90);
+		damageWall[0].Set(150, 1050, 0, 10);
+		damageWall[1].Set(150, 1050, 0, 10);
+		damageWall[2].Set(450, 1050, 0, 10);
+		damageWall[3].Set(750, 1050, 0, 10);
+		damageWall[4].Set(1050, 1050, 0, 10);
+		damageWall[5].Set(1350, 1050, 0, 10);
+		damageWall[6].Set(1650, 1050, 0, 10);
+		damageWall[7].Set(870, 330, 0, 10);
 		break;
 	default:
 		break;
@@ -883,8 +917,10 @@ SquareMng GetBriWall() {
 	SquareMng decoi;
 	decoi.Initialize();
 	for (int i = 0; i < BRI_WALL_NUM; i++) {
-		if (briWall[i].GetisExist())
-			decoi = decoi + briWall[i].GetimageMngAd()->GetSquareMng();
+		if (briWall[i].GetisExist()) {
+			//decoi = decoi + briWall[i].GetimageMngAd()->GetSquareMng();
+			decoi += briWall[i].GetimageMngAd()->GetSquareMng();
+		}
 	}
 	return decoi;
 }

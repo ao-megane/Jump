@@ -102,6 +102,7 @@ public:
 	int UpdataDamage(int count);
 private:
 	int clock;//clockf–ˆ‚Éó‘Ô‚ªi‚Ş
+	int randam;//‚¿‚å‚Á‚Æ‚¸‚ç‚·
 	int state;// 0 1 2 3(damage)
 };
 

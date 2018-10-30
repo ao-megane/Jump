@@ -93,7 +93,7 @@ const int BRI_WALL_W_HEIGHT = 160;
 const int BRI_WALL_A_WIDTH = 0;
 const int BRI_WALL_A_HEIGHT = 0;
 /*------------------------*/
-const int DAMAGE_WALL_NUM = 6;
+const int DAMAGE_WALL_NUM = 10;
 const int DAMAGE_WALL_W_WIDTH = 300;
 const int DAMAGE_WALL_W_HEIGHT = 60;
 const int DAMAGE_WALL_A_WIDTH = 400;
@@ -127,7 +127,7 @@ const double DOOR_CENTER[STAGE_NUM * 2] = {
 	1830,960,
 	1830,960,
 	1830,960,
-	1830,960,
+	1830,60,
 };
 
 //1:2
@@ -470,18 +470,20 @@ static double STAGE11_judge[STAGE11_judge_NUM * 4]{//壁，画像は別で用意か(床抜け
 const int STAGE11_COUNT = 30 * 60;//30fps
 
 /*------stage12-----*/
-const int STAGE12_view_NUM = 3;
+const int STAGE12_view_NUM = 4;
 static int STAGE12_view[STAGE12_view_NUM * 3] = {//左上,四角の種類
 	840,360,6,
 	840,600,6,
-	840,720,6
+	840,720,6,
+	60,960,1
 };
-const int STAGE12_judge_NUM = 4;
+const int STAGE12_judge_NUM = 5;
 static double STAGE12_judge[STAGE12_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防止),左上，W,H
 	0,0,60,DISP_HEIGHT,
 	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,
-	840,360,60,11*60
+	840,360,60,11*60,
+	60,960,120,60
 };
 const int STAGE12_COUNT = 30 * 60;//30fps
 
