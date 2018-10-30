@@ -198,7 +198,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				flag = 1;
 				PlayTitleBGM();
 			}
-			if (stageFlag != 4 && stageFlag != 7) {
+			if (stageFlag != 4 && stageFlag != 11) {
 				stageFlag++;
 				flag = 2;
 			}

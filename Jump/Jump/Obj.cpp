@@ -961,7 +961,7 @@ int intSquare::GetValue() {
 //}
 
 /*---------------------------------------------------*/
-int imageSquareMng::SetWalls(int a[], int num, int stageflag,int square1_image,int square2_image,int square3_image,int square4_image,int square5_image) {//壁をセットするためだけの関数，Jumpでしか使えないかも
+int imageSquareMng::SetWalls(int a[], int num, int stageflag,int square1_image,int square2_image,int square3_image,int square4_image,int square5_image,int square6_image) {//壁をセットするためだけの関数，Jumpでしか使えないかも
 	/*switch (stageflag+1)
 	{
 	case 1:
@@ -989,6 +989,10 @@ int imageSquareMng::SetWalls(int a[], int num, int stageflag,int square1_image,i
 			case 5:
 				square[i].SetLength(a[i * 3 + 0], a[i * 3 + 1], SQUARE5_WIDTH, SQUARE5_HEIGHT);
 				square[i].Setimage(square5_image);
+				break;
+			case 6:
+				square[i].SetLength(a[i * 3 + 0], a[i * 3 + 1], SQUARE6_WIDTH, SQUARE6_HEIGHT);
+				square[i].Setimage(square6_image);
 				break;
 			default:
 				break;
