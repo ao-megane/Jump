@@ -92,6 +92,12 @@ const int BRI_WALL_W_WIDTH = 60;
 const int BRI_WALL_W_HEIGHT = 160;
 const int BRI_WALL_A_WIDTH = 0;
 const int BRI_WALL_A_HEIGHT = 0;
+/*------------------------*/
+const int DAMAGE_WALL_NUM = 6;
+const int DAMAGE_WALL_W_WIDTH = 300;
+const int DAMAGE_WALL_W_HEIGHT = 60;
+const int DAMAGE_WALL_A_WIDTH = 400;
+const int DAMAGE_WALL_A_HEIGHT = 160;
 
 /*------システム--------*/
 const int STAGE_NUM = 12;
@@ -298,7 +304,7 @@ static double STAGE4_judge[STAGE4_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防
 	600,420,60,10*60,
 	600,419,180,60,
 	1140,180,10*60-1,60,
-	1680,180,60,60*13
+	1680,181,60,60*13
 };
 const int STAGE4_COUNT = 30 * 60;//30fps
 

@@ -238,6 +238,19 @@ public:
 			}
 		}
 		return a;
+	};
+	void operator += (SquareMng b) {
+		for (int i = 0; i < SQU_NUM; i++) {
+			if (b.GetSquare(i).GetisExist()) {
+				Add(b.GetSquare(i));
+			}
+		}
+	};
+	void operator = (SquareMng b) {
+		for (int i = 0; i < SQU_NUM; i++) {
+			square[i].Delete();
+			square[i] = b.GetSquare(i);
+		}
 	}
 	bool operator & (Dot a) {
 		for (int i = 0; i < SQU_NUM; i++) {

@@ -147,9 +147,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				flag = 6;
 			}
 
-			player.Update2(GetStageWalls_judge() + GetBriWall(), count);
+			player.Update2((GetStageWalls_judge() + GetBriWall()) + GetDamageWall(), count);
 
-			damage = EnemyMngUpdata(count, player.GetCenter(), GetStageWalls_judge() + GetBriWall());
+			damage = EnemyMngUpdata(count, player.GetCenter(), (GetStageWalls_judge() + GetBriWall()) + GetDamageWall());
 			if (player.GetStateFlag() != 7 && damage) {//É_ÉÅÅ[ÉWÇ™ï‘Ç¡ÇƒÇ≠ÇÈ
 				sumdamage += damage;
 				player.SetDamage(count);

@@ -17,6 +17,8 @@ int JunkStand1;
 
 int BriStand1;
 
+int DamageWallStand[4];
+
 int Enemy::Initialize() {
 	isExist = false;
 	isRight = false;
@@ -540,10 +542,83 @@ int BrittleWall::UpdataDamage(int count) {
 	return 0;
 }
 
+int DamageWall::Set(int x, int y, int count, int HP) {
+	Enemy::Set(x, y);
+	Enemy::HP = HP;
+	clock = count;
+	bodyClock = 0;
+	return 0;
+}
+int DamageWall::Updata(int count, Dot Pcenter) {
+	Enemy::GetattackMngAd()->Delete();
+	Enemy::GetweakMngAd()->Delete();
+	Enemy::GetimageMngAd()->Delete();
+
+	if (Enemy::stateFlag == 3) {
+		//printfDx("ダメージ！\n");
+		UpdataDamage(count - Enemy::bodyClock);
+	}
+	if ((count - Enemy::bodyClock) == clock) {
+		if (state != 3)
+			state++;
+		else
+			state = 0;
+		Enemy::bodyClock += clock;
+	}
+	switch (state)
+	{
+	case 0:
+		Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - DAMAGE_WALL_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DAMAGE_WALL_W_HEIGHT / 2.0,
+			Enemy::GetcenterAd()->Getx() + DAMAGE_WALL_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DAMAGE_WALL_W_HEIGHT / 2.0, DamageWallStand[0]);
+		break;
+	case 1:
+		Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - DAMAGE_WALL_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DAMAGE_WALL_W_HEIGHT / 2.0,
+			Enemy::GetcenterAd()->Getx() + DAMAGE_WALL_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DAMAGE_WALL_W_HEIGHT / 2.0, DamageWallStand[1]);
+		break;
+	case 2:
+		Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - DAMAGE_WALL_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DAMAGE_WALL_W_HEIGHT / 2.0,
+			Enemy::GetcenterAd()->Getx() + DAMAGE_WALL_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DAMAGE_WALL_W_HEIGHT / 2.0, DamageWallStand[2]);
+		break;
+	case 3:
+		Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - DAMAGE_WALL_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DAMAGE_WALL_W_HEIGHT / 2.0,
+			Enemy::GetcenterAd()->Getx() + DAMAGE_WALL_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DAMAGE_WALL_W_HEIGHT / 2.0, DamageWallStand[3]);
+
+		Enemy::GetattackMngAd()->Add(Enemy::GetcenterAd()->Getx() - DAMAGE_WALL_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DAMAGE_WALL_A_HEIGHT / 2.0,
+			Enemy::GetcenterAd()->Getx() + DAMAGE_WALL_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DAMAGE_WALL_A_HEIGHT / 2.0, 3);
+		break;
+	default:
+		break;
+	}
+
+	/*Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - DAMAGE_WALL_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DAMAGE_WALL_W_HEIGHT / 2.0,
+		Enemy::GetcenterAd()->Getx() + DAMAGE_WALL_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DAMAGE_WALL_W_HEIGHT / 2.0, DamageWallStand[3]);*/
+
+	Enemy::GetweakMngAd()->Add(Enemy::GetcenterAd()->Getx() - DAMAGE_WALL_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DAMAGE_WALL_W_HEIGHT / 2.0,
+		Enemy::GetcenterAd()->Getx() + DAMAGE_WALL_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DAMAGE_WALL_W_HEIGHT / 2.0);
+
+	
+
+	return *Enemy::GetattackMngAd() & Pcenter;
+}
+int DamageWall::SetDamage(int damage, int count) {
+	if (damage >= 30) {
+		Enemy::isExist = false;
+	}
+
+	//Enemy::bodyClock = count;
+	//Enemy::stateFlag = 3;
+	return 0;
+}
+int DamageWall::UpdataDamage(int count) {
+	if (count > 30) stateFlag = 0;
+	return 0;
+}
+
 Drawn drawn[DRAWN_NUM];
 Junk junk[JUNK_NUM];
 Tank tank[TANK_NUM];
 BrittleWall briWall[BRI_WALL_NUM];
+DamageWall damageWall[DAMAGE_WALL_NUM];
 int EnemyMngInitialize() {
 	for (int i = 0; i < 3; i++) {
 		std::string a = "images/enemies/drawn/stand/";
@@ -594,6 +669,12 @@ int EnemyMngInitialize() {
 		a += ".png";
 		noSTankBroken[i] = LoadGraph(a.c_str());
 	}
+	for (int i = 0; i < 4; i++) {
+		std::string a = "images/enemies/damagewall/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		DamageWallStand[i] = LoadGraph(a.c_str());
+	}
 
 	JunkStand1 = LoadGraph("images/enemies/junk/1.png");
 	BriStand1 = LoadGraph("images/enemies/briwall/1.png");
@@ -612,6 +693,9 @@ int EnemyMngSet(int stageFlag) {
 	}
 	for (int i = 0; i < TANK_NUM; i++) {
 		tank[i].Enemy::Initialize();
+	}
+	for (int i = 0; i < DAMAGE_WALL_NUM; i++) {
+		damageWall[i].Enemy::Initialize();
 	}
 	switch (stageFlag)
 	{
@@ -645,6 +729,9 @@ int EnemyMngSet(int stageFlag) {
 		junk[0].Set(630, 510, 0, 0, 0, 0, 10);
 		break;
 	case 6:
+		damageWall[0].Set(390, 1051, 30, 10);
+		damageWall[1].Set(990, 750, 30, 10);
+		damageWall[2].Set(1470, 390, 10, 10);
 		break;
 	case 7:
 		drawn[0].Set(810, 450, 780, 300, 1680,1080, 90);
@@ -703,7 +790,12 @@ int EnemyMngUpdata(int count, Dot Pcenter, SquareMng walls) {
 	}
 	for (int i = 0; i < TANK_NUM; i++) {
 		if (tank[i].Enemy::GetisExist()) {
-			damage += tank[i].Updata(count, Pcenter, walls);;
+			damage += tank[i].Updata(count, Pcenter, walls);
+		}
+	}
+	for (int i = 0; i < DAMAGE_WALL_NUM; i++) {
+		if (damageWall[i].Enemy::GetisExist()) {
+			damage += damageWall[i].Updata(count, Pcenter);
 		}
 	}
 
@@ -750,6 +842,7 @@ int EnemyMngDamage(intSquareMng pattack,int count,Dot Pcenter) {
 			}
 		}
 	}
+	//damagewallは除外
 	return ishit;
 }
 
@@ -778,6 +871,11 @@ int EnemyMngDraw() {
 			tank[i].Draw();
 		}
 	}
+	for (int i = 0; i < DAMAGE_WALL_NUM; i++) {
+		if (damageWall[i].Enemy::GetisExist()) {
+			damageWall[i].Draw();
+		}
+	}
 	return 0;
 }
 
@@ -788,5 +886,20 @@ SquareMng GetBriWall() {
 		if (briWall[i].GetisExist())
 			decoi = decoi + briWall[i].GetimageMngAd()->GetSquareMng();
 	}
+	return decoi;
+}
+
+SquareMng GetDamageWall() {
+	SquareMng decoi;
+	decoi.Initialize();
+	for (int i = 0; i < DAMAGE_WALL_NUM; i++) {
+		if (damageWall[i].GetisExist()) {
+			//printfDx("%d\n", i);
+			//damageWall[i].GetimageMngAd()->GetSquareMng().testDraw(BLUE);
+			//decoi = decoi + damageWall[i].GetimageMngAd()->GetSquareMng();
+			decoi += damageWall[i].GetimageMngAd()->GetSquareMng();
+		}
+	}
+	//decoi.testDraw(RED);
 	return decoi;
 }

@@ -93,6 +93,17 @@ public:
 private:
 
 };
+class DamageWall : public Enemy 
+{
+public:
+	int Set(int x, int y,int clock, int HP);
+	int Updata(int count, Dot Pcenter);
+	int SetDamage(int damage, int count);
+	int UpdataDamage(int count);
+private:
+	int clock;//clockf–ˆ‚Éó‘Ô‚ªi‚Ş
+	int state;// 0 1 2 3(damage)
+};
 
 
 int EnemyMngInitialize();
@@ -101,6 +112,7 @@ int EnemyMngUpdata(int count, Dot Pcenter,SquareMng walls);
 int EnemyMngDamage(intSquareMng pattack,int count,Dot Pcenter);
 
 SquareMng GetBriWall();
+SquareMng GetDamageWall();
 
 intSquare GetEAttackMng();
 
