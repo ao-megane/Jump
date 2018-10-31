@@ -12,6 +12,7 @@ const int GRAY = GetColor(127, 127, 127);
 const int WHITE = GetColor(255, 255, 255);
 const int ORANGE = GetColor(243, 152, 0);
 const int BROWN = GetColor(46, 33, 13);
+const int PURPLE = GetColor(122, 0, 122);
 
 #define A (key[0])
 #define B (key[1])
@@ -87,11 +88,17 @@ const int JUNK_W_HEIGHT = 60;
 const int JUNK_A_WIDTH = 0;
 const int JUNK_A_HEIGHT = 0;
 /*------------------------*/
-const int BRI_WALL_NUM = 2;
+const int BRI_WALL_NUM = 5;
 const int BRI_WALL_W_WIDTH = 60;
 const int BRI_WALL_W_HEIGHT = 160;
 const int BRI_WALL_A_WIDTH = 0;
 const int BRI_WALL_A_HEIGHT = 0;
+/*------------------------*/
+const int DAMAGE_WALL_NUM = 10;
+const int DAMAGE_WALL_W_WIDTH = 300;
+const int DAMAGE_WALL_W_HEIGHT = 60;
+const int DAMAGE_WALL_A_WIDTH = 400;
+const int DAMAGE_WALL_A_HEIGHT = 160;
 
 /*------ÉVÉXÉeÉÄ--------*/
 const int STAGE_NUM = 12;
@@ -105,7 +112,23 @@ const double P_START_POINT[STAGE_NUM * 2] = {
 	150,GROUND_HEIGHT - 100,
 	150,GROUND_HEIGHT - 100,
 	150,GROUND_HEIGHT - 100,
-	150,GROUND_HEIGHT - 100
+	150,GROUND_HEIGHT - 100,
+	150,GROUND_HEIGHT - 100,
+	150,GROUND_HEIGHT - 160,
+};
+const double DOOR_CENTER[STAGE_NUM * 2] = {
+	1830,960,
+	1830,960,
+	1830,960,
+	1830,960,
+	1830,960,//5
+	90,180,
+	1830,960,
+	1830,960,
+	1830,960,
+	1830,960,
+	1830,960,
+	1830,420,
 };
 
 //1:2
@@ -264,17 +287,16 @@ static double STAGE3_judge[STAGE3_judge_NUM * 4]{//ï«ÅCâÊëúÇÕï Ç≈ópà”Ç©(è∞î≤ÇØñh
 const int STAGE3_COUNT = 30 * 60;//30fps
 
 /*------stage4(É`ÉÖÅ[ÉgÉäÉAÉã1)-----*/
-const int STAGE4_view_NUM = 7;
+const int STAGE4_view_NUM = 6;
 static int STAGE4_view[STAGE4_view_NUM * 3] = {//ç∂è„,éläpÇÃéÌóﬁ
 	300,780,2,
 	600,420,2,
 	660,420,1,
-	660,840,1,
-	1020,180,4,
-	1680,240,2,
-	1680,600,2,
+	1140,180,4,
+	1600,240,2,
+	1600,600,2,
 };
-const int STAGE4_judge_NUM = 9;
+const int STAGE4_judge_NUM = 8;
 static double STAGE4_judge[STAGE4_judge_NUM * 4]{//ï«ÅCâÊëúÇÕï Ç≈ópà”Ç©(è∞î≤ÇØñhé~),ç∂è„ÅCW,H
 	0,0,60,DISP_HEIGHT,
 	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
@@ -282,9 +304,8 @@ static double STAGE4_judge[STAGE4_judge_NUM * 4]{//ï«ÅCâÊëúÇÕï Ç≈ópà”Ç©(è∞î≤ÇØñh
 	300,780,60,300,
 	600,420,60,10*60,
 	600,419,180,60,
-	630,840,150,60,
-	1020,180,10*60,60,
-	1680,240,60,60*13
+	1140,180,10*60-1,60,
+	1600,240,55,60*15
 };
 const int STAGE4_COUNT = 30 * 60;//30fps
 
@@ -320,142 +341,154 @@ static double STAGE5_judge[STAGE5_judge_NUM * 4]{//ï«ÅCâÊëúÇÕï Ç≈ópà”Ç©(è∞î≤ÇØñh
 const int STAGE5_COUNT = 30 * 60;//30fps
 
 /*------stage6-----*/
-const int STAGE6_view_NUM = 4;
+const int STAGE6_view_NUM = 11;
 static int STAGE6_view[STAGE6_view_NUM * 3] = {//ç∂è„,éläpÇÃéÌóﬁ
-	240,300,1,
-	13 * 60,0,2,
-	13 * 60,120,2,
-	DISP_WIDTH - 240,600,2
+	60,240,5,
+	540,240,6,
+	540,540,1,
+	660,540,1,
+	240,960,1,
+	300,900,1,
+	360,840,1,
+	900,660,1,
+	1260,660,1,
+	1620,660,1,
+	1740,840,1
 };
-const int STAGE6_judge_NUM = 7;
+const int STAGE6_judge_NUM = 13;
 static double STAGE6_judge[STAGE6_judge_NUM * 4]{//ï«ÅCâÊëúÇÕï Ç≈ópà”Ç©(è∞î≤ÇØñhé~),ç∂è„ÅCW,H
 	0,0,60,DISP_HEIGHT,
-	0,DISP_HEIGHT - 60,240,70,
-	DISP_WIDTH - 180,DISP_HEIGHT - 60,180,70,
+	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,
-	240,300,SQUARE1_WIDTH,SQUARE1_HEIGHT,
-	13 * 60,-10000,60,10000 + 12 * 60,
-	DISP_WIDTH - 240,600,SQUARE2_WIDTH,SQUARE2_HEIGHT
+	60,240,9*60-1,60,
+	540,240,60,6*60,
+	540,540,4*60,60,
+	240,960,120,60,
+	300,900,120,60,
+	360,840,120,60,
+	900,660,120,60,
+	1260,660,120,60,
+	1620,660,120,60,
+	1740,840,120,0
 };
 const int STAGE6_COUNT = 30 * 60;//30fps
 
 /*------stage7-----*/
-const int STAGE7_view_NUM = 4;
+const int STAGE7_view_NUM = 6;
 static int STAGE7_view[STAGE7_view_NUM * 3] = {//ç∂è„,éläpÇÃéÌóﬁ
-	240,300,1,
-	13 * 60,0,2,
-	13 * 60,120,2,
-	DISP_WIDTH - 240,600,2
+	720,900,1,
+	1140,540,1,
+	960,360,1,
+	1080,180,1,
+	1560,420,6,
+	1560,720,6
 };
-const int STAGE7_judge_NUM = 7;
+const int STAGE7_judge_NUM = 8;
 static double STAGE7_judge[STAGE7_judge_NUM * 4]{//ï«ÅCâÊëúÇÕï Ç≈ópà”Ç©(è∞î≤ÇØñhé~),ç∂è„ÅCW,H
 	0,0,60,DISP_HEIGHT,
-	0,DISP_HEIGHT - 60,240,70,
-	DISP_WIDTH - 180,DISP_HEIGHT - 60,180,70,
+	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,
-	240,300,SQUARE1_WIDTH,SQUARE1_HEIGHT,
-	13 * 60,-10000,60,10000 + 12 * 60,
-	DISP_WIDTH - 240,600,SQUARE2_WIDTH,SQUARE2_HEIGHT
+	720,900,120,60,
+	1140,540,120,60,
+	960,360,120,60,
+	1080,180,120,60,
+	1560,420,60,10*60
 };
 const int STAGE7_COUNT = 30 * 60;//30fps
 
 /*------stage8-----*/
-const int STAGE8_view_NUM = 4;
+const int STAGE8_view_NUM = 11;
 static int STAGE8_view[STAGE8_view_NUM * 3] = {//ç∂è„,éläpÇÃéÌóﬁ
-	240,300,1,
-	13 * 60,0,2,
-	13 * 60,120,2,
-	DISP_WIDTH - 240,600,2
+	240,960,1,
+	1380,960,1,
+	660,0,6,
+	660,300,6,
+	660,540,6,
+	1680,0,6,
+	1680,300,6,
+	1680,540,6,
+	1140,0,6,
+	1140,300,6,
+	1140,540,6,
 };
-const int STAGE8_judge_NUM = 7;
+const int STAGE8_judge_NUM = 8;
 static double STAGE8_judge[STAGE8_judge_NUM * 4]{//ï«ÅCâÊëúÇÕï Ç≈ópà”Ç©(è∞î≤ÇØñhé~),ç∂è„ÅCW,H
 	0,0,60,DISP_HEIGHT,
-	0,DISP_HEIGHT - 60,240,70,
-	DISP_WIDTH - 180,DISP_HEIGHT - 60,180,70,
+	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,
-	240,300,SQUARE1_WIDTH,SQUARE1_HEIGHT,
-	13 * 60,-10000,60,10000 + 12 * 60,
-	DISP_WIDTH - 240,600,SQUARE2_WIDTH,SQUARE2_HEIGHT
+	240,960,120,60,
+	1380,960,120,60,
+	660,0,60,14*60,
+	1680,0,60,14*60,
+	1140,0,60,14*60
 };
 const int STAGE8_COUNT = 30 * 60;//30fps
 
 /*------stage9------*/
-const int STAGE9_view_NUM = 4;
+const int STAGE9_view_NUM = 1;
 static int STAGE9_view[STAGE9_view_NUM * 3] = {//ç∂è„,éläpÇÃéÌóﬁ
-	240,300,1,
-	13 * 60,0,2,
-	13 * 60,120,2,
-	DISP_WIDTH - 240,600,2
+	0,0,-1
 };
-const int STAGE9_judge_NUM = 7;
+const int STAGE9_judge_NUM = 3;
 static double STAGE9_judge[STAGE9_judge_NUM * 4]{//ï«ÅCâÊëúÇÕï Ç≈ópà”Ç©(è∞î≤ÇØñhé~),ç∂è„ÅCW,H
 	0,0,60,DISP_HEIGHT,
-	0,DISP_HEIGHT - 60,240,70,
-	DISP_WIDTH - 180,DISP_HEIGHT - 60,180,70,
+	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,
-	240,300,SQUARE1_WIDTH,SQUARE1_HEIGHT,
-	13 * 60,-10000,60,10000 + 12 * 60,
-	DISP_WIDTH - 240,600,SQUARE2_WIDTH,SQUARE2_HEIGHT
 };
 const int STAGE9_COUNT = 30 * 60;//30fps
 
-/*------stage10-----*/
-const int STAGE10_view_NUM = 4;
+ /*------stage10----*/
+const int STAGE10_view_NUM = 8;
 static int STAGE10_view[STAGE10_view_NUM * 3] = {//ç∂è„,éläpÇÃéÌóﬁ
-	240,300,1,
-	13 * 60,0,2,
-	13 * 60,120,2,
-	DISP_WIDTH - 240,600,2
+	420,900,1,
+	540,0,6,
+	540,300,6,
+	540,780,6,
+	1260,300,1,
+	1560,180,6,
+	1560,450,6,
+	1560,660,6
 };
-const int STAGE10_judge_NUM = 7;
+const int STAGE10_judge_NUM = 8;
 static double STAGE10_judge[STAGE10_judge_NUM * 4]{//ï«ÅCâÊëúÇÕï Ç≈ópà”Ç©(è∞î≤ÇØñhé~),ç∂è„ÅCW,H
 	0,0,60,DISP_HEIGHT,
-	0,DISP_HEIGHT - 60,240,70,
-	DISP_WIDTH - 180,DISP_HEIGHT - 60,180,70,
+	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,
-	240,300,SQUARE1_WIDTH,SQUARE1_HEIGHT,
-	13 * 60,-10000,60,10000 + 12 * 60,
-	DISP_WIDTH - 240,600,SQUARE2_WIDTH,SQUARE2_HEIGHT
+	420,900,120,60,
+	540,0,60,10 * 60,
+	540,780,60,4 * 60,
+	1260,300,120,60,
+	1560,180,60,13 * 60
 };
 const int STAGE10_COUNT = 30 * 60;//30fps
-
 /*------stage11-----*/
-const int STAGE11_view_NUM = 4;
+const int STAGE11_view_NUM = 1;
 static int STAGE11_view[STAGE11_view_NUM * 3] = {//ç∂è„,éläpÇÃéÌóﬁ
-	240,300,1,
-	13 * 60,0,2,
-	13 * 60,120,2,
-	DISP_WIDTH - 240,600,2
+	0,0,-1
 };
-const int STAGE11_judge_NUM = 7;
+const int STAGE11_judge_NUM = 3;
 static double STAGE11_judge[STAGE11_judge_NUM * 4]{//ï«ÅCâÊëúÇÕï Ç≈ópà”Ç©(è∞î≤ÇØñhé~),ç∂è„ÅCW,H
 	0,0,60,DISP_HEIGHT,
-	0,DISP_HEIGHT - 60,240,70,
-	DISP_WIDTH - 180,DISP_HEIGHT - 60,180,70,
+	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,
-	240,300,SQUARE1_WIDTH,SQUARE1_HEIGHT,
-	13 * 60,-10000,60,10000 + 12 * 60,
-	DISP_WIDTH - 240,600,SQUARE2_WIDTH,SQUARE2_HEIGHT
 };
 const int STAGE11_COUNT = 30 * 60;//30fps
 
 /*------stage12-----*/
 const int STAGE12_view_NUM = 4;
 static int STAGE12_view[STAGE12_view_NUM * 3] = {//ç∂è„,éläpÇÃéÌóﬁ
-	240,300,1,
-	13 * 60,0,2,
-	13 * 60,120,2,
-	DISP_WIDTH - 240,600,2
+	840,360,6,
+	840,600,6,
+	840,720,6,
+	60,960,1
 };
-const int STAGE12_judge_NUM = 7;
+const int STAGE12_judge_NUM = 5;
 static double STAGE12_judge[STAGE12_judge_NUM * 4]{//ï«ÅCâÊëúÇÕï Ç≈ópà”Ç©(è∞î≤ÇØñhé~),ç∂è„ÅCW,H
 	0,0,60,DISP_HEIGHT,
-	0,DISP_HEIGHT - 60,240,70,
-	DISP_WIDTH - 180,DISP_HEIGHT - 60,180,70,
+	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,
-	240,300,SQUARE1_WIDTH,SQUARE1_HEIGHT,
-	13 * 60,-10000,60,10000 + 12 * 60,
-	DISP_WIDTH - 240,600,SQUARE2_WIDTH,SQUARE2_HEIGHT
+	840,360,60,11*60,
+	60,960,120,60
 };
 const int STAGE12_COUNT = 30 * 60;//30fps
 

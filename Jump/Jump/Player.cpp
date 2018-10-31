@@ -16,6 +16,7 @@ int PAttackair[8];
 
 int PTlp_targ1[4];
 int PTlp_targ2[4];
+int PTlp_targ3[4];
 
 int Attackw;
 int Attacks;
@@ -84,6 +85,12 @@ int Player::Initialize() {
 		a += std::to_string(i + 1);
 		a += ".png";
 		PTlp_targ2[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 4; i++) {
+		std::string a = "images/player/telepo_targ/left3/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		PTlp_targ3[i] = LoadGraph(a.c_str());
 	}
 
 	
@@ -169,6 +176,7 @@ int Player::Set(int stageflag) {
 	//telepo_back.Set(0, 0);
 	isTelepo = false;
 	isFirstJump = true;
+	mutekiClock = -1000;
 	return 0;
 }
 
@@ -283,8 +291,8 @@ int Player::UpdateAttack_w(int count) {
 
 	if (count == 3 || count == 4) {
 		//if(isRightFlag) attackAreaMng.Add(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, 10);
-		if (isRightFlag) attackAreaMng.Add(center.Getx() - 50, center.Gety() - 100, center.Getx() + 180, center.Gety() + 60, 10);
-		else attackAreaMng.Add(center.Getx() - 180, center.Gety() - 100, center.Getx() + 50, center.Gety() + 60, 10);
+		if (isRightFlag) attackAreaMng.Add(center.Getx() - 50, center.Gety() - 100, center.Getx() + 180, center.Gety() + 60, 40);
+		else attackAreaMng.Add(center.Getx() - 180, center.Gety() - 100, center.Getx() + 50, center.Gety() + 60, 40);
 		//DrawBox(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, RED, true);
 	}
 
@@ -315,8 +323,8 @@ int Player::UpdateAttack_air(int count) {
 	}
 
 	if (count == 3 || count == 4) {
-		if (isRightFlag) attackAreaMng.Add(center.Getx() - 90, center.Gety() - 120, center.Getx() + 240-60, center.Gety() + 120, 10);
-		else attackAreaMng.Add(center.Getx() - 240+60, center.Gety() - 120, center.Getx() + 90, center.Gety() + 120, 10);
+		if (isRightFlag) attackAreaMng.Add(center.Getx() - 90, center.Gety() - 120, center.Getx() + 240-60, center.Gety() + 120, 40);
+		else attackAreaMng.Add(center.Getx() - 240+60, center.Gety() - 120, center.Getx() + 90, center.Gety() + 120, 40);
 		//DrawBox(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, RED, true);
 	}
 
@@ -361,8 +369,8 @@ int Player::UpdateAttack_s(int count) {//40-1-5
 	}
 
 	if (count == 41) {
-		if(isRightFlag) attackAreaMng.Add(center.Getx() - 0, center.Gety() - 60, center.Getx() + 170, center.Gety() + 30, 100);
-		else attackAreaMng.Add(center.Getx() - 170, center.Gety() - 60, center.Getx() + 0, center.Gety() + 30, 100);
+		if(isRightFlag) attackAreaMng.Add(center.Getx() - 0, center.Gety() - 60, center.Getx() + 170, center.Gety() + 30, 150);
+		else attackAreaMng.Add(center.Getx() - 170, center.Gety() - 60, center.Getx() + 0, center.Gety() + 30, 150);
 	}
 	if (count >= 46) {
 		acceptFlag = true;
@@ -382,12 +390,37 @@ int Player::SetTelepo(int count) {
 	return 0;
 }
 int Player::UpdateTelepo(int count) {//
-	for (int i = 0; i < 4; i++) {
+	//for (int i = 0; i < 4; i++) {//1f更新//早すぎて見えない
+	//	if (count - targcount < i) {
+	//		if (telepoGauge < 100) {//0回
+	//		}
+	//		else if (telepoGauge < 200) {//1回
+	//			image.Setimage(2, PTlp_targ1[i]);
+	//		}
+	//		else if (telepoGauge < 300) {//2回
+	//			image.Setimage(2, PTlp_targ2[i]);
+	//		}
+	//		else if (telepoGauge == 300) {//3回
+	//			image.Setimage(2, PTlp_targ3[i]);
+	//		}
+	//		//printfDx("aaaaaa");
+	//		break;
+	//	}
+	//}
+
+	for (int i = 0; i < 4*3; i++) {//5f更新
 		if (count - targcount < i) {
-			if(telepoGauge < 100)
-				image.Setimage(2, PTlp_targ1[i]);
-			else
-				image.Setimage(2, PTlp_targ2[i]);
+			if (telepoGauge < 100) {//0回
+			}
+			else if (telepoGauge < 200) {//1回
+				image.Setimage(2, PTlp_targ1[i / 3]);
+			}
+			else if (telepoGauge < 300) {//2回
+				image.Setimage(2, PTlp_targ2[i / 3]);
+			}
+			else if (telepoGauge == 300) {//3回
+				image.Setimage(2, PTlp_targ3[i / 3]);
+			}
 			//printfDx("aaaaaa");
 			break;
 		}
@@ -397,22 +430,26 @@ int Player::UpdateTelepo(int count) {//
 		UpdateStand(count);
 	}
 
-	if (count - targcount >= 4) {
-		targcount += 4;
+	if (count - targcount >= 4*3) {
+		targcount += 4*3;
 	}
 
 	return 0;
 }
 
 int Player::SetDamage(int count) {
+	if (count - mutekiClock <= 30) {
+		return 0;
+	}
 	bodyClock = count;
 	stateFlag = 7;
 	acceptFlag = 0;
 	acceleration.Set(0, 0);//要検討
 	velocity.Set(0, 0);
 	StopAll();
+	mutekiClock = count;
 	//attack = 0;
-	return 0;
+	return 1;
 }
 int Player::UpdateDamage(int count) {
 	if (count % 4 < 2) {
@@ -428,32 +465,6 @@ int Player::UpdateDamage(int count) {
 		velocity.Setx(P_SPEED);
 	}
 
-	if (count < 17) {//待機
-		acceptFlag = 0;
-	}
-	else if (count < 20) {//攻撃
-		//attack = 40;
-		//attackArea.Set(LU, RD);
-	}
-	else if (count < 40) {//余韻
-		//attack = 0;
-	}
-	else if (count >= 40) {//モーション終わり
-		acceptFlag = 1;
-		//if (isAir != 0) {
-		//	isAir = 0;
-		//	stateFlag = 4;//戻す
-		//}
-		//else {
-		//	SetStand(count);
-		//	//printfDx("SETSTAND!\n");
-		//}
-	}
-	/*if (count == 0) image = PAttacks1;
-	if (count == 17) image = PAttacks2;
-	if (count == 19) image = PAttacks3;*/
-	/*if (count == 17)
-		PlayAttacks();*/
 	if (count == 10) {
 		acceptFlag = true;
 		stateFlag = 0;
@@ -683,6 +694,7 @@ int Player::Update2(SquareMng a,int count) {//壁まわりの処理
 			}
 		}
 	}
+	//printfDx("\n");
 
 	if (isAir && stateFlag != 5)
 		acceleration.Move(0, GRAVITY);
@@ -746,9 +758,13 @@ int Player::GetAttack() {
 int Player::Draw() {
 
 	image.Draw(isRightFlag);
-	if(telepoGauge < 100)
+	if (telepoGauge < 100)//0回
+		;//DrawCircle(center.Getx(), center.Gety(), P_TLP_RANGE, RED, 0);
+	else if (telepoGauge < 200)//1回
 		DrawCircle(center.Getx(), center.Gety(), P_TLP_RANGE, RED, 0);
-	if(telepoGauge == 300)
+	else if (telepoGauge < 300)//2回
+		DrawCircle(center.Getx(), center.Gety(), P_TLP_RANGE, PURPLE, 0);
+	if(telepoGauge == 300)//3回
 		DrawCircle(center.Getx(), center.Gety(), P_TLP_RANGE, BLUE, 0);
 
 	attackAreaMng.testDraw(RED);

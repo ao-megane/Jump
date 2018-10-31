@@ -32,6 +32,7 @@ protected:
 	SquareMng weakMng;
 	int HP;
 	int stateFlag;
+	int mutekiClock;
 	/*
 	0 stand
 	1 turn
@@ -43,7 +44,7 @@ protected:
 
 class Drawn : public Enemy{
 public:
-	int Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy,int HP);
+	int Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy,int level,bool isright);
 	int SetStand(int count);
 	int SetTurn(int count);
 	int SetDamage(int damage, int count);
@@ -54,11 +55,11 @@ public:
 	int UpdataDamage(int count);
 	//int Draw();
 private:
-
+	int level;
 };
 class Tank : public Enemy {
 public:
-	int Set(int x, int y, bool haveShield, int serchLUx, int serchLUy, int serchRDx, int serchRDy,int HP);
+	int Set(int x, int y, bool haveShield, int serchLUx, int serchLUy, int serchRDx, int serchRDy,int level,bool isright);
 	int SetStand(int count);
 	int SetTurn(int count);
 	int SetDamage(int damage, int count, Dot Pcenter);
@@ -71,6 +72,7 @@ public:
 	//int Draw();
 private:
 	bool haveShield;
+	int level;
 };
 
 class Junk : public Enemy
@@ -93,6 +95,18 @@ public:
 private:
 
 };
+class DamageWall : public Enemy 
+{
+public:
+	int Set(int x, int y,int clock, int HP);
+	int Updata(int count, Dot Pcenter);
+	int SetDamage(int damage, int count);
+	int UpdataDamage(int count);
+private:
+	int clock;//clockfñàÇ…èÛë‘Ç™êiÇﬁ
+	int randam;//ÇøÇÂÇ¡Ç∆Ç∏ÇÁÇ∑
+	int state;// 0 1 2 3(damage)
+};
 
 
 int EnemyMngInitialize();
@@ -101,6 +115,7 @@ int EnemyMngUpdata(int count, Dot Pcenter,SquareMng walls);
 int EnemyMngDamage(intSquareMng pattack,int count,Dot Pcenter);
 
 SquareMng GetBriWall();
+SquareMng GetDamageWall();
 
 intSquare GetEAttackMng();
 

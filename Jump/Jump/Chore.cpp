@@ -19,11 +19,11 @@ int White;
 
 int Keeper;	//透過用カウントキーパー
 int flag;	//現状態フラグ 0 normal 1 ending 2 bord
+int damagecount;	//ダメージ表示用フラグキーパー
+int damagedecoi;	//ダメージ表示用値キーパー
 
-int TitleBGM;
-int ChaseBGM;
-int beLooked;
-int normalBGM;
+int TytleBGM;
+int playBGM;
 int Move;
 int Choice;
 
@@ -32,8 +32,11 @@ int manFlag;
 
 int Score;
 
-int lemagne;
-int slemagne;
+//int lemagne;
+//int slemagne;
+int makinas;
+int smakinas;
+int vsmakinas;
 int SystemInitialize() {
 	Result = LoadGraph("images/system/result.png");
 	GameOver = LoadGraph("images/system/gameover.png");
@@ -61,21 +64,36 @@ int SystemInitialize() {
 
 	Choice = LoadSoundMem("sounds/system/decide.wav");
 	Move = LoadSoundMem("sounds/system/select.wav");
-	TitleBGM = LoadSoundMem("sounds/system/bgm.wav");
-	ChaseBGM = LoadSoundMem("sounds/system/chase.wav");
-	beLooked = LoadSoundMem("sounds/system/discovery.wav");
-	normalBGM = LoadSoundMem("sounds/system/normal.wav");
+	TytleBGM = LoadSoundMem("sounds/system/tytle.wav");
+	//ChaseBGM = LoadSoundMem("sounds/system/chase.wav");
+	//beLooked = LoadSoundMem("sounds/system/discovery.wav");
+	playBGM = LoadSoundMem("sounds/system/playing.wav");
 
-	if (AddFontResourceEx("font/Charlemagne.ttf", FR_PRIVATE, NULL) == 0) {
-		//printfDx("AddFontResourceEx失敗\n");
+	//if (AddFontResourceEx("font/Charlemagne.ttf", FR_PRIVATE, NULL) == 0) {
+	//	//printfDx("AddFontResourceEx失敗\n");
+	//}
+	//lemagne = CreateFontToHandle("Charlemagne", 60, -1, DX_FONTTYPE_ANTIALIASING_8X8);
+	//if (lemagne == -1) {
+	//	//printfDx("CreateFontToHandle失敗\n");
+	//}
+	//slemagne = CreateFontToHandle("Charlemagne", 40, -1, DX_FONTTYPE_ANTIALIASING_8X8);
+	//if (lemagne == -1) {
+	//	//printfDx("CreateFontToHandle失敗\n");
+	//}
+	if (AddFontResourceEx("font/Makinas-Scrap-5.otf", FR_PRIVATE, NULL) == 0) {
+		printfDx("AddFontResourceEx失敗\n");
 	}
-	lemagne = CreateFontToHandle("Charlemagne", 60, -1, DX_FONTTYPE_ANTIALIASING_8X8);
-	if (lemagne == -1) {
-		//printfDx("CreateFontToHandle失敗\n");
+	makinas = CreateFontToHandle("マキナス Scrap 5", 60, -1, DX_FONTTYPE_ANTIALIASING_8X8);
+	if (makinas == -1) {
+		printfDx("CreateFontToHandle失敗\n");
 	}
-	slemagne = CreateFontToHandle("Charlemagne", 40, -1, DX_FONTTYPE_ANTIALIASING_8X8);
-	if (lemagne == -1) {
-		//printfDx("CreateFontToHandle失敗\n");
+	smakinas = CreateFontToHandle("マキナス Scrap 5", 40, -1, DX_FONTTYPE_ANTIALIASING_8X8);
+	if (smakinas == -1) {
+		printfDx("CreateFontToHandle失敗\n");
+	}
+	vsmakinas = CreateFontToHandle("マキナス Scrap 5", 110, -1, DX_FONTTYPE_ANTIALIASING_8X8);
+	if (smakinas == -1) {
+		printfDx("CreateFontToHandle失敗\n");
 	}
 	Keeper = 0;
 	flag = 0;
@@ -97,41 +115,24 @@ int PlayChoice() {
 	return 0;
 }
 
-int PlaybeLooked() {
-	PlaySoundMem(beLooked, DX_PLAYTYPE_BACK);
-	return 0;
-}
-
 int* ScorePass() {
 	return &Score;
 }
 
-int PlayTitleBGM() {
-	StopSoundMem(TitleBGM);
-	StopSoundMem(normalBGM);
-	StopSoundMem(ChaseBGM);
-	PlaySoundMem(TitleBGM, DX_PLAYTYPE_LOOP);
+int PlayTytleBGM() {
+	StopSoundMem(TytleBGM);
+	StopSoundMem(playBGM);
+	PlaySoundMem(TytleBGM, DX_PLAYTYPE_LOOP);
 	return 0;
 }
 
-int PlaynormalBGM() {
-	StopSoundMem(TitleBGM);
-	StopSoundMem(normalBGM);
-	StopSoundMem(ChaseBGM);
-	PlaySoundMem(normalBGM, DX_PLAYTYPE_LOOP);
+int PlayplayBGM() {
+	StopSoundMem(TytleBGM);
+	StopSoundMem(playBGM);
+	PlaySoundMem(playBGM, DX_PLAYTYPE_LOOP);
 	return 0;
 }
 
-int PlayChaseBGM() {
-	//StopSoundMem(ChaseBGM);
-	PlaySoundMem(ChaseBGM, DX_PLAYTYPE_LOOP);
-	return 0;
-}
-
-int StopChaseBGM() {
-	StopSoundMem(ChaseBGM);;
-	return 0;
-}
 int clockcount;
 int DrawOP(int count) {
 	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Tytle[0], true);
@@ -153,6 +154,7 @@ int DrawOP(int count) {
 	);
 
 	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Tytle[2], true);
+	DrawStringToHandle(DISP_WIDTH / 3.0, DISP_HEIGHT - 300, "左スティック上下で選択\nBで決定", WHITE, smakinas);
 	return 0;
 }
 int DrawSelect(int local) {
@@ -183,16 +185,16 @@ int DrawTitleSentence(int flag) {
 	switch (flag)
 	{
 	case 0://play
-		DrawFormatString(0, 30, RED, "→PLAY!!");
-		//DrawFormatStringToHandle(1575, 900, BLACK, lemagne, "PLAY");
+		//DrawStringtoHandle(0, 30, RED, "→PLAY!!");
+		DrawFormatStringToHandle(1575, 900, WHITE, smakinas, "PLAY");
 		break;
 	case 1://manual
-		DrawFormatString(0, 30, RED, "→MANUAL!!");
-		//DrawFormatStringToHandle(1500, 900, BLACK, lemagne, "MANUAL");
+		//DrawFormatString(0, 30, RED, "→MANUAL!!");
+		DrawFormatStringToHandle(1500, 900, WHITE, smakinas, "MANUAL");
 		break;
 	case 2://credit
-		DrawFormatString(0, 30, RED, "→CREDIT!!");
-		//DrawFormatStringToHandle(1530, 900, BLACK, lemagne, "CREDIT");
+		//DrawFormatString(0, 30, RED, "→CREDIT!!");
+		DrawFormatStringToHandle(1530, 900, WHITE, smakinas, "CREDIT");
 		break;
 	default:
 		break;
@@ -287,10 +289,27 @@ int DrawCredit() {
 }
 
 int DrawUI(int count) {
-	DrawFormatString(DISP_WIDTH - 50, 50, WHITE, "%d", count / 30);
+	//DrawFormatString(DISP_WIDTH - 50, 50, WHITE, "%d", count / 30);
+	DrawFormatStringToHandle(DISP_WIDTH - 150, 10, WHITE, vsmakinas, "%d", count / 30);
 	return 0;
 }
-int toUIDamage(int damage,int count) {
+int DrawUIDamage(int damage,int count) {
+	if (damage != 0) {
+		damagecount = count;
+		damagedecoi += damage;
+		
+	}
+	else {
+		//printfDx("aaaaaa\n");
+	}
+	if (count - damagecount <= 45) {
+		if(damagedecoi != 0)
+			DrawFormatStringToHandle(DISP_WIDTH - 150 + 100, 10 + 100, RED, smakinas, "-%2d", damagedecoi);
+	}
+	else {
+		damagedecoi = 0;
+	}
+
 	return 0;
 }
 
@@ -467,20 +486,6 @@ int DrawWhite(int count,int keeper) {
 			return 1;
 		}
 	}
-	return 0;
-}
-
-int yesBGM() {
-	ChangeVolumeSoundMem(255, normalBGM);
-	ChangeVolumeSoundMem(255, ChaseBGM);
-	ChangeVolumeSoundMem(255, beLooked);
-	return 0;
-}
-
-int noBGM() {
-	ChangeVolumeSoundMem(0, normalBGM);
-	ChangeVolumeSoundMem(0, ChaseBGM);
-	//ChangeVolumeSoundMem(0, beLooked);
 	return 0;
 }
 

@@ -653,8 +653,8 @@ double SquareMng::GetLeftLanding(Square area, int margin) {
 		if (square[i].GetisExist()) {	//四角が存在して
 			if (!(square[i].GetLU().Gety() > area.GetRD().Gety()) && !(area.GetLU().Gety() > square[i].GetRD().Gety())) {	//縦方向判定
 				if (square[i].GetRD().Getx() - margin <= area.GetLU().Getx()) {	//横方向判定,LUはめりこみ対策，うまくいかなければ再考(RDからmarginでやるか)
-					if (area.GetLU().Getx() - square[i].GetLU().Getx() - margin < a) {//近いやつ
-						a = area.GetLU().Getx() - square[i].GetLU().Getx() - margin;
+					if (area.GetLU().Getx() - square[i].GetRD().Getx() + margin < a) {//近いやつ
+						a = area.GetLU().Getx() - square[i].GetRD().Getx() + margin;
 						//square[i].testDraw(RED);
 						b = i;
 					}
@@ -755,6 +755,7 @@ Dot SquareMng::SetTelepo(Dot center, Dot telepo,Square teleposqu) {
 				}
 			}
 			else if ((telepo - center).Getx() <= 0 && (telepo - center).Gety() >= 0) {//第三象限
+				telepo.Set(teleposqu.GetLU().Getx(), teleposqu.GetRD().Gety());
 				if (decoi.GetLU().Getx() <= 0 && decoi.GetRD().Gety() >= 0) {
 					//decoi.testDraw(RED);
 					if ((telepo - center).Getx() <= decoi.GetRD().Getx() && (telepo - center).Gety() >= decoi.GetLU().Gety()) {//雑判定
@@ -961,7 +962,7 @@ int intSquare::GetValue() {
 //}
 
 /*---------------------------------------------------*/
-int imageSquareMng::SetWalls(int a[], int num, int stageflag,int square1_image,int square2_image,int square3_image,int square4_image,int square5_image) {//壁をセットするためだけの関数，Jumpでしか使えないかも
+int imageSquareMng::SetWalls(int a[], int num, int stageflag,int square1_image,int square2_image,int square3_image,int square4_image,int square5_image,int square6_image) {//壁をセットするためだけの関数，Jumpでしか使えないかも
 	/*switch (stageflag+1)
 	{
 	case 1:
@@ -989,6 +990,10 @@ int imageSquareMng::SetWalls(int a[], int num, int stageflag,int square1_image,i
 			case 5:
 				square[i].SetLength(a[i * 3 + 0], a[i * 3 + 1], SQUARE5_WIDTH, SQUARE5_HEIGHT);
 				square[i].Setimage(square5_image);
+				break;
+			case 6:
+				square[i].SetLength(a[i * 3 + 0], a[i * 3 + 1], SQUARE6_WIDTH, SQUARE6_HEIGHT);
+				square[i].Setimage(square6_image);
 				break;
 			default:
 				break;

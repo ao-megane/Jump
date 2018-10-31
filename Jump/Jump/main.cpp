@@ -41,7 +41,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	//InputFile("kanuma2017.txt");
 
-	PlayTitleBGM();
+	PlayTytleBGM();
 
 	flag = 0;
 	int damage = 0;
@@ -100,7 +100,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			break;
 		case 1://ステージ選択画面
-			DrawFormatString(0, 0, WHITE, "selecting");
+			//DrawFormatString(0, 0, WHITE, "selecting");
 			DrawSelect(localFlag);
 			if (right == 1) {
 				PlayMove();
@@ -114,13 +114,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			if (B == 1) {
 				flag = 2;
+				
 				PlayChoice();
+				PlayplayBGM();
 				if (localFlag == 0) stageFlag = 0;
 				if (localFlag == 1) stageFlag = 5;
 				if (localFlag == 2) {
 					printfDx("地下はまだ！！");
 					flag = 1;
 				}
+				//stageFlag = 11;
 			}
 			break;
 		case 2://loading
@@ -140,20 +143,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			break;
 		case 4://playing
-			DrawFormatString(0, 0, WHITE, "playing");
+			//DrawFormatString(0, 0, WHITE, "playing");
 			player.Update1(count,key);
 			if (StageUpdata(stageFlag, count, 0,player.GetCenter())) {
 				keepCount = count;
 				flag = 6;
 			}
 
-			player.Update2(GetStageWalls_judge() + GetBriWall(), count);
+			player.Update2((GetStageWalls_judge() + GetBriWall()) + GetDamageWall(), count);
 
-			damage = EnemyMngUpdata(count, player.GetCenter(), GetStageWalls_judge() + GetBriWall());
+			damage = EnemyMngUpdata(count, player.GetCenter(), (GetStageWalls_judge() + GetBriWall()) + GetDamageWall());
 			if (player.GetStateFlag() != 7 && damage) {//ダメージが返ってくる
-				sumdamage += damage;
-				player.SetDamage(count);
-				toUIDamage(damage, count);
+				if (player.SetDamage(count)) {
+					sumdamage += damage;
+				}
+				else {
+					damage = 0;
+					//printfDx("bbbbbb\n");
+				}
 			}
 			if (EnemyMngDamage(player.GetAttackAreaMng(),count,player.GetCenter())) {
 				player.Addtelepo();
@@ -163,7 +170,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//player.GetWeakAreaMng().isDamageSquareMng(GetEnemyMngAttackArea)
 			}
 
-			if (count + sumdamage*30 > GetStageLimit()) {
+			if (count + sumdamage * 30 > GetStageLimit()) {
 				flag = 5;
 				keepCount = count;
 			}
@@ -177,18 +184,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			player.Draw();
 			EffectMngDraw();
 			DrawUI(GetStageLimit() - sumdamage * 30 - count);
-			DrawFormatString(DISP_WIDTH - 100, 100, RED, "%2d", sumdamage);
+			DrawUIDamage(damage, count);
+			//DrawFormatString(DISP_WIDTH - 100, 100, RED, "%2d", sumdamage);
 			break;
 		case 5://gameover
 			//DrawFormatString(100, 100, WHITE, "gameover");
 			DrawGameOverBord(count - keepCount);
 			if (count - keepCount > 30 && B == 1) {
 				flag = 1;
-				PlayTitleBGM();
+				PlayTytleBGM();
 			}
 			if (count - keepCount > 180) {
 				flag = 0;
-				PlayTitleBGM();
+				PlayTytleBGM();
 			}
 			break;
 		case 6://result
@@ -196,9 +204,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			DrawClearBord(count - keepCount);
 			if (B == 1) {
 				flag = 1;
-				PlayTitleBGM();
+				PlayTytleBGM();
 			}
-			if (stageFlag != 4 && stageFlag != 7) {
+			if (stageFlag != 4 && stageFlag != 11) {
 				stageFlag++;
 				flag = 2;
 			}
@@ -208,11 +216,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			break;
 		case 7://マニュアル
 			DrawFormatString(0, 0, WHITE, "manual1");
-			if (B == 1)
+			if (B == 1) {
 				PlayChoice();
+			}
 			if (DrawManual(B)) {
 				flag = 0;
 				count = 0;
+				//PlayTytleBGM();
 			}
 			break;
 		case 8://クレジット
@@ -231,7 +241,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			if (B == 1) flag = 4;
 			if (A == 1) {
 				flag = 1;
-				PlayTitleBGM();
+				PlayTytleBGM();
 			}
 			break;
 		default:
