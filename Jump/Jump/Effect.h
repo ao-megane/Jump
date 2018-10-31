@@ -20,6 +20,9 @@ protected:
 	int bodyClock;
 	imageSquareMng image;
 	Dot center;
+	Dot velocity;
+	Dot acceleration;
+	bool isRight;
 };
 
 class Tlp_appear : public Effect {
@@ -40,15 +43,19 @@ private:
 class Drawn_disappear : public Effect {
 public:
 	int Update(int count);
+	int Set(int count, Dot a, bool isright, int lev);
 private:
-	Dot velocity;
-	Dot acceleration;
+	int level;
+	
 };
 
 class Tank_disappear : public Effect {
 public:
 	int Update(int count);
 private:
+	bool isRight;
+	bool haveS;
+	int level;
 	//Dot velocity;
 	//Dot acceleration;
 };
@@ -63,26 +70,28 @@ class Debri : public Effect {
 public:
 	int Update(int count);
 private:
-	Dot velocity;
-	Dot acceleration;
 };
 class RedDebri : public Effect {
 public:
 	int Update(int count);
 private:
-	Dot velocity;
-	Dot acceleration;
+};
+class BlueDebri : public Effect {
+public:
+	int Update(int count);
+private:
 };
 
 int EffectMngInitialize();
 
 int Tlp_appearMngBorn(int count, Dot center);
 int Tlp_disappearMngBorn(int count, Dot center);
-int Drawn_disappearMngBorn(int count, Dot a);
-int Tank_disappearMngBorn(int count, Dot a);
+int Drawn_disappearMngBorn(int count, Dot a, bool isright, int level);
+int Tank_disappearMngBorn(int count, Dot a, bool isright, int level);
 int ExprosionMngBorn(int count, Dot a);
 int DebriMngBorn(int count, Dot a);
 int RedDebriMngBorn(int count, Dot a);
+int BlueDebriMngBorn(int count, Dot a);
 
 int EffectMngUpdate(int count);
 int EffectMngDelete();

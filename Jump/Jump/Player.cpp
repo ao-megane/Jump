@@ -16,6 +16,7 @@ int PAttackair[8];
 
 int PTlp_targ1[4];
 int PTlp_targ2[4];
+int PTlp_targ3[4];
 
 int Attackw;
 int Attacks;
@@ -84,6 +85,12 @@ int Player::Initialize() {
 		a += std::to_string(i + 1);
 		a += ".png";
 		PTlp_targ2[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 4; i++) {
+		std::string a = "images/player/telepo_targ/left3/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		PTlp_targ3[i] = LoadGraph(a.c_str());
 	}
 
 	
@@ -382,12 +389,37 @@ int Player::SetTelepo(int count) {
 	return 0;
 }
 int Player::UpdateTelepo(int count) {//
-	for (int i = 0; i < 4; i++) {
+	//for (int i = 0; i < 4; i++) {//1f更新//早すぎて見えない
+	//	if (count - targcount < i) {
+	//		if (telepoGauge < 100) {//0回
+	//		}
+	//		else if (telepoGauge < 200) {//1回
+	//			image.Setimage(2, PTlp_targ1[i]);
+	//		}
+	//		else if (telepoGauge < 300) {//2回
+	//			image.Setimage(2, PTlp_targ2[i]);
+	//		}
+	//		else if (telepoGauge == 300) {//3回
+	//			image.Setimage(2, PTlp_targ3[i]);
+	//		}
+	//		//printfDx("aaaaaa");
+	//		break;
+	//	}
+	//}
+
+	for (int i = 0; i < 4*3; i++) {//5f更新
 		if (count - targcount < i) {
-			if(telepoGauge < 100)
-				image.Setimage(2, PTlp_targ1[i]);
-			else
-				image.Setimage(2, PTlp_targ2[i]);
+			if (telepoGauge < 100) {//0回
+			}
+			else if (telepoGauge < 200) {//1回
+				image.Setimage(2, PTlp_targ1[i / 3]);
+			}
+			else if (telepoGauge < 300) {//2回
+				image.Setimage(2, PTlp_targ2[i / 3]);
+			}
+			else if (telepoGauge == 300) {//3回
+				image.Setimage(2, PTlp_targ3[i / 3]);
+			}
 			//printfDx("aaaaaa");
 			break;
 		}
@@ -397,8 +429,8 @@ int Player::UpdateTelepo(int count) {//
 		UpdateStand(count);
 	}
 
-	if (count - targcount >= 4) {
-		targcount += 4;
+	if (count - targcount >= 4*3) {
+		targcount += 4*3;
 	}
 
 	return 0;
@@ -746,9 +778,13 @@ int Player::GetAttack() {
 int Player::Draw() {
 
 	image.Draw(isRightFlag);
-	if(telepoGauge < 100)
+	if (telepoGauge < 100)//0回
+		;//DrawCircle(center.Getx(), center.Gety(), P_TLP_RANGE, RED, 0);
+	else if (telepoGauge < 200)//1回
 		DrawCircle(center.Getx(), center.Gety(), P_TLP_RANGE, RED, 0);
-	if(telepoGauge == 300)
+	else if (telepoGauge < 300)//2回
+		DrawCircle(center.Getx(), center.Gety(), P_TLP_RANGE, PURPLE, 0);
+	if(telepoGauge == 300)//3回
 		DrawCircle(center.Getx(), center.Gety(), P_TLP_RANGE, BLUE, 0);
 
 	attackAreaMng.testDraw(RED);

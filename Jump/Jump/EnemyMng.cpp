@@ -2,16 +2,27 @@
 #include"Value.h"
 #include"Chore.h"
 
-int DrawnStand[3];
-int DrawnTurn[2];//中身ないかも
+int RedDrawnStand[3];
+int RedDrawnTurn[2];//中身ないかも
 
-int haveSTankStand[4];
-int haveSTankTurn[2];
-int haveSTankBroken[4];
+int BlueDrawnStand[3];
+int BlueDrawnTurn[2];//中身ないかも
 
-int noSTankStand[4];
-int noSTankTurn[2];
-int noSTankBroken[4];
+int RedhaveSTankStand[4];
+int RedhaveSTankTurn[2];
+int RedhaveSTankBroken[4];
+
+int RednoSTankStand[4];
+int RednoSTankTurn[2];
+int RednoSTankBroken[4];
+
+int BluehaveSTankStand[4];
+int BluehaveSTankTurn[2];
+int BluehaveSTankBroken[4];
+
+int BluenoSTankStand[4];
+int BluenoSTankTurn[2];
+int BluenoSTankBroken[4];
 
 int JunkStand1;
 
@@ -109,9 +120,16 @@ int Enemy::Draw() {
 	return 0;
 }
 
-int Drawn::Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy, int HP) {
-	Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, HP);
+int Drawn::Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy, int lev,bool isright) {
+	level = lev;
+	if (level == 1) {
+		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 30);
+	}
+	else if (level == 2) {
+		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 90);
+	}
 	stateFlag = 0;
+	isRight = isright;
 	return 0;
 }
 int Drawn::Updata(int count, Dot Pcenter,SquareMng walls) {
@@ -204,11 +222,22 @@ int Drawn::SetStand(int count) {
 	return 0;
 }
 int Drawn::UpdataStand(int count, Dot Pcenter) {
-	image.Setimage(0, DrawnStand[0]);
-	for (int i = 0; i < 3; i++) {
-		//printfDx("%d", i);
-		if (count < i) {
-			image.Setimage(0, DrawnStand[i]);
+	if (level == 1) {
+		image.Setimage(0, RedDrawnStand[0]);
+		for (int i = 0; i < 3; i++) {
+			//printfDx("%d", i);
+			if (count < i) {
+				image.Setimage(0, RedDrawnStand[i]);
+			}
+		}
+	}
+	else if (level == 2) {
+		image.Setimage(0, BlueDrawnStand[0]);
+		for (int i = 0; i < 3; i++) {
+			//printfDx("%d", i);
+			if (count < i) {
+				image.Setimage(0, BlueDrawnStand[i]);
+			}
 		}
 	}
 	if (count >= 3) {
@@ -232,9 +261,18 @@ int Drawn::SetTurn(int count) {
 }
 int Drawn::UpdataTurn(int count) {
 	image.Setimage(0, 0);
-	for (int i = 0; i < 2; i++) {
-		if (count < 5*(i+1)) {
-			image.Setimage(0, DrawnTurn[i]);
+	if (level == 1) {
+		for (int i = 0; i < 2; i++) {
+			if (count < 5 * (i + 1)) {
+				image.Setimage(0, RedDrawnTurn[i]);
+			}
+		}
+	}
+	else if (level == 2) {
+		for (int i = 0; i < 2; i++) {
+			if (count < 5 * (i + 1)) {
+				image.Setimage(0, BlueDrawnTurn[i]);
+			}
 		}
 	}
 	if (count > 10) {
@@ -255,7 +293,7 @@ int Drawn::SetDamage(int damage, int count) {
 		DebriMngBorn(count, center);
 		RedDebriMngBorn(count, center);
 		RedDebriMngBorn(count, center);
-		Drawn_disappearMngBorn(count, center);
+		Drawn_disappearMngBorn(count, center,isRight,level);
 		return 0;
 	}
 	Enemy::bodyClock = count;
@@ -267,34 +305,162 @@ int Drawn::UpdataDamage(int count) {
 		image.Setimage(0, 0);
 	}
 	else {
-		image.Setimage(0, DrawnStand[1]);
+		if (level == 1) {
+			image.Setimage(0, RedDrawnStand[1]);
+		}
+		else if (level == 2) {
+			image.Setimage(0, BlueDrawnStand[1]);
+		}
+		
 	}
 
 	if (count > 30) stateFlag = 0;
 	return 0;
 }
 
-int Tank::Set(int x, int y, bool haveS, int serchLUx, int serchLUy, int serchRDx, int serchRDy,int HP) {
-	Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy,HP);
+int Tank::Set(int x, int y, bool haveS, int serchLUx, int serchLUy, int serchRDx, int serchRDy,int lev,bool isright) {
+	level = lev;
+	isRight = isright;
+	if (level == 1) {
+		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 30);
+	}
+	else if (level == 2) {
+		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 90);
+	}
 	haveShield = haveS;
 	return 0;
 }
 int Tank::SetTurn(int count) {
 	Enemy::bodyClock = count;
 	Enemy::stateFlag = 1;
+	velocity.Set(0, 0);
+	acceleration.Set(0, 0);
 	return 0;
 }
 int Tank::UpdataTurn(int count) {
 	image.Setimage(0, 0);
-	for (int i = 0; i < 2; i++) {
-		if (count < 15 * (i + 1)) {
-			if(haveShield)
-				image.Setimage(0, haveSTankTurn[i]);
-			else
-				image.Setimage(0, noSTankTurn[i]);
+	if (isRight) {
+		if (level == 1) {
+			if (count < 10) {
+				if (haveShield) {
+					image.Setimage(0, RedhaveSTankStand[0]);
+				}
+				else {
+					image.Setimage(0, RednoSTankStand[0]);
+					//printfDx("aaaaaaaaa");
+				}
+			}
+			else if (count < 10 + 8) {
+				if (haveShield) {
+					image.Setimage(0, RedhaveSTankTurn[0]);
+				}
+				else {
+					image.Setimage(0, RednoSTankTurn[0]);
+					//printfDx("aaaaaaaaa");
+				}
+			}
+			else if (count < 10 + 16) {
+				if (haveShield) {
+					image.Setimage(0, RedhaveSTankTurn[1]);
+				}
+				else {
+					image.Setimage(0, RednoSTankTurn[1]);
+					//printfDx("aaaaaaaaa");
+				}
+			}
+		}
+		else if (level == 2) {
+			if (count < 10) {
+				if (haveShield) {
+					image.Setimage(0, BluehaveSTankStand[0]);
+				}
+				else {
+					image.Setimage(0, BluenoSTankStand[0]);
+					//printfDx("aaaaaaaaa");
+				}
+			}
+			else if (count < 10 + 8) {
+				if (haveShield) {
+					image.Setimage(0, BluehaveSTankTurn[0]);
+				}
+				else {
+					image.Setimage(0, BluenoSTankTurn[0]);
+					//printfDx("aaaaaaaaa");
+				}
+			}
+			else if (count < 10 + 16) {
+				if (haveShield) {
+					image.Setimage(0, BluehaveSTankTurn[1]);
+				}
+				else {
+					image.Setimage(0, BluenoSTankTurn[1]);
+					//printfDx("aaaaaaaaa");
+				}
+			}
 		}
 	}
-	if (count > 30) {
+	else {
+		if (level == 1) {
+			if (count < 10) {
+				if (haveShield) {
+					image.Setimage(0, RedhaveSTankStand[0]);
+				}
+				else {
+					image.Setimage(0, RednoSTankStand[0]);
+					//printfDx("aaaaaaaaa");
+				}
+			}
+			else if (count < 10 + 8) {
+				if (haveShield) {
+					image.Setimage(0, RedhaveSTankTurn[0]);
+				}
+				else {
+					image.Setimage(0, RednoSTankTurn[0]);
+					//printfDx("aaaaaaaaa");
+				}
+			}
+			else if (count < 10 + 16) {
+				if (haveShield) {
+					image.Setimage(0, RedhaveSTankTurn[1]);
+				}
+				else {
+					image.Setimage(0, RednoSTankTurn[1]);
+					//printfDx("aaaaaaaaa");
+				}
+			}
+		}
+		else if (level == 2) {
+			if (count < 10) {
+				if (haveShield) {
+					image.Setimage(0, BluehaveSTankStand[0]);
+				}
+				else {
+					image.Setimage(0, BluenoSTankStand[0]);
+					//printfDx("aaaaaaaaa");
+				}
+			}
+			else if (count < 10 + 8) {
+				if (haveShield) {
+					image.Setimage(0, BluehaveSTankTurn[0]);
+				}
+				else {
+					image.Setimage(0, BluenoSTankTurn[0]);
+					//printfDx("aaaaaaaaa");
+				}
+			}
+			else if (count < 10 + 16) {
+				if (haveShield) {
+					image.Setimage(0, BluehaveSTankTurn[1]);
+				}
+				else {
+					image.Setimage(0, BluenoSTankTurn[1]);
+					//printfDx("aaaaaaaaa");
+				}
+			}
+		}
+	}
+
+	if (count >= 10+16) {
 		isRight =! isRight;
 		stateFlag = 0;
 	}
@@ -392,21 +558,42 @@ int Tank::SetStand(int count) {
 	return 0;
 }
 int Tank::UpdataStand(int count, Dot Pcenter) {
-	if(haveShield)
-		image.Setimage(0, haveSTankStand[0]);
-	else
-		image.Setimage(0, noSTankStand[0]);
-	for (int i = 0; i < 4; i++) {
-		//printfDx("%d", i);
-		if (count < i) {
-			if(haveShield)
-				image.Setimage(0, haveSTankStand[i]);
-			else
-				image.Setimage(0, noSTankStand[i]);
+	//4f更新
+	if (level == 1) {
+		if (haveShield)
+			image.Setimage(0, RedhaveSTankStand[0]);
+		else
+			image.Setimage(0, RednoSTankStand[0]);
+		for (int i = 0; i < 4*4; i++) {
+			//printfDx("%d", i);
+			if (count < i) {
+				if (haveShield)
+					image.Setimage(0, RedhaveSTankStand[i/4]);
+				else
+					image.Setimage(0, RednoSTankStand[i/4]);
+				break;
+			}
 		}
 	}
-	if (count >= 4) {
-		bodyClock += 4;
+	else if (level == 2) {
+		if (haveShield)
+			image.Setimage(0, BluehaveSTankStand[0]);
+		else
+			image.Setimage(0, BluenoSTankStand[0]);
+		for (int i = 0; i < 4*4; i++) {
+			//printfDx("%d", i);
+			if (count < i) {
+				if (haveShield)
+					image.Setimage(0, BluehaveSTankStand[i/4]);
+				else
+					image.Setimage(0, BluenoSTankStand[i/4]);
+				break;
+			}
+		}
+	}
+	
+	if (count >= 4*4) {
+		bodyClock += 4*4;
 	}
 
 	if (search & Pcenter) {//見つかれば
@@ -441,7 +628,7 @@ int Tank::SetDamage(int damage, int count,Dot Pcenter) {
 		DebriMngBorn(count, center);
 		RedDebriMngBorn(count, center);
 		RedDebriMngBorn(count, center);
-		Tank_disappearMngBorn(count, center);
+		Tank_disappearMngBorn(count, center, isRight, level);
 		return 0;
 	}
 	Enemy::bodyClock = count;
@@ -453,11 +640,21 @@ int Tank::UpdataDamage(int count) {
 		image.Setimage(0, 0);
 	}
 	else {
-		if (haveShield) {
-			image.Setimage(0, haveSTankStand[1]);
+		if (level == 1) {
+			if (haveShield) {
+				image.Setimage(0, RedhaveSTankStand[1]);
+			}
+			else {
+				image.Setimage(0, RednoSTankStand[1]);
+			}
 		}
-		else {
-			image.Setimage(0, noSTankStand[1]);
+		else if (level == 2) {
+			if (haveShield) {
+				image.Setimage(0, BluehaveSTankStand[1]);
+			}
+			else {
+				image.Setimage(0, BluenoSTankStand[1]);
+			}
 		}
 	}
 
@@ -627,54 +824,103 @@ BrittleWall briWall[BRI_WALL_NUM];
 DamageWall damageWall[DAMAGE_WALL_NUM];
 int EnemyMngInitialize() {
 	for (int i = 0; i < 3; i++) {
-		std::string a = "images/enemies/drawn/stand/";
+		std::string a = "images/enemies/drawn/red/stand/";
 		a += std::to_string(i + 1);
 		a += ".png";
-		DrawnStand[i] = LoadGraph(a.c_str());
+		RedDrawnStand[i] = LoadGraph(a.c_str());
 	}
 	for (int i = 0; i < 2; i++) {
-		std::string a = "images/enemies/drawn/turn/";
+		std::string a = "images/enemies/drawn/red/turn/";
 		a += std::to_string(i + 1);
 		a += ".png";
-		DrawnTurn[i] = LoadGraph(a.c_str());
+		RedDrawnTurn[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 4; i++) {
+		std::string a = "images/enemies/tank/red/shield/stand/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		RedhaveSTankStand[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 2; i++) {
+		std::string a = "images/enemies/tank/red/shield/turn/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		RedhaveSTankTurn[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 4; i++) {
+		std::string a = "images/enemies/tank/red/shield/broken/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		RedhaveSTankBroken[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 4; i++) {
+		std::string a = "images/enemies/tank/red/noshield/stand/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		RednoSTankStand[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 2; i++) {
+		std::string a = "images/enemies/tank/red/noshield/turn/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		RednoSTankTurn[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 4; i++) {
+		std::string a = "images/enemies/tank/red/noshield/broken/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		RednoSTankBroken[i] = LoadGraph(a.c_str());
 	}
 
-	for (int i = 0; i < 4; i++) {
-		std::string a = "images/enemies/tank/shield/stand/";
+	for (int i = 0; i < 3; i++) {
+		std::string a = "images/enemies/drawn/blue/stand/";
 		a += std::to_string(i + 1);
 		a += ".png";
-		haveSTankStand[i] = LoadGraph(a.c_str());
+		BlueDrawnStand[i] = LoadGraph(a.c_str());
 	}
 	for (int i = 0; i < 2; i++) {
-		std::string a = "images/enemies/tank/shield/turn/";
+		std::string a = "images/enemies/drawn/blue/turn/";
 		a += std::to_string(i + 1);
 		a += ".png";
-		haveSTankTurn[i] = LoadGraph(a.c_str());
+		BlueDrawnTurn[i] = LoadGraph(a.c_str());
 	}
 	for (int i = 0; i < 4; i++) {
-		std::string a = "images/enemies/tank/shield/broken/";
+		std::string a = "images/enemies/tank/blue/shield/stand/";
 		a += std::to_string(i + 1);
 		a += ".png";
-		haveSTankBroken[i] = LoadGraph(a.c_str());
-	}
-	for (int i = 0; i < 4; i++) {
-		std::string a = "images/enemies/tank/noshield/stand/";
-		a += std::to_string(i + 1);
-		a += ".png";
-		noSTankStand[i] = LoadGraph(a.c_str());
+		BluehaveSTankStand[i] = LoadGraph(a.c_str());
 	}
 	for (int i = 0; i < 2; i++) {
-		std::string a = "images/enemies/tank/noshield/turn/";
+		std::string a = "images/enemies/tank/blue/shield/turn/";
 		a += std::to_string(i + 1);
 		a += ".png";
-		noSTankTurn[i] = LoadGraph(a.c_str());
+		BluehaveSTankTurn[i] = LoadGraph(a.c_str());
 	}
 	for (int i = 0; i < 4; i++) {
-		std::string a = "images/enemies/tank/noshield/broken/";
+		std::string a = "images/enemies/tank/blue/shield/broken/";
 		a += std::to_string(i + 1);
 		a += ".png";
-		noSTankBroken[i] = LoadGraph(a.c_str());
+		BluehaveSTankBroken[i] = LoadGraph(a.c_str());
 	}
+	for (int i = 0; i < 4; i++) {
+		std::string a = "images/enemies/tank/blue/noshield/stand/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		BluenoSTankStand[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 2; i++) {
+		std::string a = "images/enemies/tank/blue/noshield/turn/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		BluenoSTankTurn[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 4; i++) {
+		std::string a = "images/enemies/tank/blue/noshield/broken/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		BluenoSTankBroken[i] = LoadGraph(a.c_str());
+	}
+
 	for (int i = 0; i < 4; i++) {
 		std::string a = "images/enemies/damagewall/";
 		a += std::to_string(i + 1);
@@ -708,10 +954,10 @@ int EnemyMngSet(int stageFlag) {
 	case 0://敵なし
 		break;
 	case 1://
-		tank[0].Set(1350, 690, false, 480, 540, 1440, 780, 90);
+		tank[0].Set(1350, 690, false, 480, 540, 1440, 780, 1,0);
 		break;
 	case 2:
-		drawn[0].Set(1470, 330, 60, 0, 1860, 660, 90);
+		drawn[0].Set(1470, 330, 60, 0, 1860, 660, 1,0);
 		briWall[0].Set(1710, 930, 0, 0, 0, 0, 10);
 		break;
 	case 3:
@@ -721,17 +967,17 @@ int EnemyMngSet(int stageFlag) {
 		junk[3].Set(930, 270, 0, 0, 0, 0, 10);
 		break;
 	case 4:
-		tank[0].Set(1350, 270, true, 600, 0, 1440, 360, 90);
-		tank[1].Set(690, 630, false, 600, 420, 1440, 720, 90);
-		tank[2].Set(1530, 930, true, 600, 780, 1620, 1020, 90);
+		tank[0].Set(1350, 270, true, 600, 0, 1440, 360, 1,0);
+		tank[1].Set(690, 630, false, 600, 420, 1440, 720, 1,1);
+		tank[2].Set(1530, 930, true, 600, 780, 1620, 1020, 1,0);
 		junk[0].Set(270, 990, 0, 0, 0, 0, 10);
 		junk[1].Set(390, 990, 0, 0, 0, 0, 10);
 		junk[2].Set(510, 330, 0, 0, 0, 0, 10);
 		break;
 	case 5:
-		drawn[0].Set(810, 150, 600, 0, 1860, 600, 90);
-		tank[0].Set(870, 930, false, 420, 720, 1380, 1020, 90);
-		tank[1].Set(1650, 930, true, 840, 720, 1860, 1020, 90);
+		drawn[0].Set(810, 150, 600, 0, 1860, 600, 2,1);
+		tank[0].Set(870, 930, false, 420, 720, 1380, 1020, 2,0);
+		tank[1].Set(1650, 930, true, 840, 720, 1860, 1020, 2,0);
 		junk[0].Set(630, 510, 0, 0, 0, 0, 10);
 		break;
 	case 6:
@@ -740,7 +986,7 @@ int EnemyMngSet(int stageFlag) {
 		damageWall[2].Set(1470, 390, 6, 10);
 		break;
 	case 7:
-		drawn[0].Set(810, 450, 780, 300, 1680,1080, 90);
+		drawn[0].Set(810, 450, 780, 300, 1680,1080, 2,1);
 		briWall[0].Set(690, 930, 0, 0, 0, 0, 10);
 		briWall[1].Set(1710, 930, 0, 0, 0, 0, 10);
 		junk[0].Set(1350, 990, 0, 0, 0, 0, 10);
@@ -748,9 +994,9 @@ int EnemyMngSet(int stageFlag) {
 		damageWall[1].Set(1590, 1050, 10, 10);
 		break;
 	case 8:
-		drawn[0].Set(390, 330, 60, 240, 900, 1020, 90);
-		drawn[1].Set(990, 330, 600, 240, 1500, 1020, 90);
-		drawn[2].Set(1710, 330, 900, 240, 1820, 1020, 90);
+		drawn[0].Set(390, 330, 60, 240, 900, 1020, 2,0);
+		drawn[1].Set(990, 330, 600, 240, 1500, 1020, 2,0);
+		drawn[2].Set(1710, 330, 900, 240, 1820, 1020, 2,0);
 		damageWall[0].Set(450, 1050, 10, 10);
 		damageWall[1].Set(1050, 1050, 10, 10);
 		damageWall[2].Set(1530, 1050, 10, 10);
@@ -758,7 +1004,7 @@ int EnemyMngSet(int stageFlag) {
 		damageWall[4].Set(1350, 750, 10, 10);
 		break;
 	case 9:
-		drawn[0].Set(870, 210, 600, 0, 1560, 1020, 90);
+		drawn[0].Set(870, 210, 600, 0, 1560, 1020, 2,1);
 		briWall[0].Set(570, 690, 0, 0, 0, 0, 10);
 		briWall[1].Set(1590, 90, 0, 0, 0, 0, 10);
 		junk[0].Set(90, 690, 0, 0, 0, 0, 10);
@@ -772,23 +1018,23 @@ int EnemyMngSet(int stageFlag) {
 		damageWall[4].Set(1590, 1050, 0, 10);
 		break;
 	case 10:
-		drawn[0].Set(390, 330, 60, 240, 900, 1020, 90);
-		drawn[1].Set(990, 330, 600, 240, 1500, 1020, 90);
-		drawn[2].Set(1710, 330, 900, 240, 1820, 1020, 90);
+		drawn[0].Set(390, 330, 60, 240, 900, 1020, 2,0);
+		drawn[1].Set(990, 330, 600, 240, 1500, 1020, 2,0);
+		drawn[2].Set(1710, 330, 900, 240, 1820, 1020, 2,0);
 		damageWall[0].Set(450, 1050, 10, 10);
 		damageWall[1].Set(1050, 1050, 10, 10);
 		damageWall[2].Set(1530, 1050, 10, 10);
 		damageWall[3].Set(750, 750, 10, 10);
 		damageWall[4].Set(1350, 750, 10, 10);
-		tank[0].Set(810, 930, true, 180, 780, 1860, 1020, 90);
-		tank[1].Set(1650, 930, true, 180, 780, 1860, 1020, 90);
+		tank[0].Set(810, 930, true, 180, 780, 1860, 1020, 2,0);
+		tank[1].Set(1650, 930, true, 180, 780, 1860, 1020, 2,0);
 		break;
 	case 11:
-		drawn[0].Set(750, 750, 0, 300, 840, 1020, 90);
-		drawn[1].Set(390, 90, 0, 0, 840, 840, 90);
-		drawn[2].Set(990, 90, 0, 0, 1500, 420, 90);
-		drawn[3].Set(1770, 270, 1320, 0, 1860, 1080, 90);
-		tank[0].Set(990, 910, false, 900, 780, 1860, 1080, 90);
+		drawn[0].Set(750, 750, 0, 300, 840, 1020, 2,1);
+		drawn[1].Set(390, 90, 0, 0, 840, 840, 2,1);
+		drawn[2].Set(990, 90, 0, 0, 1500, 420, 2,1);
+		drawn[3].Set(1770, 270, 1320, 0, 1860, 1080, 2,1);
+		tank[0].Set(990, 910, false, 900, 780, 1860, 1080, 2,1);
 		damageWall[0].Set(150, 1050, 0, 10);
 		damageWall[1].Set(150, 1050, 0, 10);
 		damageWall[2].Set(450, 1050, 0, 10);
@@ -881,7 +1127,7 @@ int EnemyMngDamage(intSquareMng pattack,int count,Dot Pcenter) {
 }
 
 int EnemyMngDraw() {
-	//DrawGraph(100, 100, DrawnStand[0], true);
+	DrawGraph(100, 100, BluenoSTankStand[0], true);
 	//DrawBox(180, 300, 840, 420, BLUE, 0);
 	for (int i = 0; i < DRAWN_NUM; i++) {
 		if (drawn[i].Enemy::GetisExist()) {

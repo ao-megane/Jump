@@ -4,8 +4,10 @@ int Burn;
 
 int tlp_appear[4];
 int tlp_disappear[4];
-int drawn_disappear[4];
-int tank_disappear[8];
+int red_drawn_disappear[4];
+int red_tank_disappear[8];
+int blue_drawn_disappear[4];
+int blue_tank_disappear[8];
 int expro[6];
 int debri[4];
 int reddebri[5];
@@ -16,6 +18,8 @@ int Effect::Set(int count, Dot a) {
 	bodyClock = count;
 	center = a;
 	image.Add(center.Getx() - P_DRAW_WIDTH / 2.0, center.Gety() - P_DRAW_HEIGHT / 2.0, center.Getx() + P_DRAW_WIDTH / 2.0, center.Gety() + P_DRAW_HEIGHT / 2.0, 0);
+	velocity.Set(0, 0);
+	acceleration.Set(0, 0);
 	return 0;
 }
 bool Effect::GetisExist() {
@@ -64,10 +68,21 @@ int Tlp_disappear::Update(int count) {
 	if (count - bodyClock >= 4) isExist = false;
 	return 0;
 }
+int Drawn_disappear::Set(int count, Dot a, bool isright, int lev) {
+	Effect::Set(count, a);
+	isRight = isright;
+	level = lev;
+	return 0;
+}
 int Drawn_disappear::Update(int count) {
 	for (int i = 0; i < 4; i++) {
 		if ((count - bodyClock) % 4 < i) {
-			image.Setimage(0, drawn_disappear[i]);
+			if (level == 1) {
+				image.Setimage(0, red_drawn_disappear[i]);
+			}
+			else if (level == 2) {
+				image.Setimage(0, blue_drawn_disappear[i]);
+			}
 			break;
 		}
 	}
@@ -85,7 +100,12 @@ int Drawn_disappear::Update(int count) {
 int Tank_disappear::Update(int count) {
 	for (int i = 0; i < 8; i++) {
 		if ((count - bodyClock) % 8 < i) {
-			image.Setimage(0, tank_disappear[i]);
+			if (level == 1) {
+				image.Setimage(0, red_tank_disappear[i]);
+			}
+			else if (level == 2) {
+				image.Setimage(0, blue_tank_disappear[i]);
+			}
 			break;
 		}
 	}
@@ -202,17 +222,17 @@ int Tlp_disappearMngBorn(int count, Dot a) {
 	return 0;
 }
 Drawn_disappear drawn_disappe[4];
-int Drawn_disappearMngBorn(int count, Dot a) {
+int Drawn_disappearMngBorn(int count, Dot a,bool isright,int level) {
 	for (int i = 0; i < 4; i++) {
 		if (!drawn_disappe[i].GetisExist()) {
-			drawn_disappe[i].Set(count, a);
+			drawn_disappe[i].Set(count, a, isright, level);
 			return 0;
 		}
 	}
 	return 0;
 }
 Tank_disappear tank_disappe[4];
-int Tank_disappearMngBorn(int count, Dot a) {
+int Tank_disappearMngBorn(int count, Dot a,bool isright,int level) {
 	for (int i = 0; i < 4; i++) {
 		if (!tank_disappe[i].GetisExist()) {
 			tank_disappe[i].Set(count, a);
@@ -268,16 +288,28 @@ int EffectMngInitialize() {
 		tlp_disappear[3 - i] = LoadGraph(a.c_str());
 	}
 	for (int i = 0; i < 4; i++) {
-		std::string a = "images/enemies/drawn/broken/";
+		std::string a = "images/enemies/drawn/red/broken/";
 		a += std::to_string(i + 1);
 		a += ".png";
-		drawn_disappear[i] = LoadGraph(a.c_str());
+		red_drawn_disappear[i] = LoadGraph(a.c_str());
 	}
 	for (int i = 0; i < 8; i++) {
-		std::string a = "images/enemies/tank/broken/";
+		std::string a = "images/enemies/tank/red/broken/";
 		a += std::to_string(i + 1);
 		a += ".png";
-		tank_disappear[i] = LoadGraph(a.c_str());
+		red_tank_disappear[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 4; i++) {
+		std::string a = "images/enemies/drawn/blue/broken/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		blue_drawn_disappear[i] = LoadGraph(a.c_str());
+	}
+	for (int i = 0; i < 8; i++) {
+		std::string a = "images/enemies/tank/blue/broken/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		blue_tank_disappear[i] = LoadGraph(a.c_str());
 	}
 	for (int i = 0; i < 6; i++) {
 		std::string a = "images/enemies/explo/explo/";

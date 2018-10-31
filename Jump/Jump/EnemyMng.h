@@ -43,7 +43,7 @@ protected:
 
 class Drawn : public Enemy{
 public:
-	int Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy,int HP);
+	int Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy,int level,bool isright);
 	int SetStand(int count);
 	int SetTurn(int count);
 	int SetDamage(int damage, int count);
@@ -54,11 +54,11 @@ public:
 	int UpdataDamage(int count);
 	//int Draw();
 private:
-
+	int level;
 };
 class Tank : public Enemy {
 public:
-	int Set(int x, int y, bool haveShield, int serchLUx, int serchLUy, int serchRDx, int serchRDy,int HP);
+	int Set(int x, int y, bool haveShield, int serchLUx, int serchLUy, int serchRDx, int serchRDy,int level,bool isright);
 	int SetStand(int count);
 	int SetTurn(int count);
 	int SetDamage(int damage, int count, Dot Pcenter);
@@ -71,6 +71,7 @@ public:
 	//int Draw();
 private:
 	bool haveShield;
+	int level;
 };
 
 class Junk : public Enemy
