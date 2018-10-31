@@ -821,8 +821,8 @@ int DamageWall::Updata(int count, Dot Pcenter) {
 		Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - DAMAGE_WALL_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DAMAGE_WALL_W_HEIGHT / 2.0,
 			Enemy::GetcenterAd()->Getx() + DAMAGE_WALL_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DAMAGE_WALL_W_HEIGHT / 2.0, DamageWallStand[3]);
 
-		Enemy::GetattackMngAd()->Add(Enemy::GetcenterAd()->Getx() - DAMAGE_WALL_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DAMAGE_WALL_A_HEIGHT / 2.0,
-			Enemy::GetcenterAd()->Getx() + DAMAGE_WALL_A_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DAMAGE_WALL_A_HEIGHT / 2.0, 3);
+		Enemy::GetattackMngAd()->Add(Enemy::GetcenterAd()->Getx() - 120, Enemy::GetcenterAd()->Gety() - 70,
+			Enemy::GetcenterAd()->Getx() + 120, Enemy::GetcenterAd()->Gety() + 0, 3);
 		break;
 	default:
 		break;

@@ -9,6 +9,7 @@ int Selectbase;
 int Selectfact;
 imageSquare Baseicon;
 imageSquare Facticon;
+imageSquare Facticon2;
 int Logo;
 int Pause;
 int Manual[2];
@@ -51,6 +52,8 @@ int SystemInitialize() {
 	Baseicon.Setimage(LoadGraph("images/system/select/baseicon.png"));
 	Facticon.Set(DISP_WIDTH / 4.0 * 2 - ICON_WIDTH / 2.0, DISP_HEIGHT / 2.0 - ICON_HEIGHT / 2.0, DISP_WIDTH / 4.0 * 2 + ICON_WIDTH / 2.0, DISP_HEIGHT / 2.0 + ICON_HEIGHT / 2.0);
 	Facticon.Setimage(LoadGraph("images/system/select/factoryicon.png"));
+	Facticon2.Set(DISP_WIDTH / 4.0 * 3 - ICON_WIDTH / 2.0, DISP_HEIGHT / 2.0 - ICON_HEIGHT / 2.0, DISP_WIDTH / 4.0 * 3 + ICON_WIDTH / 2.0, DISP_HEIGHT / 2.0 + ICON_HEIGHT / 2.0);
+	Facticon2.Setimage(LoadGraph("images/system/select/factoryicon.png"));
 	White = LoadGraph("images/system/white.png");
 	Manual[0] = LoadGraph("images/system/manual1.png");
 	Manual[1] = LoadGraph("images/system/manual2.png");
@@ -170,11 +173,14 @@ int DrawSelect(int local) {
 		
 		break;
 	case 3:
-		DrawFormatString(500, 500, RED, "工場地下！！");
+		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Selectfact, true);
+		DrawBox(Facticon2.Square::GetLU().Getx(), Facticon2.Square::GetLU().Gety(), Facticon2.Square::GetRD().Getx(), Facticon2.Square::GetRD().Gety(), RED, 0);
+
 		break;
 	default:
 		break;
 	}
+	Facticon2.Draw();
 	Facticon.Draw();
 	Baseicon.Draw();
 
@@ -294,19 +300,19 @@ int DrawUI(int count) {
 	return 0;
 }
 int DrawUIDamage(int damage,int count) {
-	if (damage != 0) {
+	if (damage != 0) {//ダメージがあれば
 		damagecount = count;
 		damagedecoi += damage;
-		
+		//printfDx("decoing\n");
 	}
-	else {
+	else {//ダメージがなければ
 		//printfDx("aaaaaa\n");
 	}
-	if (count - damagecount <= 45) {
+	if (count - damagecount <= 45) {//ダメージから一定時間たつまで
 		if(damagedecoi != 0)
-			DrawFormatStringToHandle(DISP_WIDTH - 150 + 100, 10 + 100, RED, smakinas, "-%2d", damagedecoi);
+			DrawFormatStringToHandle(DISP_WIDTH - 150 + 80, 10 + 100, RED, smakinas, "-%2d", damagedecoi);
 	}
-	else {
+	else {//ダメージから一定時間たったら
 		damagedecoi = 0;
 	}
 
@@ -451,13 +457,20 @@ int LoserUpdata(int count) {
 	//DrawLoseBord(count);
 	return 1;
 }
-int DrawClearBord(int count) {
-	if (count <= 180) {
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, (count - Keeper2) / 60.0 * 255.0);		//ブレンドモードを設定
-		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Result, true);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);		//ブレンドモードをオフ
+int DrawResult(int keepcount,int stage) {
+	//if (count <= 180) {
+	//	SetDrawBlendMode(DX_BLENDMODE_ALPHA, (count - Keeper2) / 60.0 * 255.0);		//ブレンドモードを設定
+	//	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Result, true);
+	//	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);		//ブレンドモードをオフ
+	//}
+	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Result, true);
+	DrawFormatStringToHandle(640, 560, RED, vsmakinas, "%3d", keepcount/30);
+	DrawFormatStringToHandle(1380, 560, ORANGE, vsmakinas, "S", keepcount / 30);
+	switch (stage)
+	{
+	default:
+		break;
 	}
-	//DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Clear, true);
 	//DrawFormatString(1000, 1000, RED, "CLEAR!!");
 	return 0;
 }

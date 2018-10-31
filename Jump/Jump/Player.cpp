@@ -754,6 +754,14 @@ int Player::GetAttack() {
 	//return attack;
 	return 0;
 }
+bool Player::Getismuteki(int count) {
+	if (count - mutekiClock <= 30) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
 
 int Player::Draw() {
 

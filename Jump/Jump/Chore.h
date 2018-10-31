@@ -58,7 +58,7 @@ int LoserUpdata(int count);
 
 int DrawGameOverBord(int count);
 
-int DrawClearBord(int count);
+int DrawResult(int keepcount,int stage);
 
 int SetWinner(int levelFlag,int count,int* score);
 
