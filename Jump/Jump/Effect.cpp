@@ -39,7 +39,7 @@ int Effect::Delete() {
 }
 int Effect::Draw() {
 	if (isExist)
-		image.Draw();
+		image.Draw(isRight);
 	return 0;
 }
 Effect::Effect() {
@@ -550,7 +550,7 @@ int EffectMngDelete() {
 }
 
 int EffectMngDraw() {
-	DrawGraph(100, 100, red_tank_haveS_junk[0], 1);
+	//DrawGraph(100, 100, red_tank_haveS_junk[0], 1);
 	for (int i = 0; i < 4; i++) {
 		if (tlp_appe[i].GetisExist()) {
 			tlp_appe[i].Draw();
