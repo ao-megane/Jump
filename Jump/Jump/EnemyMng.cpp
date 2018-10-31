@@ -68,6 +68,7 @@ int Enemy::Set(int x, int y, double serchLUx, double serchLUy, double serchRDx, 
 	search.Add(serchLUx, serchLUy, serchRDx, serchRDy);
 	HP = hp;
 	stateFlag = 0;
+	mutekiClock = -100;
 	return 0;
 }
 int Enemy::Set(int x, int y) {
@@ -76,6 +77,7 @@ int Enemy::Set(int x, int y) {
 	velocity.Set(0, 0);
 	acceleration.Set(0, 0);
 	stateFlag = 0;
+	mutekiClock = -100;
 	return 0;
 }
 int Enemy::SetHP(int a) {
@@ -123,10 +125,10 @@ int Enemy::Draw() {
 int Drawn::Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy, int lev,bool isright) {
 	level = lev;
 	if (level == 1) {
-		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 30);
+		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 100);
 	}
 	else if (level == 2) {
-		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 90);
+		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 200);
 	}
 	stateFlag = 0;
 	isRight = isright;
@@ -285,6 +287,9 @@ int Drawn::UpdataTurn(int count) {
 int Drawn::SetDamage(int damage, int count) {
 	acceleration.Set(0, 0);
 	velocity.Set(0, 0);
+	if (count - mutekiClock < 5) {
+		return 0;
+	}
 	HP -= damage;
 	if (HP <= 0) {
 		Enemy::isExist = false;
@@ -298,6 +303,7 @@ int Drawn::SetDamage(int damage, int count) {
 	}
 	Enemy::bodyClock = count;
 	Enemy::stateFlag = 3;
+	mutekiClock = count;
 	return 0;
 }
 int Drawn::UpdataDamage(int count) {
@@ -322,10 +328,10 @@ int Tank::Set(int x, int y, bool haveS, int serchLUx, int serchLUy, int serchRDx
 	level = lev;
 	isRight = isright;
 	if (level == 1) {
-		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 30);
+		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 100);
 	}
 	else if (level == 2) {
-		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 90);
+		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 200);
 	}
 	haveShield = haveS;
 	return 0;
@@ -620,6 +626,9 @@ int Tank::SetDamage(int damage, int count,Dot Pcenter) {
 			if (isRight) return 0;
 		}
 	}
+	if (count - mutekiClock < 5) {
+		return 0;
+	}
 	HP -= damage;
 	if (HP <= 0) {
 		Enemy::isExist = false;
@@ -633,6 +642,7 @@ int Tank::SetDamage(int damage, int count,Dot Pcenter) {
 	}
 	Enemy::bodyClock = count;
 	Enemy::stateFlag = 3;
+	mutekiClock = count;
 	return 0;
 }
 int Tank::UpdataDamage(int count) {
@@ -664,17 +674,10 @@ int Tank::UpdataDamage(int count) {
 
 int Junk::Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy, int HP) {
 	Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, HP);
-	return 0;
-}
-int Junk::Updata(int count, Dot Pcenter) {
-	Enemy::GetattackMngAd()->Delete();
-	Enemy::GetweakMngAd()->SquareMng::Delete();
-	Enemy::GetimageMngAd()->SquareMng::Delete();
 
-	if (Enemy::stateFlag == 3) {
-		//printfDx("ダメージ！\n");
-		UpdataDamage(count - Enemy::bodyClock);
-	}
+	Enemy::GetattackMngAd()->Delete();
+	Enemy::GetweakMngAd()->Delete();
+	Enemy::GetimageMngAd()->Delete();
 
 	Enemy::GetweakMngAd()->Add(Enemy::GetcenterAd()->Getx() - JUNK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - JUNK_W_HEIGHT / 2.0,
 		Enemy::GetcenterAd()->Getx() + JUNK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + JUNK_W_HEIGHT / 2.0);
@@ -682,24 +685,43 @@ int Junk::Updata(int count, Dot Pcenter) {
 	Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - JUNK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - JUNK_W_HEIGHT / 2.0,
 		Enemy::GetcenterAd()->Getx() + JUNK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + JUNK_W_HEIGHT / 2.0, JunkStand1);
 
+
+	return 0;
+}
+int Junk::Updata(int count, Dot Pcenter) {
+	//Enemy::GetattackMngAd()->Delete();
+	//Enemy::GetweakMngAd()->Delete();
+	//Enemy::GetimageMngAd()->Delete();
+
+	//if (Enemy::stateFlag == 3) {
+	//	//printfDx("ダメージ！\n");
+	//	UpdataDamage(count - Enemy::bodyClock);
+	//}
+
+	//Enemy::GetweakMngAd()->Add(Enemy::GetcenterAd()->Getx() - JUNK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - JUNK_W_HEIGHT / 2.0,
+	//	Enemy::GetcenterAd()->Getx() + JUNK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + JUNK_W_HEIGHT / 2.0);
+
+	//Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - JUNK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - JUNK_W_HEIGHT / 2.0,
+	//	Enemy::GetcenterAd()->Getx() + JUNK_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + JUNK_W_HEIGHT / 2.0, JunkStand1);
+
 	return *Enemy::GetattackMngAd() & Pcenter;
 }
 int Junk::SetDamage(int damage, int count) {
 	//Enemy::HP -= damage;
-	Enemy::bodyClock = count;
-	Enemy::stateFlag = 3;
+	/*Enemy::bodyClock = count;
+	Enemy::stateFlag = 3;*/
 	
 	return 0;
 }
 int Junk::UpdataDamage(int count) {
-	if (count % 4 < 2) {
+	/*if (count % 4 < 2) {
 		image.Setimage(0, 0);
 	}
 	else {
 		image.Setimage(0, JunkStand1);
 	}
 
-	if (count > 30) stateFlag = 0;
+	if (count > 30) stateFlag = 0;*/
 	return 0;
 }
 
@@ -949,15 +971,16 @@ int EnemyMngSet(int stageFlag) {
 	for (int i = 0; i < DAMAGE_WALL_NUM; i++) {
 		damageWall[i].Enemy::Initialize();
 	}
+
 	switch (stageFlag)
 	{
 	case 0://敵なし
 		break;
 	case 1://
-		tank[0].Set(1350, 690, false, 480, 540, 1440, 780, 1,0);
+		tank[0].Set(1350, 690, false, 480, 540, 1440, 780, 1, 0);
 		break;
 	case 2:
-		drawn[0].Set(1470, 330, 60, 0, 1860, 660, 1,0);
+		drawn[0].Set(1470, 330, 60, 0, 1860, 660, 1, 0);
 		briWall[0].Set(1710, 930, 0, 0, 0, 0, 10);
 		break;
 	case 3:
@@ -967,17 +990,17 @@ int EnemyMngSet(int stageFlag) {
 		junk[3].Set(930, 270, 0, 0, 0, 0, 10);
 		break;
 	case 4:
-		tank[0].Set(1350, 270, true, 600, 0, 1440, 360, 1,0);
-		tank[1].Set(690, 630, false, 600, 420, 1440, 720, 1,1);
-		tank[2].Set(1530, 930, true, 600, 780, 1620, 1020, 1,0);
+		tank[0].Set(1350, 270, true, 600, 0, 1440, 360, 1, 0);
+		tank[1].Set(690, 630, false, 600, 420, 1440, 720, 1, 1);
+		tank[2].Set(1530, 930, true, 600, 780, 1620, 1020, 1, 0);
 		junk[0].Set(270, 990, 0, 0, 0, 0, 10);
-		junk[1].Set(390, 990, 0, 0, 0, 0, 10);
-		junk[2].Set(510, 330, 0, 0, 0, 0, 10);
+		junk[1].Set(510 - 2, 330 - 2, 0, 0, 0, 0, 10);
+		junk[2].Set(390 + 2, 990 - 2, 0, 0, 0, 0, 10);
 		break;
 	case 5:
-		drawn[0].Set(810, 150, 600, 0, 1860, 600, 2,1);
-		tank[0].Set(870, 930, false, 420, 720, 1380, 1020, 2,0);
-		tank[1].Set(1650, 930, true, 840, 720, 1860, 1020, 2,0);
+		drawn[0].Set(810, 150, 600, 0, 1860, 600, 2, 1);
+		tank[0].Set(870, 930, false, 420, 720, 1380, 1020, 2, 0);
+		tank[1].Set(1650, 930, true, 840, 720, 1860, 1020, 2, 0);
 		junk[0].Set(630, 510, 0, 0, 0, 0, 10);
 		break;
 	case 6:
@@ -986,17 +1009,20 @@ int EnemyMngSet(int stageFlag) {
 		damageWall[2].Set(1470, 390, 6, 10);
 		break;
 	case 7:
-		drawn[0].Set(810, 450, 780, 300, 1680,1080, 2,1);
+		drawn[0].Set(810, 450, 780, 300, 1680, 1080, 2, 1);
 		briWall[0].Set(690, 930, 0, 0, 0, 0, 10);
 		briWall[1].Set(1710, 930, 0, 0, 0, 0, 10);
+		briWall[2].Set(1170, 930, 0, 0, 0, 0, 10);
 		junk[0].Set(1350, 990, 0, 0, 0, 0, 10);
+		junk[1].Set(750, 810, 0, 0, 0, 0, 10);
 		damageWall[0].Set(570, 1050, 40, 10);
-		damageWall[1].Set(1590, 1050, 10, 10);
+		damageWall[1].Set(1590, 1050, 0, 10);
+		damageWall[2].Set(1050, 1050, 35, 10);
 		break;
 	case 8:
-		drawn[0].Set(390, 330, 60, 240, 900, 1020, 2,0);
-		drawn[1].Set(990, 330, 600, 240, 1500, 1020, 2,0);
-		drawn[2].Set(1710, 330, 900, 240, 1820, 1020, 2,0);
+		drawn[0].Set(390, 330, 60, 240, 900, 1020, 2, 0);
+		drawn[1].Set(990, 330, 600, 240, 1500, 1020, 2, 0);
+		drawn[2].Set(1710, 330, 900, 240, 1820, 1020, 2, 0);
 		damageWall[0].Set(450, 1050, 10, 10);
 		damageWall[1].Set(1050, 1050, 10, 10);
 		damageWall[2].Set(1530, 1050, 10, 10);
@@ -1004,7 +1030,7 @@ int EnemyMngSet(int stageFlag) {
 		damageWall[4].Set(1350, 750, 10, 10);
 		break;
 	case 9:
-		drawn[0].Set(870, 210, 600, 0, 1560, 1020, 2,1);
+		drawn[0].Set(870, 210, 600, 0, 1560, 1020, 2, 1);
 		briWall[0].Set(570, 690, 0, 0, 0, 0, 10);
 		briWall[1].Set(1590, 90, 0, 0, 0, 0, 10);
 		junk[0].Set(90, 690, 0, 0, 0, 0, 10);
@@ -1018,23 +1044,24 @@ int EnemyMngSet(int stageFlag) {
 		damageWall[4].Set(1590, 1050, 0, 10);
 		break;
 	case 10:
-		drawn[0].Set(390, 330, 60, 240, 900, 1020, 2,0);
-		drawn[1].Set(990, 330, 600, 240, 1500, 1020, 2,0);
-		drawn[2].Set(1710, 330, 900, 240, 1820, 1020, 2,0);
+		drawn[0].Set(390, 330, 60, 240, 900, 1020, 2, 0);
+		drawn[1].Set(990, 330, 600, 240, 1500, 1020, 2, 0);
+		drawn[2].Set(1710, 330, 900, 240, 1820, 1020, 2, 0);
 		damageWall[0].Set(450, 1050, 10, 10);
 		damageWall[1].Set(1050, 1050, 10, 10);
 		damageWall[2].Set(1530, 1050, 10, 10);
 		damageWall[3].Set(750, 750, 10, 10);
 		damageWall[4].Set(1350, 750, 10, 10);
-		tank[0].Set(810, 930, true, 180, 780, 1860, 1020, 2,0);
-		tank[1].Set(1650, 930, true, 180, 780, 1860, 1020, 2,0);
+		tank[0].Set(810, 930, true, 180, 780, 1860, 1020, 2, 0);
+		tank[1].Set(1650, 930, true, 180, 780, 1860, 1020, 2, 0);
 		break;
 	case 11:
-		drawn[0].Set(750, 750, 0, 300, 840, 1020, 2,1);
-		drawn[1].Set(390, 90, 0, 0, 840, 840, 2,1);
-		drawn[2].Set(990, 90, 0, 0, 1500, 420, 2,1);
-		drawn[3].Set(1770, 270, 1320, 0, 1860, 1080, 2,1);
-		tank[0].Set(990, 910, false, 900, 780, 1860, 1080, 2,1);
+		drawn[0].Set(750, 750, 0, 300, 840, 1020, 2, 1);
+		drawn[1].Set(390, 90, 0, 0, 840, 840, 2, 1);
+		drawn[2].Set(990, 90, 0, 0, 1500, 420, 2, 1);
+		drawn[3].Set(1770, 270, 1320, 0, 1860, 1080, 2, 1);
+		tank[0].Set(990, 910, false, 900, 780, 1860, 1080, 2, 1);
+		drawn[4].Set(1770, 510, 1320, 0, 1920, 1080, 2, 0);
 		damageWall[0].Set(150, 1050, 0, 10);
 		damageWall[1].Set(150, 1050, 0, 10);
 		damageWall[2].Set(450, 1050, 0, 10);
@@ -1047,7 +1074,6 @@ int EnemyMngSet(int stageFlag) {
 	default:
 		break;
 	}
-
 	return 0;
 }
 
@@ -1098,9 +1124,11 @@ int EnemyMngDamage(intSquareMng pattack,int count,Dot Pcenter) {
 	for (int i = 0; i < JUNK_NUM; i++) {
 		if (junk[i].Enemy::GetisExist()) {
 			edamage = pattack.isHitSquareMng(*junk[i].Enemy::GetweakMngAd());
+			//printfDx("%d", i);
 			if (edamage) {
-				junk[i].SetDamage(edamage, count);
+				//junk[i].SetDamage(edamage, count);
 				ishit = true;
+				//printfDx("JUNK DAMAGE\n");
 			}
 		}
 	}
@@ -1127,7 +1155,7 @@ int EnemyMngDamage(intSquareMng pattack,int count,Dot Pcenter) {
 }
 
 int EnemyMngDraw() {
-	DrawGraph(100, 100, BluenoSTankStand[0], true);
+	//DrawGraph(100, 100, BluenoSTankStand[0], true);
 	//DrawBox(180, 300, 840, 420, BLUE, 0);
 	for (int i = 0; i < DRAWN_NUM; i++) {
 		if (drawn[i].Enemy::GetisExist()) {

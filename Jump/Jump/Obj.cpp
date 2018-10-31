@@ -653,8 +653,8 @@ double SquareMng::GetLeftLanding(Square area, int margin) {
 		if (square[i].GetisExist()) {	//lŠp‚ª‘¶İ‚µ‚Ä
 			if (!(square[i].GetLU().Gety() > area.GetRD().Gety()) && !(area.GetLU().Gety() > square[i].GetRD().Gety())) {	//c•ûŒü”»’è
 				if (square[i].GetRD().Getx() - margin <= area.GetLU().Getx()) {	//‰¡•ûŒü”»’è,LU‚Í‚ß‚è‚±‚İ‘ÎôC‚¤‚Ü‚­‚¢‚©‚È‚¯‚ê‚ÎÄl(RD‚©‚çmargin‚Å‚â‚é‚©)
-					if (area.GetLU().Getx() - square[i].GetLU().Getx() - margin < a) {//‹ß‚¢‚â‚Â
-						a = area.GetLU().Getx() - square[i].GetLU().Getx() - margin;
+					if (area.GetLU().Getx() - square[i].GetRD().Getx() + margin < a) {//‹ß‚¢‚â‚Â
+						a = area.GetLU().Getx() - square[i].GetRD().Getx() + margin;
 						//square[i].testDraw(RED);
 						b = i;
 					}
@@ -755,6 +755,7 @@ Dot SquareMng::SetTelepo(Dot center, Dot telepo,Square teleposqu) {
 				}
 			}
 			else if ((telepo - center).Getx() <= 0 && (telepo - center).Gety() >= 0) {//‘æOÛŒÀ
+				telepo.Set(teleposqu.GetLU().Getx(), teleposqu.GetRD().Gety());
 				if (decoi.GetLU().Getx() <= 0 && decoi.GetRD().Gety() >= 0) {
 					//decoi.testDraw(RED);
 					if ((telepo - center).Getx() <= decoi.GetRD().Getx() && (telepo - center).Gety() >= decoi.GetLU().Gety()) {//G”»’è

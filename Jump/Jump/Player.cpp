@@ -176,6 +176,7 @@ int Player::Set(int stageflag) {
 	//telepo_back.Set(0, 0);
 	isTelepo = false;
 	isFirstJump = true;
+	mutekiClock = -1000;
 	return 0;
 }
 
@@ -290,8 +291,8 @@ int Player::UpdateAttack_w(int count) {
 
 	if (count == 3 || count == 4) {
 		//if(isRightFlag) attackAreaMng.Add(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, 10);
-		if (isRightFlag) attackAreaMng.Add(center.Getx() - 50, center.Gety() - 100, center.Getx() + 180, center.Gety() + 60, 10);
-		else attackAreaMng.Add(center.Getx() - 180, center.Gety() - 100, center.Getx() + 50, center.Gety() + 60, 10);
+		if (isRightFlag) attackAreaMng.Add(center.Getx() - 50, center.Gety() - 100, center.Getx() + 180, center.Gety() + 60, 40);
+		else attackAreaMng.Add(center.Getx() - 180, center.Gety() - 100, center.Getx() + 50, center.Gety() + 60, 40);
 		//DrawBox(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, RED, true);
 	}
 
@@ -322,8 +323,8 @@ int Player::UpdateAttack_air(int count) {
 	}
 
 	if (count == 3 || count == 4) {
-		if (isRightFlag) attackAreaMng.Add(center.Getx() - 90, center.Gety() - 120, center.Getx() + 240-60, center.Gety() + 120, 10);
-		else attackAreaMng.Add(center.Getx() - 240+60, center.Gety() - 120, center.Getx() + 90, center.Gety() + 120, 10);
+		if (isRightFlag) attackAreaMng.Add(center.Getx() - 90, center.Gety() - 120, center.Getx() + 240-60, center.Gety() + 120, 40);
+		else attackAreaMng.Add(center.Getx() - 240+60, center.Gety() - 120, center.Getx() + 90, center.Gety() + 120, 40);
 		//DrawBox(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, RED, true);
 	}
 
@@ -368,8 +369,8 @@ int Player::UpdateAttack_s(int count) {//40-1-5
 	}
 
 	if (count == 41) {
-		if(isRightFlag) attackAreaMng.Add(center.Getx() - 0, center.Gety() - 60, center.Getx() + 170, center.Gety() + 30, 100);
-		else attackAreaMng.Add(center.Getx() - 170, center.Gety() - 60, center.Getx() + 0, center.Gety() + 30, 100);
+		if(isRightFlag) attackAreaMng.Add(center.Getx() - 0, center.Gety() - 60, center.Getx() + 170, center.Gety() + 30, 150);
+		else attackAreaMng.Add(center.Getx() - 170, center.Gety() - 60, center.Getx() + 0, center.Gety() + 30, 150);
 	}
 	if (count >= 46) {
 		acceptFlag = true;
@@ -437,14 +438,18 @@ int Player::UpdateTelepo(int count) {//
 }
 
 int Player::SetDamage(int count) {
+	if (count - mutekiClock <= 30) {
+		return 0;
+	}
 	bodyClock = count;
 	stateFlag = 7;
 	acceptFlag = 0;
 	acceleration.Set(0, 0);//要検討
 	velocity.Set(0, 0);
 	StopAll();
+	mutekiClock = count;
 	//attack = 0;
-	return 0;
+	return 1;
 }
 int Player::UpdateDamage(int count) {
 	if (count % 4 < 2) {
@@ -460,32 +465,6 @@ int Player::UpdateDamage(int count) {
 		velocity.Setx(P_SPEED);
 	}
 
-	if (count < 17) {//待機
-		acceptFlag = 0;
-	}
-	else if (count < 20) {//攻撃
-		//attack = 40;
-		//attackArea.Set(LU, RD);
-	}
-	else if (count < 40) {//余韻
-		//attack = 0;
-	}
-	else if (count >= 40) {//モーション終わり
-		acceptFlag = 1;
-		//if (isAir != 0) {
-		//	isAir = 0;
-		//	stateFlag = 4;//戻す
-		//}
-		//else {
-		//	SetStand(count);
-		//	//printfDx("SETSTAND!\n");
-		//}
-	}
-	/*if (count == 0) image = PAttacks1;
-	if (count == 17) image = PAttacks2;
-	if (count == 19) image = PAttacks3;*/
-	/*if (count == 17)
-		PlayAttacks();*/
 	if (count == 10) {
 		acceptFlag = true;
 		stateFlag = 0;
@@ -715,6 +694,7 @@ int Player::Update2(SquareMng a,int count) {//壁まわりの処理
 			}
 		}
 	}
+	//printfDx("\n");
 
 	if (isAir && stateFlag != 5)
 		acceleration.Move(0, GRAVITY);

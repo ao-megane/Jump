@@ -32,6 +32,7 @@ protected:
 	SquareMng weakMng;
 	int HP;
 	int stateFlag;
+	int mutekiClock;
 	/*
 	0 stand
 	1 turn

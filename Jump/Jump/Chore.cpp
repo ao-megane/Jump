@@ -20,10 +20,8 @@ int White;
 int Keeper;	//透過用カウントキーパー
 int flag;	//現状態フラグ 0 normal 1 ending 2 bord
 
-int TitleBGM;
-int ChaseBGM;
-int beLooked;
-int normalBGM;
+int TytleBGM;
+int playBGM;
 int Move;
 int Choice;
 
@@ -61,10 +59,10 @@ int SystemInitialize() {
 
 	Choice = LoadSoundMem("sounds/system/decide.wav");
 	Move = LoadSoundMem("sounds/system/select.wav");
-	TitleBGM = LoadSoundMem("sounds/system/bgm.wav");
-	ChaseBGM = LoadSoundMem("sounds/system/chase.wav");
-	beLooked = LoadSoundMem("sounds/system/discovery.wav");
-	normalBGM = LoadSoundMem("sounds/system/normal.wav");
+	TytleBGM = LoadSoundMem("sounds/system/tytle.wav");
+	//ChaseBGM = LoadSoundMem("sounds/system/chase.wav");
+	//beLooked = LoadSoundMem("sounds/system/discovery.wav");
+	playBGM = LoadSoundMem("sounds/system/playing.wav");
 
 	if (AddFontResourceEx("font/Charlemagne.ttf", FR_PRIVATE, NULL) == 0) {
 		//printfDx("AddFontResourceEx失敗\n");
@@ -97,41 +95,24 @@ int PlayChoice() {
 	return 0;
 }
 
-int PlaybeLooked() {
-	PlaySoundMem(beLooked, DX_PLAYTYPE_BACK);
-	return 0;
-}
-
 int* ScorePass() {
 	return &Score;
 }
 
-int PlayTitleBGM() {
-	StopSoundMem(TitleBGM);
-	StopSoundMem(normalBGM);
-	StopSoundMem(ChaseBGM);
-	PlaySoundMem(TitleBGM, DX_PLAYTYPE_LOOP);
+int PlayTytleBGM() {
+	StopSoundMem(TytleBGM);
+	StopSoundMem(playBGM);
+	PlaySoundMem(TytleBGM, DX_PLAYTYPE_LOOP);
 	return 0;
 }
 
-int PlaynormalBGM() {
-	StopSoundMem(TitleBGM);
-	StopSoundMem(normalBGM);
-	StopSoundMem(ChaseBGM);
-	PlaySoundMem(normalBGM, DX_PLAYTYPE_LOOP);
+int PlayplayBGM() {
+	StopSoundMem(TytleBGM);
+	StopSoundMem(playBGM);
+	PlaySoundMem(playBGM, DX_PLAYTYPE_LOOP);
 	return 0;
 }
 
-int PlayChaseBGM() {
-	//StopSoundMem(ChaseBGM);
-	PlaySoundMem(ChaseBGM, DX_PLAYTYPE_LOOP);
-	return 0;
-}
-
-int StopChaseBGM() {
-	StopSoundMem(ChaseBGM);;
-	return 0;
-}
 int clockcount;
 int DrawOP(int count) {
 	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Tytle[0], true);
@@ -467,20 +448,6 @@ int DrawWhite(int count,int keeper) {
 			return 1;
 		}
 	}
-	return 0;
-}
-
-int yesBGM() {
-	ChangeVolumeSoundMem(255, normalBGM);
-	ChangeVolumeSoundMem(255, ChaseBGM);
-	ChangeVolumeSoundMem(255, beLooked);
-	return 0;
-}
-
-int noBGM() {
-	ChangeVolumeSoundMem(0, normalBGM);
-	ChangeVolumeSoundMem(0, ChaseBGM);
-	//ChangeVolumeSoundMem(0, beLooked);
 	return 0;
 }
 

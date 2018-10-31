@@ -41,7 +41,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	//InputFile("kanuma2017.txt");
 
-	PlayTitleBGM();
+	PlayTytleBGM();
 
 	flag = 0;
 	int damage = 0;
@@ -114,13 +114,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			if (B == 1) {
 				flag = 2;
+				
 				PlayChoice();
+				PlayplayBGM();
 				if (localFlag == 0) stageFlag = 0;
 				if (localFlag == 1) stageFlag = 5;
 				if (localFlag == 2) {
 					printfDx("地下はまだ！！");
 					flag = 1;
 				}
+				//stageFlag = 11;
 			}
 			break;
 		case 2://loading
@@ -151,8 +154,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 			damage = EnemyMngUpdata(count, player.GetCenter(), (GetStageWalls_judge() + GetBriWall()) + GetDamageWall());
 			if (player.GetStateFlag() != 7 && damage) {//ダメージが返ってくる
-				sumdamage += damage;
-				player.SetDamage(count);
+				if(player.SetDamage(count))
+					sumdamage += damage;
+				
 				toUIDamage(damage, count);
 			}
 			if (EnemyMngDamage(player.GetAttackAreaMng(),count,player.GetCenter())) {
@@ -184,11 +188,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			DrawGameOverBord(count - keepCount);
 			if (count - keepCount > 30 && B == 1) {
 				flag = 1;
-				PlayTitleBGM();
+				PlayTytleBGM();
 			}
 			if (count - keepCount > 180) {
 				flag = 0;
-				PlayTitleBGM();
+				PlayTytleBGM();
 			}
 			break;
 		case 6://result
@@ -196,7 +200,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			DrawClearBord(count - keepCount);
 			if (B == 1) {
 				flag = 1;
-				PlayTitleBGM();
+				PlayTytleBGM();
 			}
 			if (stageFlag != 4 && stageFlag != 11) {
 				stageFlag++;
@@ -208,11 +212,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			break;
 		case 7://マニュアル
 			DrawFormatString(0, 0, WHITE, "manual1");
-			if (B == 1)
+			if (B == 1) {
 				PlayChoice();
+			}
 			if (DrawManual(B)) {
 				flag = 0;
 				count = 0;
+				//PlayTytleBGM();
 			}
 			break;
 		case 8://クレジット
@@ -231,7 +237,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			if (B == 1) flag = 4;
 			if (A == 1) {
 				flag = 1;
-				PlayTitleBGM();
+				PlayTytleBGM();
 			}
 			break;
 		default:

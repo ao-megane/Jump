@@ -28,15 +28,9 @@ int DrawSelect(int local);
 
 int DrawTitleSentence(int flag);
 
-int PlayTitleBGM();
+int PlayTytleBGM();
 
-int PlaynormalBGM();
-
-int PlayChaseBGM();
-
-int StopChaseBGM();
-
-int PlaybeLooked();
+int PlayplayBGM();
 
 int DrawUI(int count);
 int toUIDamage(int damage, int count);
