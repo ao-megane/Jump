@@ -48,6 +48,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	int sumdamage = 0;
 	int Winner[STAGE_NUM] = { 0 };
 	int Loser[STAGE_NUM] = { 0 };
+	int keepCleartime=0;
 	int down = 0;
 	int up = 0;
 	int right = 0;
@@ -119,11 +120,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				PlayplayBGM();
 				if (localFlag == 0) stageFlag = 0;
 				if (localFlag == 1) stageFlag = 5;
-				if (localFlag == 2) {
-					printfDx("地下はまだ！！");
-					flag = 1;
-				}
+				if (localFlag == 2) stageFlag = 9;
 				//stageFlag = 11;
+			}
+			if (A == 1) {
+				flag = 0;
+				PlayTytleBGM();
 			}
 			break;
 		case 2://loading
@@ -153,14 +155,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			player.Update2((GetStageWalls_judge() + GetBriWall()) + GetDamageWall(), count);
 
 			damage = EnemyMngUpdata(count, player.GetCenter(), (GetStageWalls_judge() + GetBriWall()) + GetDamageWall());
-			if (player.GetStateFlag() != 7 && damage) {//ダメージが返ってくる
+			if (player.GetStateFlag() != 7 && damage && !player.Getismuteki(count)) {//ダメージが返ってくる
 				if (player.SetDamage(count)) {
 					sumdamage += damage;
+					//printfDx("damaging\n");
 				}
-				else {
-					damage = 0;
-					//printfDx("bbbbbb\n");
-				}
+			}
+			else {
+				damage = 0;
 			}
 			if (EnemyMngDamage(player.GetAttackAreaMng(),count,player.GetCenter())) {
 				player.Addtelepo();
@@ -201,17 +203,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			break;
 		case 6://result
 			//DrawFormatString(100, 100, WHITE, "gameclear");
-			DrawClearBord(count - keepCount);
+			DrawResult(GetStageLimit() - sumdamage * 30 - keepCount,stageFlag);
 			if (B == 1) {
-				flag = 1;
-				PlayTytleBGM();
-			}
-			if (stageFlag != 4 && stageFlag != 11) {
-				stageFlag++;
-				flag = 2;
-			}
-			else {
-				flag = 1;
+				if (stageFlag != 4 && stageFlag != 8 && stageFlag != 11) {
+					stageFlag++;
+					flag = 2;
+				}
+				else {
+					flag = 1;
+				}
 			}
 			break;
 		case 7://マニュアル
@@ -240,7 +240,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			count--;
 			if (B == 1) flag = 4;
 			if (A == 1) {
-				flag = 1;
+				flag = 0;
 				PlayTytleBGM();
 			}
 			break;

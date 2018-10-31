@@ -180,7 +180,7 @@ static double STAGE1_judge[STAGE1_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防
 	1500,301,60,13*60,
 	1680,600,180,60
 };
-const int STAGE1_COUNT = 30 * 60;//30fps
+const int STAGE1_COUNT = 30 * 120;//30fps
 
 /*------stage2(チュートリアル1)-----*/
 const int STAGE2_view_NUM = 22;
@@ -234,7 +234,7 @@ static double STAGE2_judge[STAGE2_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防
 	1620,180,120,60,
 	1680,120,120,60,
 };
-const int STAGE2_COUNT = 30 * 60;//30fps
+const int STAGE2_COUNT = 30 * 120;//30fps
 
 /*------stage3(チュートリアル3)-----*/
 const int STAGE3_view_NUM = 19;
@@ -284,7 +284,7 @@ static double STAGE3_judge[STAGE3_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防
 	1320,420,120,60,
 	1740,840,120,60
 };
-const int STAGE3_COUNT = 30 * 60;//30fps
+const int STAGE3_COUNT = 30 * 120;//30fps
 
 /*------stage4(チュートリアル1)-----*/
 const int STAGE4_view_NUM = 6;
@@ -307,7 +307,7 @@ static double STAGE4_judge[STAGE4_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防
 	1140,180,10*60-1,60,
 	1600,240,55,60*15
 };
-const int STAGE4_COUNT = 30 * 60;//30fps
+const int STAGE4_COUNT = 30 * 120;//30fps
 
 /*------stage5(チュートリアル1)-----*/
 const int STAGE5_view_NUM = 11;
@@ -338,7 +338,7 @@ static double STAGE5_judge[STAGE5_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防
 	540,720,18*60,60,
 	1620,0,60,15*60
 };
-const int STAGE5_COUNT = 30 * 60;//30fps
+const int STAGE5_COUNT = 30 * 90;//30fps
 
 /*------stage6-----*/
 const int STAGE6_view_NUM = 11;
@@ -369,9 +369,9 @@ static double STAGE6_judge[STAGE6_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防
 	900,660,120,60,
 	1260,660,120,60,
 	1620,660,120,60,
-	1740,840,120,0
+	1740,840,120,60
 };
-const int STAGE6_COUNT = 30 * 60;//30fps
+const int STAGE6_COUNT = 30 * 90;//30fps
 
 /*------stage7-----*/
 const int STAGE7_view_NUM = 6;
@@ -394,7 +394,7 @@ static double STAGE7_judge[STAGE7_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防
 	1080,180,120,60,
 	1560,420,60,10*60
 };
-const int STAGE7_COUNT = 30 * 60;//30fps
+const int STAGE7_COUNT = 30 * 90;//30fps
 
 /*------stage8-----*/
 const int STAGE8_view_NUM = 11;
@@ -422,7 +422,7 @@ static double STAGE8_judge[STAGE8_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防
 	1680,0,60,14*60,
 	1140,0,60,14*60
 };
-const int STAGE8_COUNT = 30 * 60;//30fps
+const int STAGE8_COUNT = 30 * 90;//30fps
 
 /*------stage9------*/
 const int STAGE9_view_NUM = 1;

@@ -48,10 +48,19 @@ private:
 	int level;
 	
 };
-
-class Tank_disappear : public Effect {
+class Tank_disappear : public Effect {//è¡Ç¶ÇÈÇÃ
 public:
 	int Update(int count);
+	int Set(int count, Dot a, bool isright, int lev,bool haves);
+private:
+	bool isRight;
+	bool haveS;
+	int level;
+};
+class Tank_junk : public Effect {//écÇÈÇÃ
+public:
+	int Update(int count);
+	int Set(int count, Dot a, bool isright, int lev, bool haves);
 private:
 	bool isRight;
 	bool haveS;
@@ -87,7 +96,8 @@ int EffectMngInitialize();
 int Tlp_appearMngBorn(int count, Dot center);
 int Tlp_disappearMngBorn(int count, Dot center);
 int Drawn_disappearMngBorn(int count, Dot a, bool isright, int level);
-int Tank_disappearMngBorn(int count, Dot a, bool isright, int level);
+int Tank_disappearMngBorn(int count, Dot a, bool isright, int level,bool haves);
+int Tank_junkMngBorn(int count, Dot a, bool isright, int level, bool haves);
 int ExprosionMngBorn(int count, Dot a);
 int DebriMngBorn(int count, Dot a);
 int RedDebriMngBorn(int count, Dot a);

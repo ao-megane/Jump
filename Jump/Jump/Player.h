@@ -50,6 +50,7 @@ public:/*
 	int GetStateFlag();
 	int GetIsRightFlag();
 	Dot GetCenter();
+	bool Getismuteki(int count);
 	intSquareMng GetAttackAreaMng();
 	SquareMng GetWeakAreaMng();
 	Dot weapon;

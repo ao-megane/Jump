@@ -10,7 +10,7 @@ SquareMng Walls_judge;
 imageSquareMng Walls_view;
 imageSquare Door;
 
-int Tutorial_back[3];
+int Tutorial_back[5];
 int Tutorial_wall_1;
 int Tutorial_wall_2;
 int Tutorial_wall_3;
@@ -36,6 +36,8 @@ int StagesInitialize() {
 	Tutorial_back[0] = LoadGraph("images/maps/base/background/1.png");
 	Tutorial_back[1] = LoadGraph("images/maps/base/background/2.png");
 	Tutorial_back[2] = LoadGraph("images/maps/base/background/3.png");
+	Tutorial_back[3] = LoadGraph("images/maps/base/background/4.png");
+	Tutorial_back[4] = LoadGraph("images/maps/base/background/5.png");
 	Tutorial_wall_1 = LoadGraph("images/maps/base/wall/120_60.png");
 	Tutorial_wall_2 = LoadGraph("images/maps/base/wall/60_600.png");
 	Tutorial_wall_3 = LoadGraph("images/maps/base/wall/840_60.png");
@@ -87,7 +89,7 @@ int StageLoad(int stagenum) {
 		Door.Setimage(base_door);
 		break;
 	case 3:
-		BackGround = Tutorial_back[2];
+		BackGround = Tutorial_back[3];
 		Walls_judge.Add(STAGE4_judge, STAGE4_judge_NUM);
 		Walls_view.SetWalls(STAGE4_view, STAGE4_view_NUM, stagenum, Tutorial_wall_1, Tutorial_wall_2, Tutorial_wall_3, Tutorial_wall_4, 0,0);
 		//dynamicWall.Born();
@@ -96,7 +98,7 @@ int StageLoad(int stagenum) {
 		Door.Setimage(base_door);
 		break;
 	case 4:
-		BackGround = Tutorial_back[2];
+		BackGround = Tutorial_back[4];
 		Walls_judge.Add(STAGE5_judge, STAGE5_judge_NUM);
 		Walls_view.SetWalls(STAGE5_view, STAGE5_view_NUM, stagenum, Tutorial_wall_1, Tutorial_wall_2, Tutorial_wall_3, Tutorial_wall_4, 0,0);
 		//dynamicWall.Born();
