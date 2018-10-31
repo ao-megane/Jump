@@ -100,7 +100,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			break;
 		case 1://ステージ選択画面
-			DrawFormatString(0, 0, WHITE, "selecting");
+			//DrawFormatString(0, 0, WHITE, "selecting");
 			DrawSelect(localFlag);
 			if (right == 1) {
 				PlayMove();
@@ -143,7 +143,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			break;
 		case 4://playing
-			DrawFormatString(0, 0, WHITE, "playing");
+			//DrawFormatString(0, 0, WHITE, "playing");
 			player.Update1(count,key);
 			if (StageUpdata(stageFlag, count, 0,player.GetCenter())) {
 				keepCount = count;
@@ -154,10 +154,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 			damage = EnemyMngUpdata(count, player.GetCenter(), (GetStageWalls_judge() + GetBriWall()) + GetDamageWall());
 			if (player.GetStateFlag() != 7 && damage) {//ダメージが返ってくる
-				if(player.SetDamage(count))
+				if (player.SetDamage(count)) {
 					sumdamage += damage;
-				
-				toUIDamage(damage, count);
+				}
+				else {
+					damage = 0;
+					//printfDx("bbbbbb\n");
+				}
 			}
 			if (EnemyMngDamage(player.GetAttackAreaMng(),count,player.GetCenter())) {
 				player.Addtelepo();
@@ -167,7 +170,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//player.GetWeakAreaMng().isDamageSquareMng(GetEnemyMngAttackArea)
 			}
 
-			if (count + sumdamage*30 > GetStageLimit()) {
+			if (count + sumdamage * 30 > GetStageLimit()) {
 				flag = 5;
 				keepCount = count;
 			}
@@ -181,7 +184,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			player.Draw();
 			EffectMngDraw();
 			DrawUI(GetStageLimit() - sumdamage * 30 - count);
-			DrawFormatString(DISP_WIDTH - 100, 100, RED, "%2d", sumdamage);
+			DrawUIDamage(damage, count);
+			//DrawFormatString(DISP_WIDTH - 100, 100, RED, "%2d", sumdamage);
 			break;
 		case 5://gameover
 			//DrawFormatString(100, 100, WHITE, "gameover");

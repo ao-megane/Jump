@@ -33,7 +33,7 @@ int PlayTytleBGM();
 int PlayplayBGM();
 
 int DrawUI(int count);
-int toUIDamage(int damage, int count);
+int DrawUIDamage(int damage, int count);
 
 int DrawPrologue(int b);
 int DrawManual(int b);
