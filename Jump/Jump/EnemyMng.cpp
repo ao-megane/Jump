@@ -128,7 +128,7 @@ int Drawn::Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serch
 		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 100);
 	}
 	else if (level == 2) {
-		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 200);
+		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 150);
 	}
 	stateFlag = 0;
 	isRight = isright;
@@ -296,8 +296,14 @@ int Drawn::SetDamage(int damage, int count) {
 		ExprosionMngBorn(count, center);
 		DebriMngBorn(count, center);
 		DebriMngBorn(count, center);
-		RedDebriMngBorn(count, center);
-		RedDebriMngBorn(count, center);
+		if (level == 1) {
+			RedDebriMngBorn(count, center);
+			RedDebriMngBorn(count, center);
+		}
+		else if (level == 2) {
+			BlueDebriMngBorn(count, center);
+			BlueDebriMngBorn(count, center);
+		}
 		Drawn_disappearMngBorn(count, center,isRight,level);
 		return 0;
 	}
@@ -331,7 +337,7 @@ int Tank::Set(int x, int y, bool haveS, int serchLUx, int serchLUy, int serchRDx
 		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 100);
 	}
 	else if (level == 2) {
-		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 200);
+		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 150);
 	}
 	haveShield = haveS;
 	return 0;
@@ -633,11 +639,18 @@ int Tank::SetDamage(int damage, int count,Dot Pcenter) {
 	if (HP <= 0) {
 		Enemy::isExist = false;
 		ExprosionMngBorn(count, center);
+		Tank_junkMngBorn(count, center, isRight, level, haveShield);
 		DebriMngBorn(count, center);
 		DebriMngBorn(count, center);
-		RedDebriMngBorn(count, center);
-		RedDebriMngBorn(count, center);
-		Tank_disappearMngBorn(count, center, isRight, level);
+		if (level == 1) {
+			RedDebriMngBorn(count, center);
+			RedDebriMngBorn(count, center);
+		}
+		else if (level == 2) {
+			BlueDebriMngBorn(count, center);
+			BlueDebriMngBorn(count, center);
+		}
+		Tank_disappearMngBorn(count, center, isRight, level, haveShield);
 		return 0;
 	}
 	Enemy::bodyClock = count;
@@ -748,7 +761,7 @@ int BrittleWall::Updata(int count, Dot Pcenter) {
 	return *Enemy::GetattackMngAd() & Pcenter;
 }
 int BrittleWall::SetDamage(int damage, int count) {
-	if (damage >= 30) {
+	if (damage >= 150) {
 		Enemy::isExist = false;
 	}
 
