@@ -215,7 +215,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			break;
 		case 7://ƒ}ƒjƒ…ƒAƒ‹
-			DrawFormatString(0, 0, WHITE, "manual1");
+			//DrawFormatString(0, 0, WHITE, "manual1");
+			//DrawManual(B);
 			if (B == 1) {
 				PlayChoice();
 			}

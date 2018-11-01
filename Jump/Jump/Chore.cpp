@@ -53,10 +53,10 @@ int SystemInitialize() {
 	Facticon.Set(DISP_WIDTH / 4.0 * 2 - ICON_WIDTH / 2.0, DISP_HEIGHT / 2.0 - ICON_HEIGHT / 2.0, DISP_WIDTH / 4.0 * 2 + ICON_WIDTH / 2.0, DISP_HEIGHT / 2.0 + ICON_HEIGHT / 2.0);
 	Facticon.Setimage(LoadGraph("images/system/select/factoryicon.png"));
 	Facticon2.Set(DISP_WIDTH / 4.0 * 3 - ICON_WIDTH / 2.0, DISP_HEIGHT / 2.0 - ICON_HEIGHT / 2.0, DISP_WIDTH / 4.0 * 3 + ICON_WIDTH / 2.0, DISP_HEIGHT / 2.0 + ICON_HEIGHT / 2.0);
-	Facticon2.Setimage(LoadGraph("images/system/select/factoryicon.png"));
+	Facticon2.Setimage(LoadGraph("images/system/select/factoryicon2.png"));
 	White = LoadGraph("images/system/white.png");
 	Manual[0] = LoadGraph("images/system/manual1.png");
-	Manual[1] = LoadGraph("images/system/manual2.png");
+	//Manual[1] = LoadGraph("images/system/manual2.png");
 
 	Prologue[0] = LoadGraph("images/system/prologue/1.png");
 	Prologue[1] = LoadGraph("images/system/prologue/2.png");
@@ -252,38 +252,40 @@ int DrawPause() {
 }
 
 int DrawManual(int b) {
-	switch (manFlag)
-	{
-	case 0:
-		//DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Manual[0], true);
-		DrawFormatString(20, 20, RED, "MANUAL");
-		break;
-	case 1:
-		//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Manual[1], true);
-		DrawFormatString(20, 20, RED, "3");
-		break;
-	case 2:
-		//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor1Image, true);
-		//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor1WallsImage, true);
-		//DrawFormatStringToHandle(52, 52, BLACK, lemagne, "floor1");
-		//DrawFormatStringToHandle(50, 50, ORANGE, lemagne, "floor1");
-		DrawFormatString(20, 20, RED, "2");
-		break;
-	case 3:
-		//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor2Image, true);
-		//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor2WallsImage, true);
-		//DrawFormatStringToHandle(52, 52, BLACK, lemagne, "floor2");
-		//DrawFormatStringToHandle(50, 50, ORANGE, lemagne, "floor2");
-		DrawFormatString(20, 20, RED, "1");
-		break;
-	}
+	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Manual[0], true);
+	//switch (manFlag)
+	//{
+	//case 0:
+	//	//DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Manual[0], true);
+	//	DrawFormatString(20, 20, RED, "MANUAL");
+	//	break;
+	//case 1:
+	//	//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Manual[1], true);
+	//	DrawFormatString(20, 20, RED, "3");
+	//	break;
+	//case 2:
+	//	//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor1Image, true);
+	//	//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor1WallsImage, true);
+	//	//DrawFormatStringToHandle(52, 52, BLACK, lemagne, "floor1");
+	//	//DrawFormatStringToHandle(50, 50, ORANGE, lemagne, "floor1");
+	//	DrawFormatString(20, 20, RED, "2");
+	//	break;
+	//case 3:
+	//	//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor2Image, true);
+	//	//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor2WallsImage, true);
+	//	//DrawFormatStringToHandle(52, 52, BLACK, lemagne, "floor2");
+	//	//DrawFormatStringToHandle(50, 50, ORANGE, lemagne, "floor2");
+	//	DrawFormatString(20, 20, RED, "1");
+	//	break;
+	//}
 
 	if (b == 1) {
-		manFlag++;
+		/*manFlag++;
 		if (manFlag == 4) {
 			manFlag = 0;
 			return 1;
-		}
+		}*/
+		return 1;
 	}
 	return 0;
 }

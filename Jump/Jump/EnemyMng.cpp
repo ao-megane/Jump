@@ -59,6 +59,9 @@ imageSquareMng* Enemy::GetimageMngAd() {
 SquareMng* Enemy::GetweakMngAd() {
 	return &weakMng;
 }
+SquareMng Enemy::GetweakMng() {
+	return weakMng;
+}
 
 int Enemy::Set(int x, int y, double serchLUx, double serchLUy, double serchRDx, double serchRDy,int hp) {
 	isExist = true;
@@ -1023,9 +1026,9 @@ int EnemyMngSet(int stageFlag) {
 		break;
 	case 7:
 		drawn[0].Set(810, 450, 780, 300, 1680, 1080, 2, 1);
-		briWall[0].Set(690, 930, 0, 0, 0, 0, 10);
-		briWall[1].Set(1710, 930, 0, 0, 0, 0, 10);
-		briWall[2].Set(1170, 930, 0, 0, 0, 0, 10);
+		briWall[0].Set(690 + 10, 930, 0, 0, 0, 0, 10);
+		briWall[1].Set(1710 + 10, 930, 0, 0, 0, 0, 10);
+		briWall[2].Set(1170 + 10, 930, 0, 0, 0, 0, 10);
 		junk[0].Set(1350, 990, 0, 0, 0, 0, 10);
 		junk[1].Set(750, 810, 0, 0, 0, 0, 10);
 		damageWall[0].Set(570, 1050, 40, 10);
@@ -1044,8 +1047,8 @@ int EnemyMngSet(int stageFlag) {
 		break;
 	case 9:
 		drawn[0].Set(870, 210, 600, 0, 1560, 1020, 2, 1);
-		briWall[0].Set(570, 690, 0, 0, 0, 0, 10);
-		briWall[1].Set(1590, 90, 0, 0, 0, 0, 10);
+		briWall[0].Set(570 - 10, 690, 0, 0, 0, 0, 10);
+		briWall[1].Set(1590 - 10, 90, 0, 0, 0, 0, 10);
 		junk[0].Set(90, 690, 0, 0, 0, 0, 10);
 		junk[1].Set(630, 390, 0, 0, 0, 0, 10);
 		junk[2].Set(1470, 930, 0, 0, 0, 0, 10);
@@ -1207,6 +1210,7 @@ SquareMng GetBriWall() {
 		if (briWall[i].GetisExist()) {
 			//decoi = decoi + briWall[i].GetimageMngAd()->GetSquareMng();
 			decoi += briWall[i].GetimageMngAd()->GetSquareMng();
+			//decoi += briWall[i].GetweakMng();
 		}
 	}
 	return decoi;

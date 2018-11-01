@@ -214,6 +214,9 @@ int Player::SetDash(int count) {
 	//image = PStand1;
 	isFirstDash = true;
 	acceptFlag = 1;
+	image.Setimage(1, 0);
+	image.Setimage(2, 0);
+	image.Setimage(3, 0);
 	return 0;
 }
 int Player::UpdateDash(int count) {
@@ -244,6 +247,9 @@ int Player::SetJump(int count) {
 	image.Setimage(0, PisAir[0]);
 	isFirstJump = true;
 	PlayJump();
+	image.Setimage(1, 0);
+	image.Setimage(2, 0);
+	image.Setimage(3, 0);
 	return 0;
 }
 int Player::UpdateJump(int count) {
@@ -278,6 +284,9 @@ int Player::SetAttack_w(int count) {
 	acceptFlag = false;
 	acceleration.Set(0, 0);
 	velocity.Set(0, 0);
+	image.Setimage(1, 0);
+	image.Setimage(2, 0);
+	image.Setimage(3, 0);
 	//attack = 0;
 	return 0;
 }
@@ -310,6 +319,9 @@ int Player::SetAttack_air(int count) {
 	stateFlag = 5;
 	acceptFlag = false;
 	//acceleration.Set(0, 0);
+	image.Setimage(1, 0);
+	image.Setimage(2, 0);
+	image.Setimage(3, 0);
 	velocity.Set(0, 0);
 	//attack = 0;
 	return 0;

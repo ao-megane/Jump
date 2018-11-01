@@ -17,6 +17,7 @@ public:
 	Dot* GetcenterAd();
 	imageSquareMng* GetimageMngAd();
 	SquareMng* GetweakMngAd();
+	SquareMng GetweakMng();
 	//SquareMng* GetsearchAreaAd();
 	int End();
 protected:

@@ -90,7 +90,7 @@ const int JUNK_A_HEIGHT = 0;
 /*------------------------*/
 const int BRI_WALL_NUM = 5;
 const int BRI_WALL_W_WIDTH = 60;
-const int BRI_WALL_W_HEIGHT = 160;
+const int BRI_WALL_W_HEIGHT = 180;
 const int BRI_WALL_A_WIDTH = 0;
 const int BRI_WALL_A_HEIGHT = 0;
 /*------------------------*/
@@ -163,11 +163,12 @@ static int STAGE1_view[STAGE1_view_NUM * 3] = {//左上,四角の種類
 	1680,600,1,
 	1800,600,1
 };
-const int STAGE1_judge_NUM = 14;
+const int STAGE1_judge_NUM = 14+1;
 static double STAGE1_judge[STAGE1_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防止),左上，W,H
 	0,0,60,DISP_HEIGHT,
 	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,
+	0,-60,DISP_WIDTH,60,
 	300,360,120,60,
 	480,180,120,60,
 	480,540,120,60,
@@ -177,7 +178,7 @@ static double STAGE1_judge[STAGE1_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防
 	960,180,120,60,
 	1080,840,120,60,
 	1380,300,300,60,
-	1500,301,60,13*60,
+	1500,301,60,13 * 60,
 	1680,600,180,60
 };
 const int STAGE1_COUNT = 30 * 120;//30fps
@@ -208,11 +209,12 @@ static int STAGE2_view[STAGE2_view_NUM * 3] = {//左上,四角の種類
 	1620,180,1,
 	1680,120,1,
 };
-const int STAGE2_judge_NUM = 23;
+const int STAGE2_judge_NUM = 23+1;
 static double STAGE2_judge[STAGE2_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防止),左上，W,H
 	0,0,60,DISP_HEIGHT,
 	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,
+	0,-60,DISP_WIDTH,60,
 	120,120,120,60,
 	180,180,120,60,
 	240,240,120,60,
@@ -259,11 +261,12 @@ static int STAGE3_view[STAGE3_view_NUM * 3] = {//左上,四角の種類
 	1320,420,1,
 	1740,840,1
 };
-const int STAGE3_judge_NUM = 22;
+const int STAGE3_judge_NUM = 22+1;
 static double STAGE3_judge[STAGE3_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防止),左上，W,H
 	0,0,60,DISP_HEIGHT,
 	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,
+	0,-60,DISP_WIDTH,60,
 	300,960,120,60,
 	360,900,120,60,
 	420,840,120,60,
@@ -296,11 +299,12 @@ static int STAGE4_view[STAGE4_view_NUM * 3] = {//左上,四角の種類
 	1600,240,2,
 	1600,600,2,
 };
-const int STAGE4_judge_NUM = 8;
+const int STAGE4_judge_NUM = 8 + 1;
 static double STAGE4_judge[STAGE4_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防止),左上，W,H
 	0,0,60,DISP_HEIGHT,
 	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,
+	0,-60,DISP_WIDTH,60,
 	300,780,60,300,
 	600,420,60,10*60,
 	600,419,180,60,
@@ -324,11 +328,12 @@ static int STAGE5_view[STAGE5_view_NUM * 3] = {//左上,四角の種類
 	1620,0,2,
 	1620,300,2
 };
-const int STAGE5_judge_NUM = 12;
+const int STAGE5_judge_NUM = 12 + 1;
 static double STAGE5_judge[STAGE5_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防止),左上，W,H
 	0,0,60,DISP_HEIGHT,
 	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,
+	0,-60,DISP_WIDTH,60,
 	300,421,60,60*10,
 	360,0,120,60,
 	420,60,120,60,
@@ -355,11 +360,12 @@ static int STAGE6_view[STAGE6_view_NUM * 3] = {//左上,四角の種類
 	1620,660,1,
 	1740,840,1
 };
-const int STAGE6_judge_NUM = 13;
+const int STAGE6_judge_NUM = 13 + 1;
 static double STAGE6_judge[STAGE6_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防止),左上，W,H
 	0,0,60,DISP_HEIGHT,
 	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,
+	0,-60,DISP_WIDTH,60,
 	60,240,9*60-1,60,
 	540,240,60,6*60,
 	540,540,4*60,60,
@@ -383,11 +389,12 @@ static int STAGE7_view[STAGE7_view_NUM * 3] = {//左上,四角の種類
 	1560,420,6,
 	1560,720,6
 };
-const int STAGE7_judge_NUM = 8;
+const int STAGE7_judge_NUM = 8 + 1;
 static double STAGE7_judge[STAGE7_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防止),左上，W,H
 	0,0,60,DISP_HEIGHT,
 	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,
+	0,-60,DISP_WIDTH,60,
 	720,900,120,60,
 	1140,540,120,60,
 	960,360,120,60,
@@ -411,11 +418,12 @@ static int STAGE8_view[STAGE8_view_NUM * 3] = {//左上,四角の種類
 	1140,300,6,
 	1140,540,6,
 };
-const int STAGE8_judge_NUM = 8;
+const int STAGE8_judge_NUM = 8 + 1;
 static double STAGE8_judge[STAGE8_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防止),左上，W,H
 	0,0,60,DISP_HEIGHT,
 	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,
+	0,-60,DISP_WIDTH,60,
 	240,960,120,60,
 	1380,960,120,60,
 	660,0,60,14*60,
@@ -429,11 +437,12 @@ const int STAGE9_view_NUM = 1;
 static int STAGE9_view[STAGE9_view_NUM * 3] = {//左上,四角の種類
 	0,0,-1
 };
-const int STAGE9_judge_NUM = 3;
+const int STAGE9_judge_NUM = 3 + 1;
 static double STAGE9_judge[STAGE9_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防止),左上，W,H
 	0,0,60,DISP_HEIGHT,
 	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,
+	0,-60,DISP_WIDTH,60,
 };
 const int STAGE9_COUNT = 30 * 60;//30fps
 
@@ -449,11 +458,12 @@ static int STAGE10_view[STAGE10_view_NUM * 3] = {//左上,四角の種類
 	1560,450,6,
 	1560,660,6
 };
-const int STAGE10_judge_NUM = 8;
+const int STAGE10_judge_NUM = 8 + 1;
 static double STAGE10_judge[STAGE10_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防止),左上，W,H
 	0,0,60,DISP_HEIGHT,
 	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,
+	0,-60,DISP_WIDTH,60,
 	420,900,120,60,
 	540,0,60,10 * 60,
 	540,780,60,4 * 60,
@@ -466,11 +476,12 @@ const int STAGE11_view_NUM = 1;
 static int STAGE11_view[STAGE11_view_NUM * 3] = {//左上,四角の種類
 	0,0,-1
 };
-const int STAGE11_judge_NUM = 3;
+const int STAGE11_judge_NUM = 3 + 1;
 static double STAGE11_judge[STAGE11_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防止),左上，W,H
 	0,0,60,DISP_HEIGHT,
 	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,
+	0,-60,DISP_WIDTH,60,
 };
 const int STAGE11_COUNT = 30 * 60;//30fps
 
@@ -482,11 +493,12 @@ static int STAGE12_view[STAGE12_view_NUM * 3] = {//左上,四角の種類
 	840,720,6,
 	60,960,1
 };
-const int STAGE12_judge_NUM = 5;
+const int STAGE12_judge_NUM = 5 + 1;
 static double STAGE12_judge[STAGE12_judge_NUM * 4]{//壁，画像は別で用意か(床抜け防止),左上，W,H
 	0,0,60,DISP_HEIGHT,
 	0,DISP_HEIGHT - 60,DISP_WIDTH,70,
 	DISP_WIDTH - 60,0,60,DISP_HEIGHT,
+	0,-60,DISP_WIDTH,60,
 	840,360,60,11*60,
 	60,960,120,60
 };
