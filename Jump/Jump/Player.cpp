@@ -678,6 +678,7 @@ int Player::Update2(SquareMng a,int count) {//•Ç‚Ü‚í‚è‚Ìˆ—
 				//printfDx("R!\n");
 				break;
 			case 6://D
+				if (velocity.Gety() < 0) break;//ã¸’†‚ÍÚ’n‚µ‚È‚¢
 				if (acceleration.Gety() > 0) {
 					acceleration.Sety(0);
 				}

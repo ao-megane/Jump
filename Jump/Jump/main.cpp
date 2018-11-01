@@ -147,7 +147,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		case 4://playing
 			//DrawFormatString(0, 0, WHITE, "playing");
 			player.Update1(count,key);
-			if (StageUpdata(stageFlag, count, 0,player.GetCenter())) {
+			if (StageUpdata(stageFlag, count, EnemyisExist(),player.GetCenter())) {//ÉNÉäÉA
 				keepCount = count;
 				flag = 6;
 			}

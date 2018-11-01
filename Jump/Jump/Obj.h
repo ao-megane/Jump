@@ -174,6 +174,7 @@ class imageSquare : public Square
 {
 public:
 	int Setimage(int image);
+	int GetimageHandle();
 	int Delete();
 	int Draw();
 	int Draw(bool isRight);
@@ -269,6 +270,7 @@ class imageSquareMng : public SquareMng {
 public:
 	int SetWalls(int a[], int num, int stageflag, int square1_image, int square2_image, int square3_image, int square4_image, int square5_image, int square6_image);
 	SquareMng GetSquareMng();
+	int GetimageHandle(int i);
 	int Add(double a,double b,double c,double d,int handle);
 	int Setimage(int num, int handle);
 	int SetPosi(int num, double a, double b, double c, double d);

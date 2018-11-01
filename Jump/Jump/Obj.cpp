@@ -896,6 +896,9 @@ int imageSquare::Setimage(int handle) {
 	image = handle;
 	return 0;
 }
+int imageSquare::GetimageHandle() {
+	return image;
+}
 int imageSquare::Delete() {
 	isExist = false;
 	return 0;
@@ -1035,6 +1038,9 @@ int imageSquareMng::Delete() {
 		square[i].Delete();
 	}
 	return 0;
+}
+int imageSquareMng::GetimageHandle(int i) {
+	return square[i].GetimageHandle();
 }
 int imageSquareMng::Draw() {
 	for (int i = 0; i < SQU_NUM; i++) {
