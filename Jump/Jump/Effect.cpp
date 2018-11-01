@@ -314,7 +314,7 @@ int Spark::Update(int count) {
 				if (isRight)
 					vel[j].Set(6 * cos(j * 180 / 8 * PI / 180.0 + PI / 2.0), 4 * -sin(j * 180 / 8 * PI / 180.0 + PI / 2.0));
 				else
-					vel[j].Set(6 * cos(j * 180 / 8 * PI / 180.0 - PI / 2.0), 4 * -sin(j * 180 / 8 * PI / 180.0 - PI / 2.0));
+					vel[j].Set(6 * cos(j * 180 / 8 * PI / 180.0 - PI / 2.0), 4 * -sin(j * 180 / 8 * PI / 180.0 + PI / 2.0));
 				cen[j] = center;
 			}
 			
@@ -323,9 +323,9 @@ int Spark::Update(int count) {
 		else {
 			acceleration.Set(0, GRAVITY);
 		}
-		if ((count - bodyClock) % 3 < i) {
+		if ((count - bodyClock) % 9 < i) {
 			for (int j = 0; j < 8; j++) {
-				image.Setimage(j, spar[i]);
+				image.Setimage(j, spar[i/3]);
 			}
 			break;
 		}
@@ -339,12 +339,68 @@ int Spark::Update(int count) {
 	for (int i = 0; i < 8; i++) {
 		vel[i].Move(acceleration.Getx(), acceleration.Gety());
 		cen[i].Move(vel[i].Getx(), vel[i].Gety());
-		image.SetPosi(i, cen[i].Getx() - 1 / 2.0, cen[i].Gety() - 1 / 2.0,
-			cen[i].Getx() + 1 / 2.0, cen[i].Gety() + 1 / 2.0);
+		image.SetPosi(i, cen[i].Getx() - 2 / 2.0, cen[i].Gety() - 2 / 2.0,
+			cen[i].Getx() + 2 / 2.0, cen[i].Gety() + 2 / 2.0);
 	}
 	
 	return 0;
 }
+int SSpark::Set(int count, Dot a, bool isright) {
+	Effect::Set(count, a);
+	isRight = isright;
+	return 0;
+}
+int SSpark::Update(int count) {
+	for (int i = 0; i < 3; i++) {
+		//if (count - bodyClock == 0) {//èââÒÇ»ÇÁ
+		//	double thita = GetRand() % 360;
+		//	if (sin(thita * PI / 180.0) > 0)
+		//		acceleration.Set(P_JUMP_POWER * cos(thita * PI / 180.0), P_JUMP_POWER * -sin(thita * PI / 180.0));
+		//	else
+		//		acceleration.Set(P_JUMP_POWER * cos(thita * PI / 180.0), P_JUMP_POWER * -sin(thita * PI / 180.0));
+		//	//printfDx("aaaaaaaaaa");
+		//}
+		if (count - bodyClock == 0) {//èââÒÇ»ÇÁ
+			acceleration.Set(0, -GRAVITY * 2);
+			for (int j = 0; j < 8; j++) {
+				for (int k = 0; k < 3; k++) {
+					if (isRight)
+						vel[j*(k+1)].Set(3.5 * (k + 2) * cos(j * 180 / 8 * PI / 180.0 + PI / 2.0), 6 * -sin(j * 180 / 8 * PI / 180.0 + PI / 2.0));
+					else
+						vel[j*(k+1)].Set(3.5 * (k + 2) * cos(j * 180 / 8 * PI / 180.0 - PI / 2.0), 6 * -sin(j * 180 / 8 * PI / 180.0 - PI / 2.0));
+
+					cen[j*(k+1)] = center;
+				}
+			}
+
+			//printfDx("aaaaaaaaaa");
+		}
+		else {
+			acceleration.Set(0, GRAVITY);
+		}
+		if ((count - bodyClock) % 9 < i) {
+			for (int j = 0; j < 24; j++) {
+				image.Setimage(j, spar[i/3]);
+			}
+			break;
+		}
+	}
+
+	if (count - bodyClock >= 90*2) isExist = false;
+
+	//acceleration.Move(0, GRAVITY);
+	//velocity.Move(acceleration.Getx(), acceleration.Gety());
+	//if (velocity.Gety() > DRAWN_SPEED) velocity.Sety(DRAWN_SPEED);
+	for (int i = 0; i < 24; i++) {
+		vel[i].Move(acceleration.Getx(), acceleration.Gety());
+		cen[i].Move(vel[i].Getx(), vel[i].Gety());
+		image.SetPosi(i, cen[i].Getx() - 3 / 2.0, cen[i].Gety() - 3 / 2.0,
+			cen[i].Getx() + 3 / 2.0, cen[i].Gety() + 3 / 2.0);
+	}
+
+	return 0;
+}
+
 
 Tlp_appear tlp_appe[4];
 int Tlp_appearMngBorn(int count, Dot a) {
@@ -446,6 +502,17 @@ int SparkMngBorn(int count, Dot a,bool isright) {
 	}
 	return 0;
 }
+SSpark sspark[4];
+int SSparkMngBorn(int count, Dot a, bool isright) {
+	for (int i = 0; i < 4; i++) {
+		if (!sspark[i].GetisExist()) {
+			sspark[i].Set(count, a, isright);
+			return 0;
+		}
+	}
+	return 0;
+}
+
 
 int EffectMngInitialize() {
 	Burn = LoadSoundMem("sounds/enemy/broken.wav");
@@ -570,6 +637,9 @@ int EffectMngUpdate(int count) {
 		if (spark[i].GetisExist()) {
 			spark[i].Update(count);
 		}
+		if (sspark[i].GetisExist()) {
+			sspark[i].Update(count);
+		}
 	}
 	for (int i = 0; i < 16; i++) {
 		if (debris[i].GetisExist()) {
@@ -607,6 +677,9 @@ int EffectMngDelete() {
 		}
 		if (spark[i].GetisExist()) {
 			spark[i].Effect::Delete();
+		}
+		if (sspark[i].GetisExist()) {
+			sspark[i].Effect::Delete();
 		}
 	}
 	for (int i = 0; i < 16; i++) {
@@ -646,6 +719,9 @@ int EffectMngDraw() {
 		}
 		if (spark[i].GetisExist()) {
 			spark[i].Draw();
+		}
+		if (sspark[i].GetisExist()) {
+			sspark[i].Draw();
 		}
 	}
 	for (int i = 0; i < 16; i++) {

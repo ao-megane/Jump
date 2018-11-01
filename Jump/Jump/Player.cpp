@@ -401,7 +401,7 @@ int Player::SetTelepo(int count) {
 	//image.Setimage(1, 0);
 	image.Setimage(2, 0);
 	image.Setimage(3, 0);
-	//acceleration.Set(0, 0);
+	acceleration.Set(0, 0);
 	velocity.Setx(0);
 	//attack = 0;
 	return 0;
