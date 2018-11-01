@@ -821,7 +821,7 @@ Dot SquareMng::SetTelepo(Dot center, Dot telepo,Square teleposqu) {
 
 bool SquareMng::isAbleTelepo(Dot center, Dot telepo) {
 	Square decoi;
-	Dot RU, LD;
+	//Dot RU, LD;
 	//testDraw(RED);
 
 	for (int i = 0; i < SQU_NUM; i++) {

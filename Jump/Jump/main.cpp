@@ -166,6 +166,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			if (EnemyMngDamage(player.GetAttackAreaMng(),count,player.GetCenter())) {
 				player.Addtelepo();
+				SparkMngBorn(count, player.GetCenter(),player.GetIsRightFlag());
 			}
 
 			if (player.GetStateFlag() != 7) {//”íƒ_ƒ’†‚Å‚È‚¯‚ê‚Î

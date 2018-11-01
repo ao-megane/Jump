@@ -90,6 +90,14 @@ public:
 	int Update(int count);
 private:
 };
+class Spark : public Effect {
+public:
+	int Set(int count, Dot a, bool isRight);
+	int Update(int count);
+private:
+	Dot vel[8];
+	Dot cen[8];
+};
 
 int EffectMngInitialize();
 
@@ -102,6 +110,7 @@ int ExprosionMngBorn(int count, Dot a);
 int DebriMngBorn(int count, Dot a);
 int RedDebriMngBorn(int count, Dot a);
 int BlueDebriMngBorn(int count, Dot a);
+int SparkMngBorn(int count, Dot a,bool isright);
 
 int EffectMngUpdate(int count);
 int EffectMngDelete();

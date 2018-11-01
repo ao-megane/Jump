@@ -755,6 +755,8 @@ int Player::Addtelepo() {
 	telepoGauge += a;
 	if (telepoGauge > TLP_MAX) telepoGauge = TLP_MAX;
 
+	
+
 	return 0;
 }
 
