@@ -396,6 +396,9 @@ int Player::SetTelepo(int count) {
 	targcount = count;
 	isTelepo = true;
 	acceptFlag = false;
+	//image.Setimage(1, 0);
+	image.Setimage(2, 0);
+	image.Setimage(3, 0);
 	//acceleration.Set(0, 0);
 	//velocity.Set(0, 0);
 	//attack = 0;

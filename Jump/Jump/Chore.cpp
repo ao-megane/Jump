@@ -38,6 +38,7 @@ int Score;
 int makinas;
 int smakinas;
 int vsmakinas;
+int dmakinas;
 int SystemInitialize() {
 	Result = LoadGraph("images/system/result.png");
 	GameOver = LoadGraph("images/system/gameover.png");
@@ -95,6 +96,10 @@ int SystemInitialize() {
 		printfDx("CreateFontToHandle失敗\n");
 	}
 	vsmakinas = CreateFontToHandle("マキナス Scrap 5", 110, -1, DX_FONTTYPE_ANTIALIASING_8X8);
+	if (smakinas == -1) {
+		printfDx("CreateFontToHandle失敗\n");
+	}
+	dmakinas = CreateFontToHandle("マキナス Scrap 5", 90, -1, DX_FONTTYPE_ANTIALIASING_8X8);
 	if (smakinas == -1) {
 		printfDx("CreateFontToHandle失敗\n");
 	}
@@ -298,7 +303,7 @@ int DrawCredit() {
 
 int DrawUI(int count) {
 	//DrawFormatString(DISP_WIDTH - 50, 50, WHITE, "%d", count / 30);
-	DrawFormatStringToHandle(DISP_WIDTH - 150, 10, WHITE, vsmakinas, "%d", count / 30);
+	DrawFormatStringToHandle(DISP_WIDTH - 170, 10, WHITE, vsmakinas, "%3d", count / 30);
 	return 0;
 }
 int DrawUIDamage(int damage,int count) {
@@ -312,7 +317,7 @@ int DrawUIDamage(int damage,int count) {
 	}
 	if (count - damagecount <= 45) {//ダメージから一定時間たつまで
 		if(damagedecoi != 0)
-			DrawFormatStringToHandle(DISP_WIDTH - 150 + 80, 10 + 100, RED, smakinas, "-%2d", damagedecoi);
+			DrawFormatStringToHandle(DISP_WIDTH - 150 + 0, 10 + 50, RED, dmakinas, "-%2d", damagedecoi);
 	}
 	else {//ダメージから一定時間たったら
 		damagedecoi = 0;
