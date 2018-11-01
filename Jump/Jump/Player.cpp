@@ -395,33 +395,18 @@ int targcount;
 int Player::SetTelepo(int count) {
 	targcount = count;
 	isTelepo = true;
-	acceptFlag = false;
+	if (isAir) SetJump(count);
+	else SetStand(count);
+	//acceptFlag = false;
 	//image.Setimage(1, 0);
 	image.Setimage(2, 0);
 	image.Setimage(3, 0);
 	//acceleration.Set(0, 0);
-	//velocity.Set(0, 0);
+	velocity.Setx(0);
 	//attack = 0;
 	return 0;
 }
 int Player::UpdateTelepo(int count) {//
-	//for (int i = 0; i < 4; i++) {//1f更新//早すぎて見えない
-	//	if (count - targcount < i) {
-	//		if (telepoGauge < 100) {//0回
-	//		}
-	//		else if (telepoGauge < 200) {//1回
-	//			image.Setimage(2, PTlp_targ1[i]);
-	//		}
-	//		else if (telepoGauge < 300) {//2回
-	//			image.Setimage(2, PTlp_targ2[i]);
-	//		}
-	//		else if (telepoGauge == 300) {//3回
-	//			image.Setimage(2, PTlp_targ3[i]);
-	//		}
-	//		//printfDx("aaaaaa");
-	//		break;
-	//	}
-	//}
 
 	for (int i = 0; i < 4*3; i++) {//5f更新
 		if (count - targcount < i) {
@@ -441,8 +426,14 @@ int Player::UpdateTelepo(int count) {//
 		}
 	}
 
-	if (stateFlag == 2 || stateFlag == 0) {
+	/*if (stateFlag == 2 || stateFlag == 0) {
 		UpdateStand(count);
+	}*/
+	if (isAir) {
+		//UpdateJump(count);
+	}
+	else {
+		//UpdateStand(count);
 	}
 
 	if (count - targcount >= 4*3) {
@@ -525,15 +516,20 @@ int Player::Update1(int count,int key[]) {//状態回り
 		if (isAir) {//空中なら
 			//if (B == 1) SetAirAttack();
 			//printfDx("isAir\n");
-			if (THUMB_X > 0) {
-				velocity.Setx(P_SPEED / 1.5 /** THUMB_X / 100.0*/);
-				if(!isTelepo)
-					isRightFlag = true;
-			}
-			else if (THUMB_X < 0) {
-				velocity.Setx(-P_SPEED / 1.5 /** THUMB_X / 100.0*/);
-				if (!isTelepo)
-					isRightFlag = false;
+			if (!isTelepo) {
+				if (THUMB_X > 0) {
+					velocity.Setx(P_SPEED / 1.5 /** THUMB_X / 100.0*/);
+					if (!isTelepo)
+						isRightFlag = true;
+				}
+				else if (THUMB_X < 0) {
+					velocity.Setx(-P_SPEED / 1.5 /** THUMB_X / 100.0*/);
+					if (!isTelepo)
+						isRightFlag = false;
+				}
+				else {
+					velocity.Setx(0);
+				}
 			}
 			else {
 				velocity.Setx(0);
@@ -545,26 +541,30 @@ int Player::Update1(int count,int key[]) {//状態回り
 			
 		}
 		else {//地上なら
-			if (THUMB_X > 0) {
-				if (stateFlag != 1) {
-					SetDash(count);
+			if (!isTelepo) {
+				if (THUMB_X > 0) {
+					if (stateFlag != 1) {
+						SetDash(count);
+					}
+					velocity.Setx(P_SPEED);
+					if (!isTelepo)
+						isRightFlag = true;
 				}
-				velocity.Setx(P_SPEED);
-				if (!isTelepo)
-					isRightFlag = true;
-			}
-			else if (THUMB_X < 0) {
-				if (stateFlag != 1) {
-					SetDash(count);
+				else if (THUMB_X < 0) {
+					if (stateFlag != 1) {
+						SetDash(count);
+					}
+					velocity.Setx(-P_SPEED);
+					if (!isTelepo)
+						isRightFlag = false;
 				}
-				velocity.Setx(-P_SPEED);
-				if (!isTelepo)
-					isRightFlag = false;
-			}
-			else {
-				if (stateFlag != 0) {
-					SetStand(count);
+				else {
+					if (stateFlag != 0) {
+						SetStand(count);
+					}
+					velocity.Setx(0);
 				}
+			}else{
 				velocity.Setx(0);
 			}
 			if (B == 1) {
@@ -585,7 +585,8 @@ int Player::Update1(int count,int key[]) {//状態回り
 
 	}
 	else {//テレポ中なら(品定め中なら)
-		velocity.Set(0,0);
+		if(velocity.Gety() > 0)
+			velocity.Set(0,0);
 	}
 
 	switch (stateFlag)
