@@ -15,6 +15,7 @@ int blue_tank_haveS_junk[8];
 int blue_tank_noS_junk[8];
 int blue_drawn_disappear[4];
 int blue_tank_disappear[8];
+int spar[3];
 int expro[6];
 int debri[4];
 int reddebri[5];
@@ -292,6 +293,113 @@ int BlueDebri::Update(int count) {
 		center.Getx() + 32 / 2.0, center.Gety() + 32 / 2.0);
 	return 0;
 }
+int Spark::Set(int count, Dot a, bool isright) {
+	Effect::Set(count, a);
+	isRight = isright;
+	return 0;
+}
+int Spark::Update(int count) {
+	for (int i = 0; i < 3; i++) {
+		//if (count - bodyClock == 0) {//èââÒÇ»ÇÁ
+		//	double thita = GetRand() % 360;
+		//	if (sin(thita * PI / 180.0) > 0)
+		//		acceleration.Set(P_JUMP_POWER * cos(thita * PI / 180.0), P_JUMP_POWER * -sin(thita * PI / 180.0));
+		//	else
+		//		acceleration.Set(P_JUMP_POWER * cos(thita * PI / 180.0), P_JUMP_POWER * -sin(thita * PI / 180.0));
+		//	//printfDx("aaaaaaaaaa");
+		//}
+		if (count - bodyClock == 0) {//èââÒÇ»ÇÁ
+			acceleration.Set(0, -GRAVITY*2);
+			for (int j = 0; j < 8; j++){
+				if (isRight)
+					vel[j].Set(6 * cos(j * 180 / 8 * PI / 180.0 + PI / 2.0), 4 * -sin(j * 180 / 8 * PI / 180.0 + PI / 2.0));
+				else
+					vel[j].Set(6 * cos(j * 180 / 8 * PI / 180.0 - PI / 2.0), 4 * -sin(j * 180 / 8 * PI / 180.0 + PI / 2.0));
+				cen[j] = center;
+			}
+			
+			//printfDx("aaaaaaaaaa");
+		}
+		else {
+			acceleration.Set(0, GRAVITY);
+		}
+		if ((count - bodyClock) % 9 < i) {
+			for (int j = 0; j < 8; j++) {
+				image.Setimage(j, spar[i/3]);
+			}
+			break;
+		}
+	}
+
+	if (count - bodyClock >= 90) isExist = false;
+
+	//acceleration.Move(0, GRAVITY);
+	//velocity.Move(acceleration.Getx(), acceleration.Gety());
+	//if (velocity.Gety() > DRAWN_SPEED) velocity.Sety(DRAWN_SPEED);
+	for (int i = 0; i < 8; i++) {
+		vel[i].Move(acceleration.Getx(), acceleration.Gety());
+		cen[i].Move(vel[i].Getx(), vel[i].Gety());
+		image.SetPosi(i, cen[i].Getx() - 2 / 2.0, cen[i].Gety() - 2 / 2.0,
+			cen[i].Getx() + 2 / 2.0, cen[i].Gety() + 2 / 2.0);
+	}
+	
+	return 0;
+}
+int SSpark::Set(int count, Dot a, bool isright) {
+	Effect::Set(count, a);
+	isRight = isright;
+	return 0;
+}
+int SSpark::Update(int count) {
+	for (int i = 0; i < 3; i++) {
+		//if (count - bodyClock == 0) {//èââÒÇ»ÇÁ
+		//	double thita = GetRand() % 360;
+		//	if (sin(thita * PI / 180.0) > 0)
+		//		acceleration.Set(P_JUMP_POWER * cos(thita * PI / 180.0), P_JUMP_POWER * -sin(thita * PI / 180.0));
+		//	else
+		//		acceleration.Set(P_JUMP_POWER * cos(thita * PI / 180.0), P_JUMP_POWER * -sin(thita * PI / 180.0));
+		//	//printfDx("aaaaaaaaaa");
+		//}
+		if (count - bodyClock == 0) {//èââÒÇ»ÇÁ
+			acceleration.Set(0, -GRAVITY * 2);
+			for (int j = 0; j < 8; j++) {
+				for (int k = 0; k < 3; k++) {
+					if (isRight)
+						vel[j*(k+1)].Set(3.5 * (k + 2) * cos(j * 180 / 8 * PI / 180.0 + PI / 2.0), 6 * -sin(j * 180 / 8 * PI / 180.0 + PI / 2.0));
+					else
+						vel[j*(k+1)].Set(3.5 * (k + 2) * cos(j * 180 / 8 * PI / 180.0 - PI / 2.0), 6 * -sin(j * 180 / 8 * PI / 180.0 - PI / 2.0));
+
+					cen[j*(k+1)] = center;
+				}
+			}
+
+			//printfDx("aaaaaaaaaa");
+		}
+		else {
+			acceleration.Set(0, GRAVITY);
+		}
+		if ((count - bodyClock) % 9 < i) {
+			for (int j = 0; j < 24; j++) {
+				image.Setimage(j, spar[i/3]);
+			}
+			break;
+		}
+	}
+
+	if (count - bodyClock >= 90*2) isExist = false;
+
+	//acceleration.Move(0, GRAVITY);
+	//velocity.Move(acceleration.Getx(), acceleration.Gety());
+	//if (velocity.Gety() > DRAWN_SPEED) velocity.Sety(DRAWN_SPEED);
+	for (int i = 0; i < 24; i++) {
+		vel[i].Move(acceleration.Getx(), acceleration.Gety());
+		cen[i].Move(vel[i].Getx(), vel[i].Gety());
+		image.SetPosi(i, cen[i].Getx() - 3 / 2.0, cen[i].Gety() - 3 / 2.0,
+			cen[i].Getx() + 3 / 2.0, cen[i].Gety() + 3 / 2.0);
+	}
+
+	return 0;
+}
 
 
 Tlp_appear tlp_appe[4];
@@ -384,6 +492,27 @@ int BlueDebriMngBorn(int count, Dot a) {
 	}
 	return 0;
 }
+Spark spark[16];
+int SparkMngBorn(int count, Dot a,bool isright) {
+	for (int i = 0; i < 4; i++) {
+		if (!spark[i].GetisExist()) {
+			spark[i].Set(count, a, isright);
+			return 0;
+		}
+	}
+	return 0;
+}
+SSpark sspark[16];
+int SSparkMngBorn(int count, Dot a, bool isright) {
+	for (int i = 0; i < 4; i++) {
+		if (!sspark[i].GetisExist()) {
+			sspark[i].Set(count, a, isright);
+			return 0;
+		}
+	}
+	return 0;
+}
+
 
 int EffectMngInitialize() {
 	Burn = LoadSoundMem("sounds/enemy/broken.wav");
@@ -476,6 +605,12 @@ int EffectMngInitialize() {
 		a += ".png";
 		blue_tank_noS_junk[i] = LoadGraph(a.c_str());
 	}
+	for (int i = 0; i < 3; i++) {
+		std::string a = "images/player/spark/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		spar[i] = LoadGraph(a.c_str());
+	}
 	return 0;
 }
 
@@ -499,6 +634,7 @@ int EffectMngUpdate(int count) {
 		if (tank_junk[i].GetisExist()) {
 			tank_junk[i].Update(count);
 		}
+		
 	}
 	for (int i = 0; i < 16; i++) {
 		if (debris[i].GetisExist()) {
@@ -509,6 +645,12 @@ int EffectMngUpdate(int count) {
 		}
 		if (bluedebris[i].GetisExist()) {
 			bluedebris[i].Update(count);
+		}
+		if (spark[i].GetisExist()) {
+			spark[i].Update(count);
+		}
+		if (sspark[i].GetisExist()) {
+			sspark[i].Update(count);
 		}
 	}
 	return 0;
@@ -534,6 +676,7 @@ int EffectMngDelete() {
 		if (exprosion[i].GetisExist()) {
 			exprosion[i].Effect::Delete();
 		}
+		
 	}
 	for (int i = 0; i < 16; i++) {
 		if (debris[i].GetisExist()) {
@@ -545,12 +688,18 @@ int EffectMngDelete() {
 		if (bluedebris[i].GetisExist()) {
 			bluedebris[i].Effect::Delete();
 		}
+		if (spark[i].GetisExist()) {
+			spark[i].Effect::Delete();
+		}
+		if (sspark[i].GetisExist()) {
+			sspark[i].Effect::Delete();
+		}
 	}
 	return 0;
 }
 
 int EffectMngDraw() {
-	//DrawGraph(100, 100, red_tank_haveS_junk[0], 1);
+	//DrawGraph(100, 100, spar[0], 1);
 	for (int i = 0; i < 4; i++) {
 		if (tlp_appe[i].GetisExist()) {
 			tlp_appe[i].Draw();
@@ -558,18 +707,19 @@ int EffectMngDraw() {
 		if (tlp_disappe[i].GetisExist()) {
 			tlp_disappe[i].Draw();
 		}
+		if (tank_junk[i].GetisExist()) {
+			tank_junk[i].Draw();
+		}
 		if (drawn_disappe[i].GetisExist()) {
 			drawn_disappe[i].Draw();
 		}
 		if (tank_disappe[i].GetisExist()) {
 			tank_disappe[i].Draw();
 		}
-		if (tank_junk[i].GetisExist()) {
-			tank_junk[i].Draw();
-		}
 		if (exprosion[i].GetisExist()) {
 			exprosion[i].Draw();
 		}
+		
 	}
 	for (int i = 0; i < 16; i++) {
 		if (debris[i].GetisExist()) {
@@ -580,6 +730,12 @@ int EffectMngDraw() {
 		}
 		if (bluedebris[i].GetisExist()) {
 			bluedebris[i].Draw();
+		}
+		if (spark[i].GetisExist()) {
+			spark[i].Draw();
+		}
+		if (sspark[i].GetisExist()) {
+			sspark[i].Draw();
 		}
 	}
 	return 0;

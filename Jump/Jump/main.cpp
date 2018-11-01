@@ -132,6 +132,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			DrawFormatString(0, 0, WHITE, "loading");
 			count = 0;
 			sumdamage = 0;
+			SystemSet();
 			StageLoad(stageFlag);
 			player.Set(stageFlag);
 			EnemyMngSet(stageFlag);
@@ -147,7 +148,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		case 4://playing
 			//DrawFormatString(0, 0, WHITE, "playing");
 			player.Update1(count,key);
-			if (StageUpdata(stageFlag, count, 0,player.GetCenter())) {
+			if (StageUpdata(stageFlag, count, EnemyisExist(),player.GetCenter())) {//クリア
 				keepCount = count;
 				flag = 6;
 			}
@@ -166,6 +167,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			if (EnemyMngDamage(player.GetAttackAreaMng(),count,player.GetCenter())) {
 				player.Addtelepo();
+				if (player.GetStateFlag() == 3) {
+					SSparkMngBorn(count, player.GetCenter(), player.GetIsRightFlag());
+				}
+				else {
+					SparkMngBorn(count, player.GetCenter(), player.GetIsRightFlag());
+				}
 			}
 
 			if (player.GetStateFlag() != 7) {//被ダメ中でなければ
@@ -215,7 +222,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			break;
 		case 7://マニュアル
-			DrawFormatString(0, 0, WHITE, "manual1");
+			//DrawFormatString(0, 0, WHITE, "manual1");
+			//DrawManual(B);
 			if (B == 1) {
 				PlayChoice();
 			}

@@ -24,6 +24,7 @@ int Factory_wall_5;
 int Factory_wall_6;
 
 int factory_door;
+int factory_door_lock;
 int base_door;
 
 //int _back;
@@ -51,6 +52,7 @@ int StagesInitialize() {
 	Factory_wall_6 = LoadGraph("images/maps/factory/wall/60_300.png");
 	base_door = LoadGraph("images/maps/base/door.png");
 	factory_door = LoadGraph("images/maps/factory/door.png");
+	factory_door_lock = LoadGraph("images/maps/factory/door_lock.png");
 	return 0;
 }
 
@@ -113,7 +115,7 @@ int StageLoad(int stagenum) {
 		//dynamicWall.Born();
 		Limit = STAGE1_COUNT;
 		Door.Setimage(factory_door);
-		Limit = STAGE5_COUNT;
+		Limit = STAGE6_COUNT;
 		break;
 	case 6:
 		BackGround = Factory_back;
@@ -122,7 +124,7 @@ int StageLoad(int stagenum) {
 		//dynamicWall.Born();
 		Limit = STAGE1_COUNT;
 		Door.Setimage(factory_door);
-		Limit = STAGE5_COUNT;
+		Limit = STAGE7_COUNT;
 		break;
 	case 7:
 		BackGround = Factory_back;
@@ -131,7 +133,7 @@ int StageLoad(int stagenum) {
 		//dynamicWall.Born();
 		Limit = STAGE1_COUNT;
 		Door.Setimage(factory_door);
-		Limit = STAGE5_COUNT;
+		Limit = STAGE8_COUNT;
 		break;
 	case 8:
 		BackGround = Factory_back;
@@ -140,7 +142,7 @@ int StageLoad(int stagenum) {
 		//dynamicWall.Born();
 		Limit = STAGE1_COUNT;
 		Door.Setimage(factory_door);
-		Limit = STAGE5_COUNT;
+		Limit = STAGE9_COUNT;
 		break;
 	case 9:
 		BackGround = Factory_back;
@@ -149,7 +151,7 @@ int StageLoad(int stagenum) {
 		//dynamicWall.Born();
 		Limit = STAGE1_COUNT;
 		Door.Setimage(factory_door);
-		Limit = STAGE5_COUNT;
+		Limit = STAGE10_COUNT;
 		break;
 	case 10:
 		//printfDx("stageLoad!!\n");
@@ -159,7 +161,7 @@ int StageLoad(int stagenum) {
 		//dynamicWall.Born();
 		Limit = STAGE1_COUNT;
 		Door.Setimage(factory_door);
-		Limit = STAGE5_COUNT;
+		Limit = STAGE11_COUNT;
 		break;
 	case 11:
 		BackGround = Factory_back;
@@ -168,7 +170,7 @@ int StageLoad(int stagenum) {
 		//dynamicWall.Born();
 		Limit = STAGE1_COUNT;
 		Door.Setimage(factory_door);
-		Limit = STAGE5_COUNT;
+		Limit = STAGE12_COUNT;
 		break;
 	default:
 		break;
@@ -203,17 +205,31 @@ bool StageBeforeDescription(int stage, int key[]) {
 		return false;
 }
 
-int StageUpdata(int stagenum, int count, int flag,Dot pcenter) {//大体のステージでいらないかも
-	switch (stagenum)
+int StageUpdata(int stagenum, int count, int enemyExist,Dot pcenter) {//大体のステージでいらないかも
+	/*switch (stagenum)
 	{
 	case 0:
 		break;
 	default:
 		break;
+	}*/
+	if (stagenum > 4) {//工場系なら
+		if (enemyExist) {//敵がいれば
+			Door.Setimage(factory_door_lock);
+		}
+		else {
+			Door.Setimage(factory_door);
+		}
+		if (Door & pcenter && !enemyExist) {
+			return 1;
+		}
 	}
-	if (Door & pcenter) {
-		return 1;
+	else {
+		if (Door & pcenter) {
+			return 1;
+		}
 	}
+	
 	return 0;
 }
 

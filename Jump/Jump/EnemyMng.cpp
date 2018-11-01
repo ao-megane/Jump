@@ -59,6 +59,9 @@ imageSquareMng* Enemy::GetimageMngAd() {
 SquareMng* Enemy::GetweakMngAd() {
 	return &weakMng;
 }
+SquareMng Enemy::GetweakMng() {
+	return weakMng;
+}
 
 int Enemy::Set(int x, int y, double serchLUx, double serchLUy, double serchRDx, double serchRDy,int hp) {
 	isExist = true;
@@ -125,10 +128,10 @@ int Enemy::Draw() {
 int Drawn::Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy, int lev,bool isright) {
 	level = lev;
 	if (level == 1) {
-		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 100);
+		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 100/2);
 	}
 	else if (level == 2) {
-		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 150);
+		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 150/2);
 	}
 	stateFlag = 0;
 	isRight = isright;
@@ -334,10 +337,10 @@ int Tank::Set(int x, int y, bool haveS, int serchLUx, int serchLUy, int serchRDx
 	level = lev;
 	isRight = isright;
 	if (level == 1) {
-		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 100);
+		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 100/2);
 	}
 	else if (level == 2) {
-		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 150);
+		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 150/2);
 	}
 	haveShield = haveS;
 	return 0;
@@ -660,6 +663,7 @@ int Tank::SetDamage(int damage, int count,Dot Pcenter) {
 }
 int Tank::UpdataDamage(int count) {
 	if (count % 4 < 2) {
+		//tankdecoi = image.GetimageHandle(0);
 		image.Setimage(0, 0);
 	}
 	else {
@@ -679,6 +683,7 @@ int Tank::UpdataDamage(int count) {
 				image.Setimage(0, BluenoSTankStand[1]);
 			}
 		}
+		//image.Setimage(0, tankdecoi);
 	}
 
 	if (count > 30) stateFlag = 0;
@@ -1023,9 +1028,9 @@ int EnemyMngSet(int stageFlag) {
 		break;
 	case 7:
 		drawn[0].Set(810, 450, 780, 300, 1680, 1080, 2, 1);
-		briWall[0].Set(690, 930, 0, 0, 0, 0, 10);
-		briWall[1].Set(1710, 930, 0, 0, 0, 0, 10);
-		briWall[2].Set(1170, 930, 0, 0, 0, 0, 10);
+		briWall[0].Set(690 + 10, 930, 0, 0, 0, 0, 10);
+		briWall[1].Set(1710 + 10, 930, 0, 0, 0, 0, 10);
+		briWall[2].Set(1170 + 10, 930, 0, 0, 0, 0, 10);
 		junk[0].Set(1350, 990, 0, 0, 0, 0, 10);
 		junk[1].Set(750, 810, 0, 0, 0, 0, 10);
 		damageWall[0].Set(570, 1050, 40, 10);
@@ -1036,16 +1041,16 @@ int EnemyMngSet(int stageFlag) {
 		drawn[0].Set(390, 330, 60, 240, 900, 1020, 2, 0);
 		drawn[1].Set(990, 330, 600, 240, 1500, 1020, 2, 0);
 		drawn[2].Set(1710, 330, 900, 240, 1820, 1020, 2, 0);
-		damageWall[0].Set(450, 1050, 10, 10);
-		damageWall[1].Set(1050, 1050, 10, 10);
-		damageWall[2].Set(1530, 1050, 10, 10);
-		damageWall[3].Set(750, 750, 10, 10);
-		damageWall[4].Set(1350, 750, 10, 10);
+		//damageWall[0].Set(450, 1050, 10, 10);
+		//damageWall[1].Set(1050, 1050, 10, 10);
+		//damageWall[2].Set(1530, 1050, 10, 10);
+		damageWall[3].Set(750, 650, 7, 10);
+		damageWall[4].Set(1350, 650, 7, 10);
 		break;
 	case 9:
 		drawn[0].Set(870, 210, 600, 0, 1560, 1020, 2, 1);
-		briWall[0].Set(570, 690, 0, 0, 0, 0, 10);
-		briWall[1].Set(1590, 90, 0, 0, 0, 0, 10);
+		briWall[0].Set(570 - 0, 690, 0, 0, 0, 0, 10);
+		briWall[1].Set(1590 - 0, 90, 0, 0, 0, 0, 10);
 		junk[0].Set(90, 690, 0, 0, 0, 0, 10);
 		junk[1].Set(630, 390, 0, 0, 0, 0, 10);
 		junk[2].Set(1470, 930, 0, 0, 0, 0, 10);
@@ -1060,29 +1065,29 @@ int EnemyMngSet(int stageFlag) {
 		drawn[0].Set(390, 330, 60, 240, 900, 1020, 2, 0);
 		drawn[1].Set(990, 330, 600, 240, 1500, 1020, 2, 0);
 		drawn[2].Set(1710, 330, 900, 240, 1820, 1020, 2, 0);
-		damageWall[0].Set(450, 1050, 10, 10);
-		damageWall[1].Set(1050, 1050, 10, 10);
-		damageWall[2].Set(1530, 1050, 10, 10);
-		damageWall[3].Set(750, 750, 10, 10);
-		damageWall[4].Set(1350, 750, 10, 10);
+		//damageWall[0].Set(450, 1050, 10, 10);
+		//damageWall[1].Set(1050, 1050, 10, 10);
+		//damageWall[2].Set(1530, 1050, 10, 10);
+		damageWall[3].Set(750, 650, 7, 10);
+		damageWall[4].Set(1350, 650, 7, 10);
 		tank[0].Set(810, 930, true, 180, 780, 1860, 1020, 2, 0);
 		tank[1].Set(1650, 930, true, 180, 780, 1860, 1020, 2, 0);
 		break;
 	case 11:
-		drawn[0].Set(750, 750, 0, 300, 840, 1020, 2, 1);
+		drawn[0].Set(740, 800, 0, 300, 840, 1020, 2, 1);
 		drawn[1].Set(390, 90, 0, 0, 840, 840, 2, 1);
 		drawn[2].Set(990, 90, 0, 0, 1500, 420, 2, 1);
 		drawn[3].Set(1770, 270, 1320, 0, 1860, 1080, 2, 1);
 		tank[0].Set(990, 910, false, 900, 780, 1860, 1080, 2, 1);
 		drawn[4].Set(1770, 510, 1320, 0, 1920, 1080, 2, 0);
 		damageWall[0].Set(150, 1050, 0, 10);
-		damageWall[1].Set(150, 1050, 0, 10);
 		damageWall[2].Set(450, 1050, 0, 10);
 		damageWall[3].Set(750, 1050, 0, 10);
 		damageWall[4].Set(1050, 1050, 0, 10);
 		damageWall[5].Set(1350, 1050, 0, 10);
 		damageWall[6].Set(1650, 1050, 0, 10);
 		damageWall[7].Set(870, 330, 0, 10);
+		damageWall[1].Set(1950, 1050, 0, 10);
 		break;
 	default:
 		break;
@@ -1207,6 +1212,7 @@ SquareMng GetBriWall() {
 		if (briWall[i].GetisExist()) {
 			//decoi = decoi + briWall[i].GetimageMngAd()->GetSquareMng();
 			decoi += briWall[i].GetimageMngAd()->GetSquareMng();
+			//decoi += briWall[i].GetweakMng();
 		}
 	}
 	return decoi;
@@ -1225,4 +1231,23 @@ SquareMng GetDamageWall() {
 	}
 	//decoi.testDraw(RED);
 	return decoi;
+}
+
+bool EnemyisExist() {
+	for (int i = 0; i < DRAWN_NUM; i++) {
+		if (drawn[i].Enemy::GetisExist()) {
+			return true;
+		}
+	}
+	for (int i = 0; i < BRI_WALL_NUM; i++) {
+		if (briWall[i].Enemy::GetisExist()) {
+			return true;
+		}
+	}
+	for (int i = 0; i < TANK_NUM; i++) {
+		if (tank[i].Enemy::GetisExist()) {
+			return true;
+		}
+	}
+	return false;
 }

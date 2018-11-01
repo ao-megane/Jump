@@ -38,6 +38,7 @@ int Score;
 int makinas;
 int smakinas;
 int vsmakinas;
+int dmakinas;
 int SystemInitialize() {
 	Result = LoadGraph("images/system/result.png");
 	GameOver = LoadGraph("images/system/gameover.png");
@@ -53,10 +54,10 @@ int SystemInitialize() {
 	Facticon.Set(DISP_WIDTH / 4.0 * 2 - ICON_WIDTH / 2.0, DISP_HEIGHT / 2.0 - ICON_HEIGHT / 2.0, DISP_WIDTH / 4.0 * 2 + ICON_WIDTH / 2.0, DISP_HEIGHT / 2.0 + ICON_HEIGHT / 2.0);
 	Facticon.Setimage(LoadGraph("images/system/select/factoryicon.png"));
 	Facticon2.Set(DISP_WIDTH / 4.0 * 3 - ICON_WIDTH / 2.0, DISP_HEIGHT / 2.0 - ICON_HEIGHT / 2.0, DISP_WIDTH / 4.0 * 3 + ICON_WIDTH / 2.0, DISP_HEIGHT / 2.0 + ICON_HEIGHT / 2.0);
-	Facticon2.Setimage(LoadGraph("images/system/select/factoryicon.png"));
+	Facticon2.Setimage(LoadGraph("images/system/select/factoryicon2.png"));
 	White = LoadGraph("images/system/white.png");
 	Manual[0] = LoadGraph("images/system/manual1.png");
-	Manual[1] = LoadGraph("images/system/manual2.png");
+	//Manual[1] = LoadGraph("images/system/manual2.png");
 
 	Prologue[0] = LoadGraph("images/system/prologue/1.png");
 	Prologue[1] = LoadGraph("images/system/prologue/2.png");
@@ -98,10 +99,21 @@ int SystemInitialize() {
 	if (smakinas == -1) {
 		printfDx("CreateFontToHandle失敗\n");
 	}
+	dmakinas = CreateFontToHandle("マキナス Scrap 5", 90, -1, DX_FONTTYPE_ANTIALIASING_8X8);
+	if (smakinas == -1) {
+		printfDx("CreateFontToHandle失敗\n");
+	}
 	Keeper = 0;
 	flag = 0;
 	proFlag = 0;
 	manFlag = 0;
+
+	return 0;
+}
+
+int SystemSet() {
+	damagecount = -1000;	//ダメージ表示用フラグキーパー
+	damagedecoi = 0;	//ダメージ表示用値キーパー
 
 	return 0;
 }
@@ -252,38 +264,40 @@ int DrawPause() {
 }
 
 int DrawManual(int b) {
-	switch (manFlag)
-	{
-	case 0:
-		//DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Manual[0], true);
-		DrawFormatString(20, 20, RED, "MANUAL");
-		break;
-	case 1:
-		//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Manual[1], true);
-		DrawFormatString(20, 20, RED, "3");
-		break;
-	case 2:
-		//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor1Image, true);
-		//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor1WallsImage, true);
-		//DrawFormatStringToHandle(52, 52, BLACK, lemagne, "floor1");
-		//DrawFormatStringToHandle(50, 50, ORANGE, lemagne, "floor1");
-		DrawFormatString(20, 20, RED, "2");
-		break;
-	case 3:
-		//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor2Image, true);
-		//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor2WallsImage, true);
-		//DrawFormatStringToHandle(52, 52, BLACK, lemagne, "floor2");
-		//DrawFormatStringToHandle(50, 50, ORANGE, lemagne, "floor2");
-		DrawFormatString(20, 20, RED, "1");
-		break;
-	}
+	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Manual[0], true);
+	//switch (manFlag)
+	//{
+	//case 0:
+	//	//DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Manual[0], true);
+	//	DrawFormatString(20, 20, RED, "MANUAL");
+	//	break;
+	//case 1:
+	//	//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Manual[1], true);
+	//	DrawFormatString(20, 20, RED, "3");
+	//	break;
+	//case 2:
+	//	//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor1Image, true);
+	//	//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor1WallsImage, true);
+	//	//DrawFormatStringToHandle(52, 52, BLACK, lemagne, "floor1");
+	//	//DrawFormatStringToHandle(50, 50, ORANGE, lemagne, "floor1");
+	//	DrawFormatString(20, 20, RED, "2");
+	//	break;
+	//case 3:
+	//	//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor2Image, true);
+	//	//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor2WallsImage, true);
+	//	//DrawFormatStringToHandle(52, 52, BLACK, lemagne, "floor2");
+	//	//DrawFormatStringToHandle(50, 50, ORANGE, lemagne, "floor2");
+	//	DrawFormatString(20, 20, RED, "1");
+	//	break;
+	//}
 
 	if (b == 1) {
-		manFlag++;
+		/*manFlag++;
 		if (manFlag == 4) {
 			manFlag = 0;
 			return 1;
-		}
+		}*/
+		return 1;
 	}
 	return 0;
 }
@@ -296,7 +310,7 @@ int DrawCredit() {
 
 int DrawUI(int count) {
 	//DrawFormatString(DISP_WIDTH - 50, 50, WHITE, "%d", count / 30);
-	DrawFormatStringToHandle(DISP_WIDTH - 150, 10, WHITE, vsmakinas, "%d", count / 30);
+	DrawFormatStringToHandle(DISP_WIDTH - 170, 10, WHITE, vsmakinas, "%3d", count / 30);
 	return 0;
 }
 int DrawUIDamage(int damage,int count) {
@@ -310,7 +324,7 @@ int DrawUIDamage(int damage,int count) {
 	}
 	if (count - damagecount <= 45) {//ダメージから一定時間たつまで
 		if(damagedecoi != 0)
-			DrawFormatStringToHandle(DISP_WIDTH - 150 + 80, 10 + 100, RED, smakinas, "-%2d", damagedecoi);
+			DrawFormatStringToHandle(DISP_WIDTH - 150 + 0, 10 + 50, RED, dmakinas, "-%2d", damagedecoi);
 	}
 	else {//ダメージから一定時間たったら
 		damagedecoi = 0;
@@ -338,7 +352,7 @@ int UpdataBack(int count) {//count使わなくてもできる(?)
 
 int DrawBack(int floor,Dot player) {
 
-	DrawFormatString(0, 20, RED, "Draw BackGround");
+	//DrawFormatString(0, 20, RED, "Draw BackGround");
 	/*if (floor == 1) {
 		DrawModiGraph(
 			DISP_WIDTH / 2.0 - player.Getx(), DISP_HEIGHT / 2.0 - player.Gety(),
@@ -464,14 +478,97 @@ int DrawResult(int keepcount,int stage) {
 	//	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);		//ブレンドモードをオフ
 	//}
 	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Result, true);
-	DrawFormatStringToHandle(640, 560, RED, vsmakinas, "%3d", keepcount/30);
-	DrawFormatStringToHandle(1380, 560, ORANGE, vsmakinas, "S", keepcount / 30);
+	DrawFormatStringToHandle(640, 560, WHITE, vsmakinas, "%3d", keepcount/30);
 	switch (stage)
 	{
+	case 0:
+		if(STAGE1_COUNT - keepcount < 10*30) DrawFormatStringToHandle(1380, 560, RED, vsmakinas, "S", keepcount / 30);
+		else if (STAGE1_COUNT - keepcount < 20*30) DrawFormatStringToHandle(1380, 560, ORANGE, vsmakinas, "A", keepcount / 30);
+		else if (STAGE1_COUNT - keepcount < 30*30) DrawFormatStringToHandle(1380, 560, GREEN, vsmakinas, "B", keepcount / 30);
+		else if (STAGE1_COUNT - keepcount < 40*30) DrawFormatStringToHandle(1380, 560, WHITE, vsmakinas, "C", keepcount / 30);
+		else  DrawFormatStringToHandle(1380, 560, BLUE, vsmakinas, "D", keepcount / 30);
+		break;
+	case 1:
+		if (STAGE2_COUNT - keepcount < 10 * 30) DrawFormatStringToHandle(1380, 560, RED, vsmakinas, "S", keepcount / 30);
+		else if (STAGE2_COUNT - keepcount < 20 * 30) DrawFormatStringToHandle(1380, 560, ORANGE, vsmakinas, "A", keepcount / 30);
+		else if (STAGE2_COUNT - keepcount < 30 * 30) DrawFormatStringToHandle(1380, 560, GREEN, vsmakinas, "B", keepcount / 30);
+		else if (STAGE2_COUNT - keepcount < 40 * 30) DrawFormatStringToHandle(1380, 560, WHITE, vsmakinas, "C", keepcount / 30);
+		else  DrawFormatStringToHandle(1380, 560, BLUE, vsmakinas, "D", keepcount / 30);
+		break;
+	case 2:
+		if (STAGE3_COUNT - keepcount < 10 * 30) DrawFormatStringToHandle(1380, 560, RED, vsmakinas, "S", keepcount / 30);
+		else if (STAGE3_COUNT - keepcount < 20 * 30) DrawFormatStringToHandle(1380, 560, ORANGE, vsmakinas, "A", keepcount / 30);
+		else if (STAGE3_COUNT - keepcount < 30 * 30) DrawFormatStringToHandle(1380, 560, GREEN, vsmakinas, "B", keepcount / 30);
+		else if (STAGE3_COUNT - keepcount < 40 * 30) DrawFormatStringToHandle(1380, 560, WHITE, vsmakinas, "C", keepcount / 30);
+		else  DrawFormatStringToHandle(1380, 560, BLUE, vsmakinas, "D", keepcount / 30);
+		break;
+	case 3:
+		if (STAGE4_COUNT - keepcount < 10 * 30) DrawFormatStringToHandle(1380, 560, RED, vsmakinas, "S", keepcount / 30);
+		else if (STAGE4_COUNT - keepcount < 20 * 30) DrawFormatStringToHandle(1380, 560, ORANGE, vsmakinas, "A", keepcount / 30);
+		else if (STAGE4_COUNT - keepcount < 30 * 30) DrawFormatStringToHandle(1380, 560, GREEN, vsmakinas, "B", keepcount / 30);
+		else if (STAGE4_COUNT - keepcount < 40 * 30) DrawFormatStringToHandle(1380, 560, WHITE, vsmakinas, "C", keepcount / 30);
+		else  DrawFormatStringToHandle(1380, 560, BLUE, vsmakinas, "D", keepcount / 30);
+		break;
+	case 4:
+		if (STAGE5_COUNT - keepcount < 10 * 30) DrawFormatStringToHandle(1380, 560, RED, vsmakinas, "S", keepcount / 30);
+		else if (STAGE5_COUNT - keepcount < 20 * 30) DrawFormatStringToHandle(1380, 560, ORANGE, vsmakinas, "A", keepcount / 30);
+		else if (STAGE5_COUNT - keepcount < 30 * 30) DrawFormatStringToHandle(1380, 560, GREEN, vsmakinas, "B", keepcount / 30);
+		else if (STAGE5_COUNT - keepcount < 40 * 30) DrawFormatStringToHandle(1380, 560, WHITE, vsmakinas, "C", keepcount / 30);
+		else  DrawFormatStringToHandle(1380, 560, BLUE, vsmakinas, "D", keepcount / 30);
+		break;
+	case 5:
+		if (STAGE6_COUNT - keepcount < 15 * 30) DrawFormatStringToHandle(1380, 560, RED, vsmakinas, "S", keepcount / 30);
+		else if (STAGE6_COUNT - keepcount < 25 * 30) DrawFormatStringToHandle(1380, 560, ORANGE, vsmakinas, "A", keepcount / 30);
+		else if (STAGE6_COUNT - keepcount < 35 * 30) DrawFormatStringToHandle(1380, 560, GREEN, vsmakinas, "B", keepcount / 30);
+		else if (STAGE6_COUNT - keepcount < 45 * 30) DrawFormatStringToHandle(1380, 560, WHITE, vsmakinas, "C", keepcount / 30);
+		else  DrawFormatStringToHandle(1380, 560, BLUE, vsmakinas, "D", keepcount / 30);
+		break;
+	case 6:
+		if (STAGE7_COUNT - keepcount < 15 * 30) DrawFormatStringToHandle(1380, 560, RED, vsmakinas, "S", keepcount / 30);
+		else if (STAGE7_COUNT - keepcount < 25 * 30) DrawFormatStringToHandle(1380, 560, ORANGE, vsmakinas, "A", keepcount / 30);
+		else if (STAGE7_COUNT - keepcount < 35 * 30) DrawFormatStringToHandle(1380, 560, GREEN, vsmakinas, "B", keepcount / 30);
+		else if (STAGE7_COUNT - keepcount < 45 * 30) DrawFormatStringToHandle(1380, 560, WHITE, vsmakinas, "C", keepcount / 30);
+		else  DrawFormatStringToHandle(1380, 560, BLUE, vsmakinas, "D", keepcount / 30);
+		break;
+	case 7:
+		if (STAGE8_COUNT - keepcount < 13 * 30) DrawFormatStringToHandle(1380, 560, RED, vsmakinas, "S", keepcount / 30);
+		else if (STAGE8_COUNT - keepcount < 23 * 30) DrawFormatStringToHandle(1380, 560, ORANGE, vsmakinas, "A", keepcount / 30);
+		else if (STAGE8_COUNT - keepcount < 33 * 30) DrawFormatStringToHandle(1380, 560, GREEN, vsmakinas, "B", keepcount / 30);
+		else if (STAGE8_COUNT - keepcount < 43 * 30) DrawFormatStringToHandle(1380, 560, WHITE, vsmakinas, "C", keepcount / 30);
+		else  DrawFormatStringToHandle(1380, 560, BLUE, vsmakinas, "D", keepcount / 30);
+		break;
+	case 8:
+		if (STAGE9_COUNT - keepcount < 12 * 30) DrawFormatStringToHandle(1380, 560, RED, vsmakinas, "S", keepcount / 30);
+		else if (STAGE9_COUNT - keepcount < 22 * 30) DrawFormatStringToHandle(1380, 560, ORANGE, vsmakinas, "A", keepcount / 30);
+		else if (STAGE9_COUNT - keepcount < 32 * 30) DrawFormatStringToHandle(1380, 560, GREEN, vsmakinas, "B", keepcount / 30);
+		else if (STAGE9_COUNT - keepcount < 42 * 30) DrawFormatStringToHandle(1380, 560, WHITE, vsmakinas, "C", keepcount / 30);
+		else  DrawFormatStringToHandle(1380, 560, BLUE, vsmakinas, "D", keepcount / 30);
+		break;
+	case 9:
+		if (STAGE10_COUNT - keepcount < 12 * 30) DrawFormatStringToHandle(1380, 560, RED, vsmakinas, "S", keepcount / 30);
+		else if (STAGE10_COUNT - keepcount < 22 * 30) DrawFormatStringToHandle(1380, 560, ORANGE, vsmakinas, "A", keepcount / 30);
+		else if (STAGE10_COUNT - keepcount < 32 * 30) DrawFormatStringToHandle(1380, 560, GREEN, vsmakinas, "B", keepcount / 30);
+		else if (STAGE10_COUNT - keepcount < 42 * 30) DrawFormatStringToHandle(1380, 560, WHITE, vsmakinas, "C", keepcount / 30);
+		else  DrawFormatStringToHandle(1380, 560, BLUE, vsmakinas, "D", keepcount / 30);
+		break;
+	case 10:
+		if (STAGE11_COUNT - keepcount < 15 * 30) DrawFormatStringToHandle(1380, 560, RED, vsmakinas, "S", keepcount / 30);
+		else if (STAGE11_COUNT - keepcount < 25 * 30) DrawFormatStringToHandle(1380, 560, ORANGE, vsmakinas, "A", keepcount / 30);
+		else if (STAGE11_COUNT - keepcount < 35 * 30) DrawFormatStringToHandle(1380, 560, GREEN, vsmakinas, "B", keepcount / 30);
+		else if (STAGE11_COUNT - keepcount < 45 * 30) DrawFormatStringToHandle(1380, 560, WHITE, vsmakinas, "C", keepcount / 30);
+		else  DrawFormatStringToHandle(1380, 560, BLUE, vsmakinas, "D", keepcount / 30);
+		break;
+	case 11:
+		if (STAGE12_COUNT - keepcount < 14 * 30) DrawFormatStringToHandle(1380, 560, RED, vsmakinas, "S", keepcount / 30);
+		else if (STAGE12_COUNT - keepcount < 24 * 30) DrawFormatStringToHandle(1380, 560, ORANGE, vsmakinas, "A", keepcount / 30);
+		else if (STAGE12_COUNT - keepcount < 34 * 30) DrawFormatStringToHandle(1380, 560, GREEN, vsmakinas, "B", keepcount / 30);
+		else if (STAGE12_COUNT - keepcount < 44 * 30) DrawFormatStringToHandle(1380, 560, WHITE, vsmakinas, "C", keepcount / 30);
+		else  DrawFormatStringToHandle(1380, 560, BLUE, vsmakinas, "D", keepcount / 30);
+		break;
 	default:
 		break;
 	}
-	//DrawFormatString(1000, 1000, RED, "CLEAR!!");
+	
 	return 0;
 }
 int DrawGameOverBord(int count) {

@@ -161,6 +161,9 @@ int Player::Set(int stageflag) {
 	//weakArea.Set(center, P_W_WIDTH, P_W_HEIGHT);
 	//attack = 0;
 	telepoGauge = TLP_MAX - 20;
+	if (stageflag == 6) {
+		telepoGauge = 100;
+	}
 	//image = PStand1;
 	acceptFlag = 1;
 	bodyClock = 0;
@@ -214,6 +217,9 @@ int Player::SetDash(int count) {
 	//image = PStand1;
 	isFirstDash = true;
 	acceptFlag = 1;
+	image.Setimage(1, 0);
+	image.Setimage(2, 0);
+	image.Setimage(3, 0);
 	return 0;
 }
 int Player::UpdateDash(int count) {
@@ -244,6 +250,9 @@ int Player::SetJump(int count) {
 	image.Setimage(0, PisAir[0]);
 	isFirstJump = true;
 	PlayJump();
+	image.Setimage(1, 0);
+	image.Setimage(2, 0);
+	image.Setimage(3, 0);
 	return 0;
 }
 int Player::UpdateJump(int count) {
@@ -278,6 +287,9 @@ int Player::SetAttack_w(int count) {
 	acceptFlag = false;
 	acceleration.Set(0, 0);
 	velocity.Set(0, 0);
+	image.Setimage(1, 0);
+	image.Setimage(2, 0);
+	image.Setimage(3, 0);
 	//attack = 0;
 	return 0;
 }
@@ -291,8 +303,8 @@ int Player::UpdateAttack_w(int count) {
 
 	if (count == 3 || count == 4) {
 		//if(isRightFlag) attackAreaMng.Add(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, 10);
-		if (isRightFlag) attackAreaMng.Add(center.Getx() - 50, center.Gety() - 100, center.Getx() + 180, center.Gety() + 60, 40);
-		else attackAreaMng.Add(center.Getx() - 180, center.Gety() - 100, center.Getx() + 50, center.Gety() + 60, 40);
+		if (isRightFlag) attackAreaMng.Add(center.Getx() - 50, center.Gety() - 100, center.Getx() + 180, center.Gety() + 60, 40/2);
+		else attackAreaMng.Add(center.Getx() - 180, center.Gety() - 100, center.Getx() + 50, center.Gety() + 60, 40/2);
 		//DrawBox(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, RED, true);
 	}
 
@@ -310,6 +322,9 @@ int Player::SetAttack_air(int count) {
 	stateFlag = 5;
 	acceptFlag = false;
 	//acceleration.Set(0, 0);
+	image.Setimage(1, 0);
+	image.Setimage(2, 0);
+	image.Setimage(3, 0);
 	velocity.Set(0, 0);
 	//attack = 0;
 	return 0;
@@ -323,8 +338,8 @@ int Player::UpdateAttack_air(int count) {
 	}
 
 	if (count == 3 || count == 4) {
-		if (isRightFlag) attackAreaMng.Add(center.Getx() - 90, center.Gety() - 120, center.Getx() + 240-60, center.Gety() + 120, 40);
-		else attackAreaMng.Add(center.Getx() - 240+60, center.Gety() - 120, center.Getx() + 90, center.Gety() + 120, 40);
+		if (isRightFlag) attackAreaMng.Add(center.Getx() - 90, center.Gety() - 120, center.Getx() + 240-60, center.Gety() + 120, 40/2);
+		else attackAreaMng.Add(center.Getx() - 240+60, center.Gety() - 120, center.Getx() + 90, center.Gety() + 120, 40/2);
 		//DrawBox(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, RED, true);
 	}
 
@@ -383,30 +398,18 @@ int targcount;
 int Player::SetTelepo(int count) {
 	targcount = count;
 	isTelepo = true;
-	acceptFlag = false;
-	//acceleration.Set(0, 0);
-	//velocity.Set(0, 0);
+	//if (isAir) SetJump(count);
+	//else SetStand(count);
+	//acceptFlag = false;
+	//image.Setimage(1, 0);
+	image.Setimage(2, 0);
+	image.Setimage(3, 0);
+	acceleration.Set(0, 0);
+	velocity.Setx(0);
 	//attack = 0;
 	return 0;
 }
 int Player::UpdateTelepo(int count) {//
-	//for (int i = 0; i < 4; i++) {//1f更新//早すぎて見えない
-	//	if (count - targcount < i) {
-	//		if (telepoGauge < 100) {//0回
-	//		}
-	//		else if (telepoGauge < 200) {//1回
-	//			image.Setimage(2, PTlp_targ1[i]);
-	//		}
-	//		else if (telepoGauge < 300) {//2回
-	//			image.Setimage(2, PTlp_targ2[i]);
-	//		}
-	//		else if (telepoGauge == 300) {//3回
-	//			image.Setimage(2, PTlp_targ3[i]);
-	//		}
-	//		//printfDx("aaaaaa");
-	//		break;
-	//	}
-	//}
 
 	for (int i = 0; i < 4*3; i++) {//5f更新
 		if (count - targcount < i) {
@@ -426,8 +429,14 @@ int Player::UpdateTelepo(int count) {//
 		}
 	}
 
-	if (stateFlag == 2 || stateFlag == 0) {
+	/*if (stateFlag == 2 || stateFlag == 0) {
 		UpdateStand(count);
+	}*/
+	if (isAir) {
+		//UpdateJump(count);
+	}
+	else {
+		//UpdateStand(count);
 	}
 
 	if (count - targcount >= 4*3) {
@@ -510,15 +519,20 @@ int Player::Update1(int count,int key[]) {//状態回り
 		if (isAir) {//空中なら
 			//if (B == 1) SetAirAttack();
 			//printfDx("isAir\n");
-			if (THUMB_X > 0) {
-				velocity.Setx(P_SPEED / 1.5 /** THUMB_X / 100.0*/);
-				if(!isTelepo)
-					isRightFlag = true;
-			}
-			else if (THUMB_X < 0) {
-				velocity.Setx(-P_SPEED / 1.5 /** THUMB_X / 100.0*/);
-				if (!isTelepo)
-					isRightFlag = false;
+			if (!isTelepo) {
+				if (THUMB_X > 0) {
+					velocity.Setx(P_SPEED / 1.5 /** THUMB_X / 100.0*/);
+					if (!isTelepo)
+						isRightFlag = true;
+				}
+				else if (THUMB_X < 0) {
+					velocity.Setx(-P_SPEED / 1.5 /** THUMB_X / 100.0*/);
+					if (!isTelepo)
+						isRightFlag = false;
+				}
+				else {
+					velocity.Setx(0);
+				}
 			}
 			else {
 				velocity.Setx(0);
@@ -530,26 +544,30 @@ int Player::Update1(int count,int key[]) {//状態回り
 			
 		}
 		else {//地上なら
-			if (THUMB_X > 0) {
-				if (stateFlag != 1) {
-					SetDash(count);
+			if (!isTelepo) {
+				if (THUMB_X > 0) {
+					if (stateFlag != 1) {
+						SetDash(count);
+					}
+					velocity.Setx(P_SPEED);
+					if (!isTelepo)
+						isRightFlag = true;
 				}
-				velocity.Setx(P_SPEED);
-				if (!isTelepo)
-					isRightFlag = true;
-			}
-			else if (THUMB_X < 0) {
-				if (stateFlag != 1) {
-					SetDash(count);
+				else if (THUMB_X < 0) {
+					if (stateFlag != 1) {
+						SetDash(count);
+					}
+					velocity.Setx(-P_SPEED);
+					if (!isTelepo)
+						isRightFlag = false;
 				}
-				velocity.Setx(-P_SPEED);
-				if (!isTelepo)
-					isRightFlag = false;
-			}
-			else {
-				if (stateFlag != 0) {
-					SetStand(count);
+				else {
+					if (stateFlag != 0) {
+						SetStand(count);
+					}
+					velocity.Setx(0);
 				}
+			}else{
 				velocity.Setx(0);
 			}
 			if (B == 1) {
@@ -570,7 +588,8 @@ int Player::Update1(int count,int key[]) {//状態回り
 
 	}
 	else {//テレポ中なら(品定め中なら)
-		velocity.Set(0,0);
+		if(velocity.Gety() > 0)
+			velocity.Set(0,0);
 	}
 
 	switch (stateFlag)
@@ -666,6 +685,7 @@ int Player::Update2(SquareMng a,int count) {//壁まわりの処理
 				//printfDx("R!\n");
 				break;
 			case 6://D
+				if (velocity.Gety() < 0) break;//上昇中は接地しない
 				if (acceleration.Gety() > 0) {
 					acceleration.Sety(0);
 				}
@@ -737,6 +757,8 @@ int Player::Addtelepo() {
 	if (a > 100) a = 100;
 	telepoGauge += a;
 	if (telepoGauge > TLP_MAX) telepoGauge = TLP_MAX;
+
+	
 
 	return 0;
 }

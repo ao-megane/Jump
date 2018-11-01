@@ -17,6 +17,7 @@ public:
 	Dot* GetcenterAd();
 	imageSquareMng* GetimageMngAd();
 	SquareMng* GetweakMngAd();
+	SquareMng GetweakMng();
 	//SquareMng* GetsearchAreaAd();
 	int End();
 protected:
@@ -73,6 +74,7 @@ public:
 private:
 	bool haveShield;
 	int level;
+	int tankdecoi;//ダメージ中の画像キーパー
 };
 
 class Junk : public Enemy
@@ -121,6 +123,7 @@ intSquare GetEAttackMng();
 
 int EnemyMngDraw();
 
+bool EnemyisExist();
 
 #endif // !ENEMY_MNG
 
