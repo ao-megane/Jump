@@ -395,8 +395,8 @@ int targcount;
 int Player::SetTelepo(int count) {
 	targcount = count;
 	isTelepo = true;
-	if (isAir) SetJump(count);
-	else SetStand(count);
+	//if (isAir) SetJump(count);
+	//else SetStand(count);
 	//acceptFlag = false;
 	//image.Setimage(1, 0);
 	image.Setimage(2, 0);
