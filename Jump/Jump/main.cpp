@@ -12,10 +12,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	SetGraphMode(DISP_WIDTH, DISP_HEIGHT, 32);
 	{
-		SetWindowSizeChangeEnableFlag(TRUE);
+		/*SetWindowSizeChangeEnableFlag(TRUE);
 		SetWindowSizeExtendRate(0.6);
 		ChangeWindowMode(TRUE);
-		SetBackgroundColor(0, 0, 0);
+		SetBackgroundColor(0, 0, 0);*/
 	}
 	DxLib_Init();
 	SetDrawScreen(DX_SCREEN_BACK);
