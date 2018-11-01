@@ -128,10 +128,10 @@ int Enemy::Draw() {
 int Drawn::Set(int x, int y, int serchLUx, int serchLUy, int serchRDx, int serchRDy, int lev,bool isright) {
 	level = lev;
 	if (level == 1) {
-		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 100);
+		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 100/2);
 	}
 	else if (level == 2) {
-		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 150);
+		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 150/2);
 	}
 	stateFlag = 0;
 	isRight = isright;
@@ -337,10 +337,10 @@ int Tank::Set(int x, int y, bool haveS, int serchLUx, int serchLUy, int serchRDx
 	level = lev;
 	isRight = isright;
 	if (level == 1) {
-		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 100);
+		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 100/2);
 	}
 	else if (level == 2) {
-		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 150);
+		Enemy::Set(x, y, serchLUx, serchLUy, serchRDx, serchRDy, 150/2);
 	}
 	haveShield = haveS;
 	return 0;
@@ -1041,11 +1041,11 @@ int EnemyMngSet(int stageFlag) {
 		drawn[0].Set(390, 330, 60, 240, 900, 1020, 2, 0);
 		drawn[1].Set(990, 330, 600, 240, 1500, 1020, 2, 0);
 		drawn[2].Set(1710, 330, 900, 240, 1820, 1020, 2, 0);
-		damageWall[0].Set(450, 1050, 10, 10);
-		damageWall[1].Set(1050, 1050, 10, 10);
-		damageWall[2].Set(1530, 1050, 10, 10);
-		damageWall[3].Set(750, 750, 10, 10);
-		damageWall[4].Set(1350, 750, 10, 10);
+		//damageWall[0].Set(450, 1050, 10, 10);
+		//damageWall[1].Set(1050, 1050, 10, 10);
+		//damageWall[2].Set(1530, 1050, 10, 10);
+		damageWall[3].Set(750, 650, 7, 10);
+		damageWall[4].Set(1350, 650, 7, 10);
 		break;
 	case 9:
 		drawn[0].Set(870, 210, 600, 0, 1560, 1020, 2, 1);
@@ -1065,29 +1065,29 @@ int EnemyMngSet(int stageFlag) {
 		drawn[0].Set(390, 330, 60, 240, 900, 1020, 2, 0);
 		drawn[1].Set(990, 330, 600, 240, 1500, 1020, 2, 0);
 		drawn[2].Set(1710, 330, 900, 240, 1820, 1020, 2, 0);
-		damageWall[0].Set(450, 1050, 10, 10);
-		damageWall[1].Set(1050, 1050, 10, 10);
-		damageWall[2].Set(1530, 1050, 10, 10);
-		damageWall[3].Set(750, 750, 10, 10);
-		damageWall[4].Set(1350, 750, 10, 10);
+		//damageWall[0].Set(450, 1050, 10, 10);
+		//damageWall[1].Set(1050, 1050, 10, 10);
+		//damageWall[2].Set(1530, 1050, 10, 10);
+		damageWall[3].Set(750, 650, 7, 10);
+		damageWall[4].Set(1350, 650, 7, 10);
 		tank[0].Set(810, 930, true, 180, 780, 1860, 1020, 2, 0);
 		tank[1].Set(1650, 930, true, 180, 780, 1860, 1020, 2, 0);
 		break;
 	case 11:
-		drawn[0].Set(750, 750, 0, 300, 840, 1020, 2, 1);
+		drawn[0].Set(740, 800, 0, 300, 840, 1020, 2, 1);
 		drawn[1].Set(390, 90, 0, 0, 840, 840, 2, 1);
 		drawn[2].Set(990, 90, 0, 0, 1500, 420, 2, 1);
 		drawn[3].Set(1770, 270, 1320, 0, 1860, 1080, 2, 1);
 		tank[0].Set(990, 910, false, 900, 780, 1860, 1080, 2, 1);
 		drawn[4].Set(1770, 510, 1320, 0, 1920, 1080, 2, 0);
 		damageWall[0].Set(150, 1050, 0, 10);
-		damageWall[1].Set(150, 1050, 0, 10);
 		damageWall[2].Set(450, 1050, 0, 10);
 		damageWall[3].Set(750, 1050, 0, 10);
 		damageWall[4].Set(1050, 1050, 0, 10);
 		damageWall[5].Set(1350, 1050, 0, 10);
 		damageWall[6].Set(1650, 1050, 0, 10);
 		damageWall[7].Set(870, 330, 0, 10);
+		damageWall[1].Set(1950, 1050, 0, 10);
 		break;
 	default:
 		break;

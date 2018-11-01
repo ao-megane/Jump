@@ -115,7 +115,7 @@ int StageLoad(int stagenum) {
 		//dynamicWall.Born();
 		Limit = STAGE1_COUNT;
 		Door.Setimage(factory_door);
-		Limit = STAGE5_COUNT;
+		Limit = STAGE6_COUNT;
 		break;
 	case 6:
 		BackGround = Factory_back;
@@ -124,7 +124,7 @@ int StageLoad(int stagenum) {
 		//dynamicWall.Born();
 		Limit = STAGE1_COUNT;
 		Door.Setimage(factory_door);
-		Limit = STAGE5_COUNT;
+		Limit = STAGE7_COUNT;
 		break;
 	case 7:
 		BackGround = Factory_back;
@@ -133,7 +133,7 @@ int StageLoad(int stagenum) {
 		//dynamicWall.Born();
 		Limit = STAGE1_COUNT;
 		Door.Setimage(factory_door);
-		Limit = STAGE5_COUNT;
+		Limit = STAGE8_COUNT;
 		break;
 	case 8:
 		BackGround = Factory_back;
@@ -142,7 +142,7 @@ int StageLoad(int stagenum) {
 		//dynamicWall.Born();
 		Limit = STAGE1_COUNT;
 		Door.Setimage(factory_door);
-		Limit = STAGE5_COUNT;
+		Limit = STAGE9_COUNT;
 		break;
 	case 9:
 		BackGround = Factory_back;
@@ -151,7 +151,7 @@ int StageLoad(int stagenum) {
 		//dynamicWall.Born();
 		Limit = STAGE1_COUNT;
 		Door.Setimage(factory_door);
-		Limit = STAGE5_COUNT;
+		Limit = STAGE10_COUNT;
 		break;
 	case 10:
 		//printfDx("stageLoad!!\n");
@@ -161,7 +161,7 @@ int StageLoad(int stagenum) {
 		//dynamicWall.Born();
 		Limit = STAGE1_COUNT;
 		Door.Setimage(factory_door);
-		Limit = STAGE5_COUNT;
+		Limit = STAGE11_COUNT;
 		break;
 	case 11:
 		BackGround = Factory_back;
@@ -170,7 +170,7 @@ int StageLoad(int stagenum) {
 		//dynamicWall.Born();
 		Limit = STAGE1_COUNT;
 		Door.Setimage(factory_door);
-		Limit = STAGE5_COUNT;
+		Limit = STAGE12_COUNT;
 		break;
 	default:
 		break;

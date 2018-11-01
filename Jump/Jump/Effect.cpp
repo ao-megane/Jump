@@ -492,7 +492,7 @@ int BlueDebriMngBorn(int count, Dot a) {
 	}
 	return 0;
 }
-Spark spark[4];
+Spark spark[16];
 int SparkMngBorn(int count, Dot a,bool isright) {
 	for (int i = 0; i < 4; i++) {
 		if (!spark[i].GetisExist()) {
@@ -502,7 +502,7 @@ int SparkMngBorn(int count, Dot a,bool isright) {
 	}
 	return 0;
 }
-SSpark sspark[4];
+SSpark sspark[16];
 int SSparkMngBorn(int count, Dot a, bool isright) {
 	for (int i = 0; i < 4; i++) {
 		if (!sspark[i].GetisExist()) {
@@ -634,12 +634,7 @@ int EffectMngUpdate(int count) {
 		if (tank_junk[i].GetisExist()) {
 			tank_junk[i].Update(count);
 		}
-		if (spark[i].GetisExist()) {
-			spark[i].Update(count);
-		}
-		if (sspark[i].GetisExist()) {
-			sspark[i].Update(count);
-		}
+		
 	}
 	for (int i = 0; i < 16; i++) {
 		if (debris[i].GetisExist()) {
@@ -650,6 +645,12 @@ int EffectMngUpdate(int count) {
 		}
 		if (bluedebris[i].GetisExist()) {
 			bluedebris[i].Update(count);
+		}
+		if (spark[i].GetisExist()) {
+			spark[i].Update(count);
+		}
+		if (sspark[i].GetisExist()) {
+			sspark[i].Update(count);
 		}
 	}
 	return 0;
@@ -675,12 +676,7 @@ int EffectMngDelete() {
 		if (exprosion[i].GetisExist()) {
 			exprosion[i].Effect::Delete();
 		}
-		if (spark[i].GetisExist()) {
-			spark[i].Effect::Delete();
-		}
-		if (sspark[i].GetisExist()) {
-			sspark[i].Effect::Delete();
-		}
+		
 	}
 	for (int i = 0; i < 16; i++) {
 		if (debris[i].GetisExist()) {
@@ -691,6 +687,12 @@ int EffectMngDelete() {
 		}
 		if (bluedebris[i].GetisExist()) {
 			bluedebris[i].Effect::Delete();
+		}
+		if (spark[i].GetisExist()) {
+			spark[i].Effect::Delete();
+		}
+		if (sspark[i].GetisExist()) {
+			sspark[i].Effect::Delete();
 		}
 	}
 	return 0;
@@ -717,12 +719,7 @@ int EffectMngDraw() {
 		if (exprosion[i].GetisExist()) {
 			exprosion[i].Draw();
 		}
-		if (spark[i].GetisExist()) {
-			spark[i].Draw();
-		}
-		if (sspark[i].GetisExist()) {
-			sspark[i].Draw();
-		}
+		
 	}
 	for (int i = 0; i < 16; i++) {
 		if (debris[i].GetisExist()) {
@@ -733,6 +730,12 @@ int EffectMngDraw() {
 		}
 		if (bluedebris[i].GetisExist()) {
 			bluedebris[i].Draw();
+		}
+		if (spark[i].GetisExist()) {
+			spark[i].Draw();
+		}
+		if (sspark[i].GetisExist()) {
+			sspark[i].Draw();
 		}
 	}
 	return 0;

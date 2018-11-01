@@ -161,6 +161,9 @@ int Player::Set(int stageflag) {
 	//weakArea.Set(center, P_W_WIDTH, P_W_HEIGHT);
 	//attack = 0;
 	telepoGauge = TLP_MAX - 20;
+	if (stageflag == 6) {
+		telepoGauge = 100;
+	}
 	//image = PStand1;
 	acceptFlag = 1;
 	bodyClock = 0;
@@ -300,8 +303,8 @@ int Player::UpdateAttack_w(int count) {
 
 	if (count == 3 || count == 4) {
 		//if(isRightFlag) attackAreaMng.Add(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, 10);
-		if (isRightFlag) attackAreaMng.Add(center.Getx() - 50, center.Gety() - 100, center.Getx() + 180, center.Gety() + 60, 40);
-		else attackAreaMng.Add(center.Getx() - 180, center.Gety() - 100, center.Getx() + 50, center.Gety() + 60, 40);
+		if (isRightFlag) attackAreaMng.Add(center.Getx() - 50, center.Gety() - 100, center.Getx() + 180, center.Gety() + 60, 40/2);
+		else attackAreaMng.Add(center.Getx() - 180, center.Gety() - 100, center.Getx() + 50, center.Gety() + 60, 40/2);
 		//DrawBox(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, RED, true);
 	}
 
@@ -335,8 +338,8 @@ int Player::UpdateAttack_air(int count) {
 	}
 
 	if (count == 3 || count == 4) {
-		if (isRightFlag) attackAreaMng.Add(center.Getx() - 90, center.Gety() - 120, center.Getx() + 240-60, center.Gety() + 120, 40);
-		else attackAreaMng.Add(center.Getx() - 240+60, center.Gety() - 120, center.Getx() + 90, center.Gety() + 120, 40);
+		if (isRightFlag) attackAreaMng.Add(center.Getx() - 90, center.Gety() - 120, center.Getx() + 240-60, center.Gety() + 120, 40/2);
+		else attackAreaMng.Add(center.Getx() - 240+60, center.Gety() - 120, center.Getx() + 90, center.Gety() + 120, 40/2);
 		//DrawBox(center.Getx() - 90, center.Gety() - 210, center.Getx() + 210, center.Gety() + 30, RED, true);
 	}
 

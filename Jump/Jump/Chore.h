@@ -16,6 +16,8 @@
 
 int SystemInitialize();
 
+int SystemSet();
+
 int PlayMove();
 
 int PlayChoice();

@@ -132,6 +132,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			DrawFormatString(0, 0, WHITE, "loading");
 			count = 0;
 			sumdamage = 0;
+			SystemSet();
 			StageLoad(stageFlag);
 			player.Set(stageFlag);
 			EnemyMngSet(stageFlag);
