@@ -826,7 +826,7 @@ int DamageWall::Updata(int count, Dot Pcenter) {
 		Enemy::GetimageMngAd()->Add(Enemy::GetcenterAd()->Getx() - DAMAGE_WALL_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() - DAMAGE_WALL_W_HEIGHT / 2.0,
 			Enemy::GetcenterAd()->Getx() + DAMAGE_WALL_W_WIDTH / 2.0, Enemy::GetcenterAd()->Gety() + DAMAGE_WALL_W_HEIGHT / 2.0, DamageWallStand[3]);
 
-		Enemy::GetattackMngAd()->Add(Enemy::GetcenterAd()->Getx() - 120, Enemy::GetcenterAd()->Gety() - 70,
+		Enemy::GetattackMngAd()->Add(Enemy::GetcenterAd()->Getx() - 120, Enemy::GetcenterAd()->Gety() - 70-10,
 			Enemy::GetcenterAd()->Getx() + 120, Enemy::GetcenterAd()->Gety() + 0, 3);
 		break;
 	default:
@@ -1031,11 +1031,11 @@ int EnemyMngSet(int stageFlag) {
 		briWall[0].Set(690 + 10, 930, 0, 0, 0, 0, 10);
 		briWall[1].Set(1710 + 10, 930, 0, 0, 0, 0, 10);
 		briWall[2].Set(1170 + 10, 930, 0, 0, 0, 0, 10);
-		junk[0].Set(1350, 990, 0, 0, 0, 0, 10);
+		junk[0].Set(1350-60, 990, 0, 0, 0, 0, 10);
 		junk[1].Set(750, 810, 0, 0, 0, 0, 10);
-		damageWall[0].Set(570, 1050, 40, 10);
-		damageWall[1].Set(1590, 1050, 0, 10);
-		damageWall[2].Set(1050, 1050, 35, 10);
+		damageWall[0].Set(570, 1050+5, 40, 10);
+		damageWall[1].Set(1590, 1050+5, 0, 10);
+		damageWall[2].Set(1050, 1050+5, 35, 10);
 		break;
 	case 8:
 		drawn[0].Set(390, 330, 60, 240, 900, 1020, 2, 0);
@@ -1044,13 +1044,13 @@ int EnemyMngSet(int stageFlag) {
 		//damageWall[0].Set(450, 1050, 10, 10);
 		//damageWall[1].Set(1050, 1050, 10, 10);
 		//damageWall[2].Set(1530, 1050, 10, 10);
-		damageWall[3].Set(750, 650, 7, 10);
-		damageWall[4].Set(1350, 650, 7, 10);
+		damageWall[3].Set(750+30, 650, 7, 10);
+		damageWall[4].Set(1350+30, 650, 7, 10);
 		break;
 	case 9:
 		drawn[0].Set(870, 210, 600, 0, 1560, 1020, 2, 1);
-		briWall[0].Set(570 - 0, 690, 0, 0, 0, 0, 10);
-		briWall[1].Set(1590 - 0, 90, 0, 0, 0, 0, 10);
+		briWall[0].Set(570 - 10, 690, 0, 0, 0, 0, 10);
+		briWall[1].Set(1590 - 10, 90, 0, 0, 0, 0, 10);
 		junk[0].Set(90, 690, 0, 0, 0, 0, 10);
 		junk[1].Set(630, 390, 0, 0, 0, 0, 10);
 		junk[2].Set(1470, 930, 0, 0, 0, 0, 10);
