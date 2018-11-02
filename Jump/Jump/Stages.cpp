@@ -2,6 +2,7 @@
 #include"DxLib.h"
 #include"Value.h"
 #include"Obj.h"
+#include"Chore.h"
 
 int BackGround;
 int Limit;
@@ -53,6 +54,7 @@ int StagesInitialize() {
 	base_door = LoadGraph("images/maps/base/door.png");
 	factory_door = LoadGraph("images/maps/factory/door.png");
 	factory_door_lock = LoadGraph("images/maps/factory/door_lock.png");
+
 	return 0;
 }
 
@@ -178,32 +180,6 @@ int StageLoad(int stagenum) {
 	return 0;
 }
 
-bool StageBeforeDescription(int stage, int key[]) {
-	switch (stage)
-	{
-	case 0:
-		DrawFormatString(300, 300, RED, "STAGE1_BEFORE_DESCRIPTION!");
-		break;
-	case 1:
-		DrawFormatString(300, 300, RED, "STAGE2_BEFORE_DESCRIPTION!");
-		break;
-	case 2:
-		DrawFormatString(300, 300, RED, "STAGE3_BEFORE_DESCRIPTION!");
-		break;
-	case 3:
-		DrawFormatString(300, 300, RED, "STAGE4_BEFORE_DESCRIPTION!");
-		break;
-	case 4:
-		DrawFormatString(300, 300, RED, "STAGE5_BEFORE_DESCRIPTION!");
-		break;
-	default:
-		break;
-	}
-	if (B == 1)
-		return true;
-	else
-		return false;
-}
 
 int StageUpdata(int stagenum, int count, int enemyExist,Dot pcenter) {//大体のステージでいらないかも
 	/*switch (stagenum)
