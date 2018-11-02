@@ -4,7 +4,9 @@ int Result;
 int GameOver;
 int Loading;
 int Credit;
-int Tytle[3];
+int Tytle;
+int RedLightning[3];
+int GreenLightning[3];
 int Selectbase;
 int Selectfact;
 imageSquare Baseicon;
@@ -14,6 +16,9 @@ int Logo;
 int Pause;
 int Manual[2];
 int Prologue[6];
+
+int descri[12];
+
 int UIBack;
 int UIIcon;
 int White;
@@ -44,9 +49,7 @@ int SystemInitialize() {
 	GameOver = LoadGraph("images/system/gameover.png");
 	Pause = LoadGraph("images/system/pause.png");
 	Credit = LoadGraph("images/system/credit.png");
-	Tytle[0] = LoadGraph("images/system/opening/tytle.png");
-	Tytle[1] = LoadGraph("images/system/title2.png");
-	Tytle[2] = LoadGraph("images/system/title3.png");
+	Tytle = LoadGraph("images/system/opening/tytle.png");
 	Selectbase = LoadGraph("images/system/select/baseback.png");
 	Selectfact = LoadGraph("images/system/select/factoryback.png");
 	Baseicon.Set(DISP_WIDTH / 4.0 - ICON_WIDTH / 2.0, DISP_HEIGHT / 2.0 - ICON_HEIGHT / 2.0, DISP_WIDTH / 4.0 + ICON_WIDTH / 2.0, DISP_HEIGHT / 2.0 + ICON_HEIGHT / 2.0);
@@ -58,6 +61,20 @@ int SystemInitialize() {
 	White = LoadGraph("images/system/white.png");
 	Manual[0] = LoadGraph("images/system/manual1.png");
 	//Manual[1] = LoadGraph("images/system/manual2.png");
+	RedLightning[0] = LoadGraph("images/system/redlightning/1.png");
+	RedLightning[1] = LoadGraph("images/system/redlightning/2.png");
+	RedLightning[2] = LoadGraph("images/system/redlightning/3.png");
+
+	GreenLightning[0] = LoadGraph("images/system/greenlightning/1.png");
+	GreenLightning[1] = LoadGraph("images/system/greenlightning/2.png");
+	GreenLightning[2] = LoadGraph("images/system/greenlightning/3.png");
+
+	for (int i = 0; i < 12; i++) {
+		std::string a = "images/system/descri/";
+		a += std::to_string(i + 1);
+		a += ".png";
+		descri[i] = LoadGraph(a.c_str());
+	}
 
 	Prologue[0] = LoadGraph("images/system/prologue/1.png");
 	Prologue[1] = LoadGraph("images/system/prologue/2.png");
@@ -150,15 +167,15 @@ int PlayplayBGM() {
 
 int clockcount;
 int DrawOP(int count) {
-	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Tytle[0], true);
+	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Tytle, true);
 
-	clockcount = count % (20 * 60 * 2);
-	DrawModiGraph(
+	clockcount = count % (30 * 7 * 2);
+	/*DrawModiGraph(
 		-clockcount / (20.0 * 60.0 * 2) * DISP_WIDTH * 2, 0,
 		DISP_WIDTH * 2 - clockcount / (20.0 * 60 * 2) * DISP_WIDTH * 2, 0,
 		DISP_WIDTH * 2 - clockcount / (20.0 * 60 * 2) * DISP_WIDTH * 2, DISP_HEIGHT,
 		-clockcount / (20.0 * 60 * 2) * DISP_WIDTH * 2, DISP_HEIGHT,
-		Tytle[1], true
+		Tytle, true
 	);
 	DrawModiGraph(
 		DISP_WIDTH * 2 - clockcount / (20.0 * 60.0 * 2) * DISP_WIDTH * 2, 0,
@@ -166,10 +183,60 @@ int DrawOP(int count) {
 		DISP_WIDTH * 4 - clockcount / (20.0 * 60.0 * 2) * DISP_WIDTH * 2, DISP_HEIGHT,
 		DISP_WIDTH * 2 - clockcount / (20.0 * 60.0 * 2) * DISP_WIDTH * 2, DISP_HEIGHT,
 		Tytle[1], true
-	);
+	);*/
 
-	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Tytle[2], true);
+	//if ((count - Keeper) <= 180) {
+	//	SetDrawBlendMode(DX_BLENDMODE_ALPHA, (count - Keeper) / 60.0 * 255);		//ブレンドモードを設定
+	//	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, GameOver, true);
+	//	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);		//ブレンドモードをオフ
+	//}
+	//else if (count >= 90) {
+	//	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, GameOver, true);
+	//	return 1;
+	//}
+
+	//DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, RedLightning[0], true);
+	if (clockcount < 6.4 * 30) {
+
+	}
+	else if (clockcount < 6.4 * 30 + 2) {
+		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, GreenLightning[0], true);
+	}
+	else if (clockcount < 6.4 * 30 + 2 + 3) {
+		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, GreenLightning[1], true);
+	}
+	else if (clockcount < 6.4 * 30 + 2 + 3 + 1) {
+		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, GreenLightning[2], true);
+	}
+	else if (clockcount < 6.4 * 30 + 6 + 2) {
+		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, GreenLightning[1], true);
+	}
+	else if (clockcount < 6.4 * 30 + 6 + 2 + 1) {
+		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, GreenLightning[0], true);
+	}//稲妻一個目
+	else if (clockcount < 13.4 * 30) {
+
+	}
+	else if (clockcount < 13.4 * 30 + 2) {
+		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, RedLightning[0], true);
+	}
+	else if (clockcount < 13.4 * 30 + 2 + 3) {
+		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, RedLightning[1], true);
+	}
+	else if (clockcount < 13.4 * 30 + 2 + 3 + 1) {
+		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, RedLightning[2], true);
+	}
+	else if (clockcount < 13.4 * 30 + 6 + 3) {
+		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, RedLightning[1], true);
+	}
+	else if (clockcount < 13.4 * 30 + 6 + 3 + 2) {
+		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, RedLightning[0], true);
+	}
+
+	
+	//DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Tytle, true);
 	DrawStringToHandle(DISP_WIDTH / 3.0, DISP_HEIGHT - 300, "左スティック上下で選択\nBで決定", WHITE, smakinas);
+	DrawFormatString(0, 0, RED, "%d", clockcount);
 	return 0;
 }
 int DrawSelect(int local) {
@@ -198,6 +265,45 @@ int DrawSelect(int local) {
 
 	return 0;
 }
+
+bool StageBeforeDescription(int stage, int key[]) {
+	/*switch (stage)
+	{
+	case 0:
+	DrawFormatString(300, 300, RED, "STAGE1_BEFORE_DESCRIPTION!");
+	break;
+	case 1:
+	DrawFormatString(300, 300, RED, "STAGE2_BEFORE_DESCRIPTION!");
+	break;
+	case 2:
+	DrawFormatString(300, 300, RED, "STAGE3_BEFORE_DESCRIPTION!");
+	break;
+	case 3:
+	DrawFormatString(300, 300, RED, "STAGE4_BEFORE_DESCRIPTION!");
+	break;
+	case 4:
+	DrawFormatString(300, 300, RED, "STAGE5_BEFORE_DESCRIPTION!");
+	break;
+	default:
+	break;
+	}*/
+	if (stage < 5) {
+		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Selectbase, true);
+	}
+	else {
+		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Selectfact, true);
+	}
+	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, descri[stage], true);
+
+	//DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, descri[0], true);
+
+	if (B == 1)
+		return true;
+	else
+		return false;
+}
+
+
 int DrawTitleSentence(int flag) {
 	//DrawFormatStringToHandle(1575, 880, GRAY, lemagne, "");
 	switch (flag)
@@ -524,10 +630,10 @@ int DrawResult(int keepcount,int stage) {
 		else  DrawFormatStringToHandle(1380, 560, BLUE, vsmakinas, "D", keepcount / 30);
 		break;
 	case 6:
-		if (STAGE7_COUNT - keepcount < 15 * 30) DrawFormatStringToHandle(1380, 560, RED, vsmakinas, "S", keepcount / 30);
-		else if (STAGE7_COUNT - keepcount < 25 * 30) DrawFormatStringToHandle(1380, 560, ORANGE, vsmakinas, "A", keepcount / 30);
-		else if (STAGE7_COUNT - keepcount < 35 * 30) DrawFormatStringToHandle(1380, 560, GREEN, vsmakinas, "B", keepcount / 30);
-		else if (STAGE7_COUNT - keepcount < 45 * 30) DrawFormatStringToHandle(1380, 560, WHITE, vsmakinas, "C", keepcount / 30);
+		if (STAGE7_COUNT - keepcount < 12 * 30) DrawFormatStringToHandle(1380, 560, RED, vsmakinas, "S", keepcount / 30);
+		else if (STAGE7_COUNT - keepcount < 22 * 30) DrawFormatStringToHandle(1380, 560, ORANGE, vsmakinas, "A", keepcount / 30);
+		else if (STAGE7_COUNT - keepcount < 32 * 30) DrawFormatStringToHandle(1380, 560, GREEN, vsmakinas, "B", keepcount / 30);
+		else if (STAGE7_COUNT - keepcount < 42 * 30) DrawFormatStringToHandle(1380, 560, WHITE, vsmakinas, "C", keepcount / 30);
 		else  DrawFormatStringToHandle(1380, 560, BLUE, vsmakinas, "D", keepcount / 30);
 		break;
 	case 7:
@@ -572,15 +678,18 @@ int DrawResult(int keepcount,int stage) {
 	return 0;
 }
 int DrawGameOverBord(int count) {
-	if ((count - Keeper) <= 180) {
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, (count - Keeper) / 60.0 * 255);		//ブレンドモードを設定
-		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, GameOver, true);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);		//ブレンドモードをオフ
-	}
-	else if (count >= 90) {
-		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, GameOver, true);
-		return 1;
-	}
+	//if ((count - Keeper) <= 180) {
+	//	SetDrawBlendMode(DX_BLENDMODE_ALPHA, (count - Keeper) / 60.0 * 255);		//ブレンドモードを設定
+	//	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, GameOver, true);
+	//	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);		//ブレンドモードをオフ
+	//}
+	//else if (count >= 90) {
+	//	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, GameOver, true);
+	//	return 1;
+	//}
+
+	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, GameOver, true);
+
 	return 0;
 }
 

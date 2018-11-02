@@ -220,7 +220,7 @@ int Debri::Update(int count) {
 				acceleration.Set(P_JUMP_POWER * cos(thita * PI / 180.0), P_JUMP_POWER * -sin(thita * PI / 180.0));
 			//printfDx("aaaaaaaaaa");
 		}
-		if ((count - bodyClock) % 4 < i) {
+		if ((count - bodyClock) % 4 <= i) {
 			image.Setimage(0, debri[i]);
 			break;
 		}
@@ -248,7 +248,7 @@ int RedDebri::Update(int count) {
 				acceleration.Set(P_JUMP_POWER * cos(thita * PI / 180.0), P_JUMP_POWER * -sin(thita * PI / 180.0));
 			//printfDx("aaaaaaaaaa");
 		}
-		if ((count - bodyClock) % 5 < i) {
+		if ((count - bodyClock) % 5 <= i) {
 			image.Setimage(0, reddebri[i]);
 			break;
 		}
@@ -276,7 +276,7 @@ int BlueDebri::Update(int count) {
 				acceleration.Set(P_JUMP_POWER * cos(thita * PI / 180.0), P_JUMP_POWER * -sin(thita * PI / 180.0));
 			//printfDx("aaaaaaaaaa");
 		}
-		if ((count - bodyClock) % 5 < i) {
+		if ((count - bodyClock) % 5 <= i) {
 			image.Setimage(0, bluedebri[i]);
 			break;
 		}
@@ -323,10 +323,11 @@ int Spark::Update(int count) {
 		else {
 			acceleration.Set(0, GRAVITY);
 		}
-		if ((count - bodyClock) % 9 < i) {
+		if ((count - bodyClock) % 3 <= i) {
 			for (int j = 0; j < 8; j++) {
-				image.Setimage(j, spar[i/3]);
+				image.Setimage(j, spar[i]);
 			}
+			//printfDx("%d", i);
 			break;
 		}
 	}
@@ -361,13 +362,13 @@ int SSpark::Update(int count) {
 		//	//printfDx("aaaaaaaaaa");
 		//}
 		if (count - bodyClock == 0) {//‰‰ñ‚È‚ç
-			acceleration.Set(0, -GRAVITY * 2);
+			acceleration.Set(0, -GRAVITY * 4);
 			for (int j = 0; j < 8; j++) {
 				for (int k = 0; k < 3; k++) {
 					if (isRight)
-						vel[j*(k+1)].Set(3.5 * (k + 2) * cos(j * 180 / 8 * PI / 180.0 + PI / 2.0), 6 * -sin(j * 180 / 8 * PI / 180.0 + PI / 2.0));
+						vel[j*(k+1)].Set(3.5 * (k + 2) * cos(j * 180 / 8 * PI / 180.0 + PI / 2.0), 3.5 * (k + 2) * -sin(j * 180 / 8 * PI / 180.0 + PI / 2.0));
 					else
-						vel[j*(k+1)].Set(3.5 * (k + 2) * cos(j * 180 / 8 * PI / 180.0 - PI / 2.0), 6 * -sin(j * 180 / 8 * PI / 180.0 - PI / 2.0));
+						vel[j*(k+1)].Set(3.5 * (k + 2) * cos(j * 180 / 8 * PI / 180.0 - PI / 2.0), 3.5 * (k + 2) * -sin(j * 180 / 8 * PI / 180.0 - PI / 2.0));
 
 					cen[j*(k+1)] = center;
 				}
@@ -378,9 +379,9 @@ int SSpark::Update(int count) {
 		else {
 			acceleration.Set(0, GRAVITY);
 		}
-		if ((count - bodyClock) % 9 < i) {
+		if ((count - bodyClock) % 3 <= i) {
 			for (int j = 0; j < 24; j++) {
-				image.Setimage(j, spar[i/3]);
+				image.Setimage(j, spar[i]);
 			}
 			break;
 		}
@@ -494,7 +495,7 @@ int BlueDebriMngBorn(int count, Dot a) {
 }
 Spark spark[16];
 int SparkMngBorn(int count, Dot a,bool isright) {
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 16; i++) {
 		if (!spark[i].GetisExist()) {
 			spark[i].Set(count, a, isright);
 			return 0;
@@ -504,7 +505,7 @@ int SparkMngBorn(int count, Dot a,bool isright) {
 }
 SSpark sspark[16];
 int SSparkMngBorn(int count, Dot a, bool isright) {
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 16; i++) {
 		if (!sspark[i].GetisExist()) {
 			sspark[i].Set(count, a, isright);
 			return 0;

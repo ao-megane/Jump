@@ -6,8 +6,6 @@ int StagesInitialize();	//画像読み込みなど
 
 int StageLoad(int stagenum);	//何番目のステージを読み込むか
 
-bool StageBeforeDescription(int stageFlag, int key[]);
-
 int StageUpdata(int stagenum, int count, int flag,Dot pcenter);	//壁が動いたり
 
 SquareMng GetStageWalls_judge();

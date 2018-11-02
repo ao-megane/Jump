@@ -34,6 +34,8 @@ int PlayTytleBGM();
 
 int PlayplayBGM();
 
+bool StageBeforeDescription(int stageFlag, int key[]);
+
 int DrawUI(int count);
 int DrawUIDamage(int damage, int count);
 
