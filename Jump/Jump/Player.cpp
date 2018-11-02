@@ -455,6 +455,8 @@ int Player::SetDamage(int count) {
 	acceptFlag = 0;
 	acceleration.Set(0, 0);//—vŒŸ“¢
 	velocity.Set(0, 0);
+	image.Setimage(2, 0);
+	image.Setimage(3, 0);
 	StopAll();
 	mutekiClock = count;
 	//attack = 0;

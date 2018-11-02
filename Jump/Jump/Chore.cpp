@@ -60,7 +60,7 @@ int SystemInitialize() {
 	Facticon2.Setimage(LoadGraph("images/system/select/factoryicon2.png"));
 	White = LoadGraph("images/system/white.png");
 	Manual[0] = LoadGraph("images/system/manual1.png");
-	//Manual[1] = LoadGraph("images/system/manual2.png");
+	Manual[1] = LoadGraph("images/system/manual2.png");
 	RedLightning[0] = LoadGraph("images/system/redlightning/1.png");
 	RedLightning[1] = LoadGraph("images/system/redlightning/2.png");
 	RedLightning[2] = LoadGraph("images/system/redlightning/3.png");
@@ -232,11 +232,10 @@ int DrawOP(int count) {
 	else if (clockcount < 13.4 * 30 + 6 + 3 + 2) {
 		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, RedLightning[0], true);
 	}
-
 	
 	//DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Tytle, true);
 	DrawStringToHandle(DISP_WIDTH / 3.0, DISP_HEIGHT - 300, "左スティック上下で選択\nBで決定", WHITE, smakinas);
-	DrawFormatString(0, 0, RED, "%d", clockcount);
+	//DrawFormatString(0, 0, RED, "%d", clockcount);
 	return 0;
 }
 int DrawSelect(int local) {
@@ -370,40 +369,25 @@ int DrawPause() {
 }
 
 int DrawManual(int b) {
-	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Manual[0], true);
-	//switch (manFlag)
-	//{
-	//case 0:
-	//	//DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Manual[0], true);
-	//	DrawFormatString(20, 20, RED, "MANUAL");
-	//	break;
-	//case 1:
-	//	//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Manual[1], true);
-	//	DrawFormatString(20, 20, RED, "3");
-	//	break;
-	//case 2:
-	//	//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor1Image, true);
-	//	//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor1WallsImage, true);
-	//	//DrawFormatStringToHandle(52, 52, BLACK, lemagne, "floor1");
-	//	//DrawFormatStringToHandle(50, 50, ORANGE, lemagne, "floor1");
-	//	DrawFormatString(20, 20, RED, "2");
-	//	break;
-	//case 3:
-	//	//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor2Image, true);
-	//	//DrawModiGraph(20, 20, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Floor2WallsImage, true);
-	//	//DrawFormatStringToHandle(52, 52, BLACK, lemagne, "floor2");
-	//	//DrawFormatStringToHandle(50, 50, ORANGE, lemagne, "floor2");
-	//	DrawFormatString(20, 20, RED, "1");
-	//	break;
-	//}
+	//DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Manual[0], true);
+	switch (manFlag)
+	{
+	case 0:
+		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Manual[0], true);
+		//DrawFormatString(20, 20, RED, "MANUAL");
+		break;
+	case 1:
+		DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Manual[1], true);
+		//DrawFormatString(20, 20, RED, "3");
+		break;
+	}
 
 	if (b == 1) {
-		/*manFlag++;
-		if (manFlag == 4) {
+		manFlag++;
+		if (manFlag == 2) {
 			manFlag = 0;
 			return 1;
-		}*/
-		return 1;
+		}
 	}
 	return 0;
 }
@@ -416,7 +400,7 @@ int DrawCredit() {
 
 int DrawUI(int count) {
 	//DrawFormatString(DISP_WIDTH - 50, 50, WHITE, "%d", count / 30);
-	DrawFormatStringToHandle(DISP_WIDTH - 170, 10, WHITE, vsmakinas, "%3d", count / 30);
+	DrawFormatStringToHandle(DISP_WIDTH - 170-20, 10, WHITE, vsmakinas, "%3d", count / 30);
 	return 0;
 }
 int DrawUIDamage(int damage,int count) {
