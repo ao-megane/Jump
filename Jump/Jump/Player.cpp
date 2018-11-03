@@ -217,25 +217,27 @@ int Player::SetDash(int count) {
 	//image = PStand1;
 	isFirstDash = true;
 	acceptFlag = 1;
+	image.Setimage(0, 0);
 	image.Setimage(1, 0);
 	image.Setimage(2, 0);
 	image.Setimage(3, 0);
 	return 0;
 }
 int Player::UpdateDash(int count) {
-	image.Setimage(0, PDash[0]);
+	//image.Setimage(0, PDash[0]);
+	image.Setimage(0, 0);
 	for (int i = 0; i < 16; i++) {
 		if (count < i) {
 			image.Setimage(0, PDash[i]);
-			if (isFirstDash && count < 8)
+			if (isFirstDash && i < 8)
 				image.Setimage(1, PDashStart[i]);
 			else
 				image.Setimage(1, 0);
 			break;
 		}
 	}
-	if (count >= 16) {
-		bodyClock += 16;
+	if (count >= 15) {
+		bodyClock += 15;
 		isFirstDash = false;
 	}
 	
@@ -250,6 +252,7 @@ int Player::SetJump(int count) {
 	image.Setimage(0, PisAir[0]);
 	isFirstJump = true;
 	PlayJump();
+	image.Setimage(0, 0);
 	image.Setimage(1, 0);
 	image.Setimage(2, 0);
 	image.Setimage(3, 0);
@@ -287,6 +290,7 @@ int Player::SetAttack_w(int count) {
 	acceptFlag = false;
 	acceleration.Set(0, 0);
 	velocity.Set(0, 0);
+	image.Setimage(0, 0);
 	image.Setimage(1, 0);
 	image.Setimage(2, 0);
 	image.Setimage(3, 0);
@@ -322,6 +326,7 @@ int Player::SetAttack_air(int count) {
 	stateFlag = 5;
 	acceptFlag = false;
 	//acceleration.Set(0, 0);
+	image.Setimage(0, 0);
 	image.Setimage(1, 0);
 	image.Setimage(2, 0);
 	image.Setimage(3, 0);
@@ -358,6 +363,7 @@ int Player::SetAttack_s(int count) {
 	stateFlag = 3;
 	acceptFlag = false;
 	acceleration.Set(0, 0);
+	image.Setimage(0, 0);
 	image.Setimage(1, 0);
 	image.Setimage(2, 0);
 	image.Setimage(3, 0);
@@ -402,6 +408,9 @@ int Player::SetTelepo(int count) {
 	//else SetStand(count);
 	//acceptFlag = false;
 	//image.Setimage(1, 0);
+	/*if (isAir) stateFlag = 2;
+	else stateFlag = 0;*/
+	//if (stateFlag == 1) stateFlag = 0;
 	image.Setimage(2, 0);
 	image.Setimage(3, 0);
 	acceleration.Set(0, 0);
@@ -601,7 +610,10 @@ int Player::Update1(int count,int key[]) {//èÛë‘âÒÇË
 		acceptFlag = true;
 		break;
 	case 1:
-		UpdateDash(count - bodyClock);
+		if(!isTelepo)
+			UpdateDash(count - bodyClock);
+		else
+			UpdateStand(count - bodyClock);
 		acceptFlag = true;
 		break;
 	case 2:

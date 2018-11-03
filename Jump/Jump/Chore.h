@@ -50,13 +50,17 @@ int DrawPause();
 
 int EndBack();
 
-int InputFile(std::string file);
+int InputFile();
 
 int DrawData();
 
-int UpdataFile(std::string file,int levelFlag,int score);//呼び出される->一人分の更新
+//int ScoreUpdata(int stage, int score);
 
-int SetLoser(int levelFlag,int count);
+int UpdataFile(int stage, int score);//呼び出される->一人分の更新
+
+int OutputFile();
+
+//int SetLoser(int levelFlag,int count);
 
 int LoserUpdata(int count);
 
@@ -64,15 +68,15 @@ int DrawGameOverBord(int count);
 
 int DrawResult(int keepcount,int stage);
 
-int SetWinner(int levelFlag,int count,int* score);
+//int SetWinner(int levelFlag,int count,int* score);
 
 int WinnerUpdata(int count);
 
 int DrawWhite(int count, int keepcount);
 
-int yesBGM();
+//int yesBGM();
 
-int noBGM();
+//int noBGM();
 
 //bool IsHitColorCtoAll(Circle x,int colorHandle,int imageHandle);
 

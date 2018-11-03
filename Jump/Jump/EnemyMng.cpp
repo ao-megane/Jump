@@ -1239,11 +1239,6 @@ bool EnemyisExist() {
 			return true;
 		}
 	}
-	for (int i = 0; i < BRI_WALL_NUM; i++) {
-		if (briWall[i].Enemy::GetisExist()) {
-			return true;
-		}
-	}
 	for (int i = 0; i < TANK_NUM; i++) {
 		if (tank[i].Enemy::GetisExist()) {
 			return true;
