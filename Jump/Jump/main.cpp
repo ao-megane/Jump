@@ -39,7 +39,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SystemInitialize();
 	SetRand();
 
-	//InputFile("kanuma2017.txt");
+	InputFile();
 
 	PlayTytleBGM();
 
@@ -212,6 +212,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			//DrawFormatString(100, 100, WHITE, "gameclear");
 			DrawResult(GetStageLimit() - sumdamage * 30 - keepCount,stageFlag);
 			if (B == 1) {
+				UpdataFile(stageFlag, GetStageLimit() - sumdamage * 30 - keepCount);
+				OutputFile();
 				if (stageFlag != 4 && stageFlag != 8 && stageFlag != 11) {
 					stageFlag++;
 					flag = 2;

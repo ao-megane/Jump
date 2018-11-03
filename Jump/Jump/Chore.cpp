@@ -19,6 +19,8 @@ int Prologue[6];
 
 int descri[12];
 
+double HighScore[STAGE_NUM];
+
 int UIBack;
 int UIIcon;
 int White;
@@ -161,7 +163,7 @@ int PlayTytleBGM() {
 int PlayplayBGM() {
 	StopSoundMem(TytleBGM);
 	StopSoundMem(playBGM);
-	PlaySoundMem(playBGM, DX_PLAYTYPE_LOOP);
+	//PlaySoundMem(playBGM, DX_PLAYTYPE_LOOP);
 	return 0;
 }
 
@@ -485,20 +487,29 @@ int DrawWalls(int floor,Dot player) {
 
 /*---------------------------------------------------------------------------*/
 
-int NumofPlayers;
-int NumofWinner;
-int HighScore;
+//int NumofPlayers;
+//int NumofWinner;
+//int HighScore;
 
-int InputFile(std::string file) {
-	std::ifstream fin("kanuma2017.txt"); // ファイルを開く
-	NumofPlayers = 0;
-	NumofWinner = 0;
-	HighScore = 0;
+int InputFile() {
+	std::ifstream fin("data.txt"); // ファイルを開く
+	//NumofPlayers = 0;
+	//NumofWinner = 0;
+	//HighScore = 0;
 	if (fin.fail()) {  // if(!fin)でもよい。
-		std::cout << "入力ファイルをオープンできません" << std:: endl;
+		//std::cout << "入力ファイルをオープンできません" << std:: endl;
+		printfDx("入力ファイルをオープンできません");
 		return 1;
 	}
-	fin >> NumofPlayers >> NumofWinner >> HighScore;
+	//fin >> NumofPlayers >> NumofWinner >> HighScore;
+	for (int i = 0; i < STAGE_NUM; i++) {
+		fin >> HighScore[i];
+		//HighScore[i] = 999;
+	}
+
+	for (int i = 0; i < STAGE_NUM; i++) {
+		//printfDx("%f\n", HighScore[i]);
+	}
 
 	return 0;
 }
@@ -512,31 +523,41 @@ int DrawData() {
 	return 0;
 }
 
-int UpdataFile(std::string file, int levelFlag, int score) {
-	std::ofstream fout("kanuma2017.txt");
+int UpdataFile(int stage, int score) {
+
+	if (HighScore[stage] < score) {
+		HighScore[stage] = score;
+	}
+	return 0;
+}
+
+int OutputFile() {
+	std::ofstream fout("data.txt");
 	if (fout.fail()) {  // if(!fin)でもよい。
 		std::cout << "出力ファイルをオープンできません" << std::endl;
 		return 1;
 	}
-	fout << NumofPlayers << "\n" << NumofWinner << "\n" << HighScore << "\n";
-
+	for (int i = 0; i < STAGE_NUM; i++) {
+		fout << HighScore[i] << "\n";
+		//printfDx("%f\n", HighScore[i]);
+	}
 	return 0;
 }
 
-int SetWinner(int levelFlag, int count,int* score) {
-	Keeper = count;
-	NumofPlayers++;
-	NumofWinner++;
-	if (HighScore < *score) HighScore = *score;
-	flag = 1;
-	return 0;
-}
-int SetLoser(int levelFlag, int count) {
-	Keeper = count;
-	NumofPlayers++;
-	flag = 1;
-	return 0;
-}
+//int SetWinner(int levelFlag, int count,int* score) {
+//	Keeper = count;
+//	NumofPlayers++;
+//	NumofWinner++;
+//	if (HighScore < *score) HighScore = *score;
+//	flag = 1;
+//	return 0;
+//}
+//int SetLoser(int levelFlag, int count) {
+//	Keeper = count;
+//	NumofPlayers++;
+//	flag = 1;
+//	return 0;
+//}
 int Keeper2;
 int WinnerUpdata(int count) {
 	/*DrawModiGraph(
@@ -568,7 +589,8 @@ int DrawResult(int keepcount,int stage) {
 	//	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);		//ブレンドモードをオフ
 	//}
 	DrawModiGraph(0, 0, DISP_WIDTH, 0, DISP_WIDTH, DISP_HEIGHT, 0, DISP_HEIGHT, Result, true);
-	DrawFormatStringToHandle(640, 560, WHITE, vsmakinas, "%3d", keepcount/30);
+	DrawFormatStringToHandle(640-30-10, 560, WHITE, vsmakinas, "%3.3f", keepcount/30.0);
+	DrawFormatStringToHandle(640 + 400, 560 + 300, WHITE, smakinas, "HIGH_SCORE : %3.3f", HighScore[stage]/30.0);
 	switch (stage)
 	{
 	case 0:
@@ -600,10 +622,10 @@ int DrawResult(int keepcount,int stage) {
 		else  DrawFormatStringToHandle(1380, 560, BLUE, vsmakinas, "D", keepcount / 30);
 		break;
 	case 4:
-		if (STAGE5_COUNT - keepcount < 10 * 30) DrawFormatStringToHandle(1380, 560, RED, vsmakinas, "S", keepcount / 30);
-		else if (STAGE5_COUNT - keepcount < 20 * 30) DrawFormatStringToHandle(1380, 560, ORANGE, vsmakinas, "A", keepcount / 30);
-		else if (STAGE5_COUNT - keepcount < 30 * 30) DrawFormatStringToHandle(1380, 560, GREEN, vsmakinas, "B", keepcount / 30);
-		else if (STAGE5_COUNT - keepcount < 40 * 30) DrawFormatStringToHandle(1380, 560, WHITE, vsmakinas, "C", keepcount / 30);
+		if (STAGE5_COUNT - keepcount < 15 * 30) DrawFormatStringToHandle(1380, 560, RED, vsmakinas, "S", keepcount / 30);
+		else if (STAGE5_COUNT - keepcount < 25 * 30) DrawFormatStringToHandle(1380, 560, ORANGE, vsmakinas, "A", keepcount / 30);
+		else if (STAGE5_COUNT - keepcount < 35 * 30) DrawFormatStringToHandle(1380, 560, GREEN, vsmakinas, "B", keepcount / 30);
+		else if (STAGE5_COUNT - keepcount < 45 * 30) DrawFormatStringToHandle(1380, 560, WHITE, vsmakinas, "C", keepcount / 30);
 		else  DrawFormatStringToHandle(1380, 560, BLUE, vsmakinas, "D", keepcount / 30);
 		break;
 	case 5:
